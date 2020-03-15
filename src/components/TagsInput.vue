@@ -3,7 +3,7 @@
     <div class="tags">
       <span
         v-for="(recordsTag, index) in recordsTags.filter(recTag => !recTag._destroy)"
-        v-bind:key="recordsTag.name.toLowerCase() + index">
+        v-bind:key="recordsTag.tag.name.toLowerCase() + index">
         {{recordsTag.tag.name}}
         <font-awesome-icon
           prefix="far"
