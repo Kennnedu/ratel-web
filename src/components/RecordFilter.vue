@@ -37,28 +37,22 @@
         type="date"
         id="filter-to"
         :value="filter.to"
-        @change="date => updateFilter({changes: { to: date }})"> </b-form-datepicker>
+        @input="date => updateFilter({changes: { to: date }})"> </b-form-datepicker>
     </b-form-group>
 
-    <b-button class="float-left" @click="() => updateFilter({changes: defFilter})">Reset</b-button>
-    <b-button class="float-right" :disabled="isEqlFilterToDefFilter" @click="saveDefFilter">Save as Default</b-button>
+    <b-button class="float-left" @click="() => updateFilter({changes: defaultFilter})">Reset</b-button>
+    <b-button class="float-right" :disabled="isEqlFilterToDefFilter" @click="() => updateDefaultFilter({changes: filter})">Save as Default</b-button>
   </b-form>
 </template>
 <script>
 import { mapState, mapMutations } from 'vuex'
 
 export default {
-  data: function(){
-    return {
-      defFilter: {}
-    }
-  },
-
   computed: {
-    ...mapState(['filter']),
+    ...mapState(['filter', 'defaultFilter']),
 
     isEqlFilterToDefFilter() {
-      const defFilter = this.defFilter;
+      const defFilter = this.defaultFilter;
       const filter= this.filter;
 
       return filter.name === defFilter.name && filter.card === defFilter.card &&
@@ -67,18 +61,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['updateFilter', 'resetFilter']),
-
-    saveDefFilter() {
-      this.defFilter = this.filter;
-      localStorage.setItem('defaultFilter', JSON.stringify(this.filter));
-    }
-  },
-
-  created() {
-    const savedDefFilter = JSON.parse(localStorage.getItem('defaultFilter'));
-
-    this.defFilter = savedDefFilter || this.filter;
+    ...mapMutations(['updateFilter', 'resetFilter', 'updateDefaultFilter'])
   }
 }
 </script>

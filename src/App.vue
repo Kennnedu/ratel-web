@@ -2,14 +2,12 @@
   <main id="ratel-app">
     <Login v-if="!logged" v-on:login="logged = true" />
     <Records v-else-if="currentPage === 'Records'" v-on:navigateTo="navigateTo"/>
-    <GroupedBy v-else-if="currentPage === 'Dashboard'" v-on:navigateTo="navigateTo" />
   </main>
 </template>
 
 <script>
-  import Records from './components/Records.vue'
-  import GroupedBy from './components/GroupedBy.vue'
-  import Login from './components/Login.vue'
+  import Records from './views/Records.vue'
+  import Login from './views/Login.vue'
   import { mapState, mapActions } from 'vuex'
   import axios from 'axios'
   import _ from 'lodash'
@@ -18,7 +16,6 @@
   export default {
     components: {
       Records,
-      GroupedBy,
       Login
     },
 
@@ -37,7 +34,7 @@
       let _this = this;
 
       axios.interceptors.request.use((config) => {
-        config.url = `http://localhost:4567/api/v1${config.url}`;
+        config.url = `http://192.168.1.6:4567/api/v1${config.url}`;
         config.headers.common.Authorization = `Bearer ${this.cookies().get('session_token')}`
         return config
       }, error => Promise.reject(error));

@@ -32,9 +32,9 @@
 <script>
 import axios from 'axios'
 import { mapState, mapGetters, mapActions } from 'vuex'
-import TagsInput from '../TagsInput.vue'
-import CardSelector from '../CardSelector.vue'
-import RecordNameInput from '../RecordNameInput.vue'
+import TagsInput from'./TagsInput.vue'
+import CardSelector from'./CardSelector.vue'
+import RecordNameInput from'./RecordNameInput.vue'
 
 export default {
   components: {

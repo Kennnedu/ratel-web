@@ -36,9 +36,9 @@
   import axios from 'axios'
   import moment from 'moment'
   import { mapActions, mapGetters } from 'vuex'
-  import CardSelector from '../CardSelector.vue'
-  import TagsInput from '../TagsInput.vue'
-  import RecordNameInput from '../RecordNameInput.vue'
+  import CardSelector from'./CardSelector.vue'
+  import TagsInput from'./TagsInput.vue'
+  import RecordNameInput from'./RecordNameInput.vue'
 
   const emptyNewRecord = () => {
     return {

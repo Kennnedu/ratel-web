@@ -12,6 +12,7 @@
       <b-card-text>
         <section class="tags">
           <b-badge
+            pill
             variant="secondary"
             class="mr-1"
             v-for="recordsTag in record.records_tags"

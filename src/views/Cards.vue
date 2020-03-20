@@ -25,17 +25,6 @@
         </table>
       </div>
     </div>
-    <ModalWindow v-if='isOpenCardModal' v-on:close='isOpenCardModal = false'>
-      <h3 slot="header">
-        {{
-          selectedCard.id ? `Edit ${selectedCard.name} card`  : 'New card'
-        }}
-      </h3>
-      <CardForm
-        slot='body'
-        v-bind:card="selectedCard"
-        v-on:close='isOpenCardModal = false'/>
-    </ModalWindow>
   </div>
 </template>
 <script>

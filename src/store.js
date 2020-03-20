@@ -23,6 +23,7 @@ export default new Vuex.Store({
     totalSum: 0,
     totalRecords: 0,
     filter: initializeFilter(),
+    defaultFilter: initializeFilter(),
     cards: []
   },
 
@@ -65,6 +66,12 @@ export default new Vuex.Store({
 
     updateFilter(state, payload) {
       state.filter = Object.assign({}, state.filter, payload.changes)
+    },
+
+    updateDefaultFilter(state, payload) {
+      let newDefaultFilter = Object.assign({}, state.defaultFilter, payload.changes)
+      state.defaultFilter = newDefaultFilter;
+      localStorage.setItem('defaultFilter', JSON.stringify(newDefaultFilter));
     },
 
     addFilteringName(state, payload) {

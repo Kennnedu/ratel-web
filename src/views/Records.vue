@@ -3,7 +3,9 @@
     <Navbar />
     <b-container class="mt-5">
       <b-row class="py-3">
-        <b-col md="8"></b-col>
+        <b-col md="8">
+          <FilterChips />
+        </b-col>
         <b-col md="4">
           <b-button block variant="primary" v-b-modal.new-record>+ Add Record</b-button>
         </b-col>
@@ -41,7 +43,7 @@
         </b-col>
       </b-row>
     </b-container>
-    <b-modal id="new-record" title="Edit Record" hide-footer>
+    <b-modal id="new-record" title="New Record" hide-footer>
       <RecordForm @save="$bvModal.hide('new-record')" />
     </b-modal>
     <b-modal id="edit-record" title="Edit Record" hide-footer>
@@ -53,22 +55,19 @@
   </section>
 </template>
 <script>
-  import Record from './statements/Record.vue'
-  import RecordForm from './statements/RecordForm.vue'
-  import RecordFilter from './statements/RecordFilter.vue'
-  import RecordBatchForm from './statements/RecordBatchForm.vue'
-  import HtmlRecordsUploadForm from './statements/HtmlRecordsUploadForm.vue'
-  import Navbar from './Navbar.vue'
+  import Record from '../components/Record.vue'
+  import RecordForm from '../components/RecordForm.vue'
+  import RecordFilter from '../components/RecordFilter.vue'
+  import RecordBatchForm from '../components/RecordBatchForm.vue'
+  import HtmlRecordsUploadForm from '../components/HtmlRecordsUploadForm.vue'
+  import FilterChips from '../components/FilterChips.vue'
+  import Navbar from '../components/Navbar.vue'
   import moment from 'moment'
 
   import { mapState, mapGetters, mapActions } from 'vuex'
-  import { library } from '@fortawesome/fontawesome-svg-core'
-  import { faUpload, faPlus, faFilter, faEdit, faArrowUp, faChartPie } from '@fortawesome/free-solid-svg-icons'
-
-  library.add(faUpload, faPlus, faFilter, faEdit, faArrowUp, faChartPie)
 
   export default {
-    components: { Navbar, Record, RecordForm, RecordFilter, RecordBatchForm, HtmlRecordsUploadForm },
+    components: { Navbar, Record, RecordForm, RecordFilter, RecordBatchForm, HtmlRecordsUploadForm, FilterChips },
 
     data: function() {
       return {

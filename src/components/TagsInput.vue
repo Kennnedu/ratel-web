@@ -2,6 +2,7 @@
   <div>
     <div class="mb-1">
       <b-badge
+        pill
         variant="secondary"
         class="mr-1"
         v-for="(recordsTag, index) in recordsTags.filter(recTag => !recTag._destroy)"
