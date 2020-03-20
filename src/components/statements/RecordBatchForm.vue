@@ -1,39 +1,33 @@
 <template>
-  <form class="pure-form pure-form-stacked" v-on:submit="submitForm" title='Эта форма может отредактировать всю отфильтрованную выборку записей'>
-    <fieldset>
-      <label> Add tags </label>
+  <b-form>
+    <b-form-group id="filter-to" label="Add tags">
       <TagsInput
         v-bind:recordsTags="batchForm.addRecordsTags"
         v-on:change="newRecordsTags => batchForm.addRecordsTags = newRecordsTags" />
+    </b-form-group>
 
-      <label> Remove Tags </label>
+    <b-form-group id="filter-to" label="Remove Tags">
       <TagsInput
         v-bind:recordsTags="batchForm.removeRecordsTags"
         v-bind:defaultDatalistID="'suggested-removing-tags'"
         v-on:change="newRecordsTags => batchForm.removeRecordsTags = newRecordsTags" />
+    </b-form-group>
 
-      <label for="record-batch-name">Operation</label>
+    <b-form-group id="filter-to" label="Record Name">
       <RecordNameInput
         v-bind:recordName="batchForm.name"
         v-on:change="newName => batchForm.name = newName" />
+    </b-form-group>
 
-      <label>Card</label>
+    <b-form-group id="filter-to" label="Sources">
       <CardSelector
         v-bind:card="batchForm.card"
         v-on:selectCard="newCard => batchForm.card = newCard"/>
-    </fieldset>
+    </b-form-group>
 
-    <input
-      type="submit"
-      class="pure-button pure-button-primary"
-      v-bind:disabled="!validBatchForm"
-      v-bind:value="submitButtonName" />
-    <input
-      type="button"
-      class="pure-button button-error"
-      v-on:click="destroyRecords"
-      value="Destroy All" />
-  </form>
+    <b-button class="" variant="outline-primary" :disabled="!validBatchForm" @click="submitForm">{{submitButtonName}}</b-button>
+    <b-button class="float-right" variant="danger" @click="destroyRecords">Destroy All</b-button>
+  </b-form>
 </template>
 <script>
 import axios from 'axios'
@@ -125,5 +119,5 @@ export default {
   }
 }
 </script>
-<style lang="css">
+<style>
 </style>

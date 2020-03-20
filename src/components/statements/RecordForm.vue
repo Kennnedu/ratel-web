@@ -1,40 +1,36 @@
 <template>
-  <form class="pure-form pure-form-stacked" v-on:submit="submitForm">
-    <fieldset>
+  <b-form>
+    <b-form-group id="record-tags-group" label="Tags" label-for="record-tags">
       <TagsInput
-        v-bind:recordsTags="currentRecord.records_tags"
-        v-on:change="newRecordsTags => currentRecord.records_tags = newRecordsTags" />
+        :recordsTags="currentRecord.records_tags"
+        @change="newRecordsTags => currentRecord.records_tags = newRecordsTags" />
+    </b-form-group>
 
-      <label for="record-name">Operation</label>
+    <b-form-group id="record-name-group" label="Name" label-for="record-name">
       <RecordNameInput
-        v-bind:recordName="currentRecord.name"
-        v-bind:isRequired="true"
-        v-on:change="newName => currentRecord.name = newName" />
+        :recordName="currentRecord.name"
+        :isRequired="true"
+        @change="newName => currentRecord.name = newName" />
+    </b-form-group>
 
-      <label for="record-card">Card</label>
+    <b-form-group id="record-card-group" label="Source" label-for="record-card">
       <CardSelector
-        v-bind:required="true"
-        v-bind:card="currentRecord.card"
-        v-on:selectCard="newCard => currentRecord.card = newCard"/>
+        :required="true"
+        :card="currentRecord.card"
+        @selectCard="newCard => currentRecord.card = newCard"/>
+    </b-form-group>
 
-      <label for="record-amount">Amount</label>
-      <input type="number" id="record-amount" step="0.01" required v-model.number="currentRecord.amount">
+    <b-form-group id="record-amount-group" label="Amount" label-for="record-amount">
+      <b-form-input type="number" id="record-amount" step="0.01" required v-model.number="currentRecord.amount"></b-form-input>
+    </b-form-group>
 
-      <label for="record-rest">Rest</label>
-      <input type="number" id="record-rest" step="0.01" v-model.number="currentRecord.rest">
+    <b-form-group id="record-performed-at-group" label="Performed At" label-for="record-performed-at">
+      <b-form-input type="datetime-local" id="record-performed-at" v-model="currentRecord.performed_at"></b-form-input>
+    </b-form-group>
 
-      <label for="record-performed-at">Performed At</label>
-      <input type="datetime-local" id="record-performed-at" v-model="currentRecord.performed_at">
-    </fieldset>
-    <input type="submit"
-           class="pure-button pure-button-primary"
-           v-bind:value="saveButtonName"/>
-    <input type="button"
-           class="pure-button button-error"
-           value="Delete"
-           v-on:click="destroy"
-           v-if="currentRecord.id"/>
-  </form>
+    <b-button variant="outline-primary" @click="submitForm">{{saveButtonName}}</b-button>
+    <b-button variant="danger" class="float-right" @click="destroy" v-if="currentRecord.id">Delete</b-button>
+  </b-form>
 </template>
 <script>
   import axios from 'axios'
@@ -144,8 +140,5 @@
     }
   }
 </script>
-<style lang="css" scoped>
-  .pure-form-message.pure-form-message-error {
-    color: red;
-  }
+<style>
 </style>

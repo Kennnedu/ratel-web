@@ -1,6 +1,5 @@
 <template>
   <main id="ratel-app">
-    <Header v-if="logged" />
     <Login v-if="!logged" v-on:login="logged = true" />
     <Records v-else-if="currentPage === 'Records'" v-on:navigateTo="navigateTo"/>
     <GroupedBy v-else-if="currentPage === 'Dashboard'" v-on:navigateTo="navigateTo" />
@@ -10,7 +9,6 @@
 <script>
   import Records from './components/Records.vue'
   import GroupedBy from './components/GroupedBy.vue'
-  import Header from './components/Header.vue'
   import Login from './components/Login.vue'
   import { mapState, mapActions } from 'vuex'
   import axios from 'axios'
@@ -21,8 +19,7 @@
     components: {
       Records,
       GroupedBy,
-      Login,
-      Header
+      Login
     },
 
     data: function(){
@@ -40,7 +37,7 @@
       let _this = this;
 
       axios.interceptors.request.use((config) => {
-        config.url = `https://ratel-app.herokuapp.com/api/v1${config.url}`;
+        config.url = `http://localhost:4567/api/v1${config.url}`;
         config.headers.common.Authorization = `Bearer ${this.cookies().get('session_token')}`
         return config
       }, error => Promise.reject(error));

@@ -44,7 +44,7 @@
       <button
         title="Filter By Records"
         class="pure-button"
-        v-on:click="isOpenRecordFilterModal = true">
+        v-b-modal.filter-records>
         <font-awesome-icon icon="filter" style="color: #777" />
       </button>
     </nav>
@@ -61,16 +61,14 @@
         <section class="grouped-sum">{{ row.records_sum }}</section>
       </article>
     </main>
-    <ModalWindow v-if='isOpenRecordFilterModal' v-on:close='isOpenRecordFilterModal = false'>
-      <h3 slot="header">Filter records</h3>
-      <RecordFilter slot='body'/>
-    </ModalWindow>
+    <b-modal id="filter-records" title="Filter records" hide-footer>
+      <RecordFilter/>
+    </b-modal>
   </section>
 </template>
 <script>
   import axios from 'axios';
   import RecordFilter from './statements/RecordFilter.vue'
-  import ModalWindow from './ModalWindow.vue'
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { faFilter, faLongArrowAltLeft, faHandHoldingUsd, faCreditCard, faTags, faReceipt } from '@fortawesome/free-solid-svg-icons'
   import { mapState } from 'vuex';
@@ -79,15 +77,13 @@
 
   export default {
     components: {
-      RecordFilter,
-      ModalWindow
+      RecordFilter
     },
 
     data: function() {
       return {
         tableData: [],
-        tableName: 'cards',
-        isOpenRecordFilterModal: false
+        tableName: 'cards'
       }
     },
 

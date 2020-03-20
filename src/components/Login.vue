@@ -1,26 +1,30 @@
 <template>
-  <section id="content">
-    <main>
-      <form class="pure-form"
-            v-on:submit="submitForm"
-            v-bind:class="{'has-error-animation': hasError}">
-        <h1>Log In</h1>
-        <fieldset class="pure-group">
-          <input type="text" name="username" placeholder="Username" required v-model="username" />
-        </fieldset>
-        <fieldset class="pure-group">
-          <input type="password" name="password" placeholder="Password" required v-model="password" />
-        </fieldset>
+  <b-container>
+    <b-row class="login-wrapper">
+      <b-col md="4" offset="4" class="my-auto">
+        <b-card title="Login" class="shadow p-3 mb-5 rounded">
+          <b-form>
+            <b-form-invalid-feedback :state="!hasError">
+              Invalid username or password. Please try again.
+            </b-form-invalid-feedback>
+            <b-form-group id="username-group" label="Username" label-for="username">
+              <b-input type="text" id="username" v-model="username" placeholder="Enter username" :required='true'></b-input>
+            </b-form-group>
 
-        <fieldset class="pure-group">
-          <label for="remember" class="pure-checkbox">
-            <input id="remember" type="checkbox" v-model="secureLogin" /> Secure Login
-          </label>
-        </fieldset>
-        <input type="submit" class="pure-button pure-button-primary" value="Login" />
-      </form>
-    </main>
-  </section>
+            <b-form-group id="password-group" label="Password" label-for="password">
+              <b-input type="password" id="password" v-model="password" placeholder="Enter password" :required='true'></b-input>
+            </b-form-group>
+
+            <b-from-group id="secure-login-group">
+              <b-checkbox v-model="secureLogin">Secure login</b-checkbox>
+            </b-from-group>
+
+            <b-button class="mt-3" block variant="primary" @click="submitForm">Login</b-button>
+          </b-form>
+        </b-card>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 <script>
   import axios from 'axios'
@@ -57,55 +61,8 @@
     }
   }
 </script>
-<style lang="css" scoped>
-  #content main{
-    height: 85vh;
-    display: flex;
-    align-items: center;
+<style>
+  .login-wrapper {
+    height: 100vh;
   }
-
-  form {
-    margin: auto;
-    padding: 45px;
-    border: 1px solid lightgray;
-    background-color: #eaeded;
-    border-radius: 7px;
-  }
-
-  form input[type='submit'] {
-    width: 100%;
-  }
-
-  form h1 {
-    text-align: center;
-  }
-
-  fieldset.pure-group label input {
-    display: inline;
-  }
-
-  .has-error-animation {
-    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    perspective: 1000px;
-  }
-
-  @keyframes shake {
-  10%, 90% {
-    transform: translate3d(-1px, 0, 0);
-  }
-
-  20%, 80% {
-    transform: translate3d(2px, 0, 0);
-  }
-
-  30%, 50%, 70% {
-    transform: translate3d(-4px, 0, 0);
-  }
-
-  40%, 60% {
-    transform: translate3d(4px, 0, 0);
-  }
-}
 </style>

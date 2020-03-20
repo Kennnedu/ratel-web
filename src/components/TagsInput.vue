@@ -1,26 +1,30 @@
 <template>
   <div>
-    <div class="tags">
-      <span
+    <div class="mb-1">
+      <b-badge
+        variant="secondary"
+        class="mr-1"
         v-for="(recordsTag, index) in recordsTags.filter(recTag => !recTag._destroy)"
-        v-bind:key="recordsTag.tag.name.toLowerCase() + index">
+        :key="recordsTag.tag.name.toLowerCase() + index">
         {{recordsTag.tag.name}}
         <font-awesome-icon
           prefix="far"
           icon="times-circle"
-          v-on:click="e => deleteRecordsTag(recordsTag)" />
-      </span>
+          @click="e => deleteRecordsTag(recordsTag)" />
+      </b-badge>
     </div>
-    <input
+
+    <b-form-input
       type="text"
+      id="record-tags"
       placeholder="Press space to add new tag"
       v-model="tagName"
-      v-on:keyup.space="addRecordsTag"
-      v-bind:list="dataListId"
-      autocomplete="off" />
+      @keyup.space="addRecordsTag"
+      :list="dataListId"
+      autocomplete="off"></b-form-input>
 
-    <datalist v-bind:id="dataListId">
-      <option v-for="tag in suggestedTags" v-bind:key="tag.id">{{tag.name}}</option>
+    <datalist :id="dataListId">
+      <option v-for="tag in suggestedTags" :key="tag.id">{{tag.name}}</option>
     </datalist>
   </div>
 </template>
@@ -87,17 +91,5 @@ export default {
   }
 }
 </script>
-<style lang="css" scoped>
-  .tags span {
-    font-size: 13px;
-    background-color: #ababa9;
-    padding: 3px;
-    color: white;
-    border-radius: 6px;
-    margin-right: 3px;
-  }
-
-  .tags span svg {
-    margin-left: 2px;
-  }
+<style>
 </style>

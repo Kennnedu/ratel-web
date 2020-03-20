@@ -1,55 +1,48 @@
 <template>
-  <form class="pure-form pure-form-stacked">
-    <fieldset>
-      <div class="pure-control-group">
-        <label for="filter-operation">By operation</label>
-        <input type="text"
-                id="filter-operation"
-                v-bind:value="filter.name"
-                v-on:input="e => updateFilter({changes: { name: e.target.value }})"/>
-      </div>
-      <div class="pure-control-group">
-        <label for="filter-card">By card</label>
-        <input type="text"
-                id="filter-card"
-                v-bind:value="filter.card"
-                v-on:input="e => updateFilter({changes: { card: e.target.value }})" />
-      </div>
-      <div class="pure-control-group">
-        <label for="filter-tags">By tag</label>
-        <input type="text"
-               id="filter-card"
-               v-bind:value="filter.tags"
-               v-on:input="e => updateFilter({changes: { tags: e.target.value }})" />
-      </div>
-      <div class="pure-control-group">
-        <label for="filter-from">From</label>
-        <input type="date"
-                id="filter-from"
-                v-bind:value="filter.from"
-                v-on:input="e => updateFilter({changes: { from: e.target.value }})" />
-      </div>
-      <div class="pure-control-group">
-        <label for="filter-to">To</label>
-        <input type="date"
-                id="filter-to"
-                v-bind:value="filter.to"
-                v-on:change="e => updateFilter({changes: { to: e.target.value }})" />
-      </div>
-    </fieldset>
-    <input
-      type="button"
-      value="Reset"
-      class="pure-button"
-      v-on:click="() => updateFilter({changes: defFilter})" 
-    />
-    <input
-      type="button"
-      value="Save as Default"
-      class="pure-button"
-      v-bind:disabled="isEqlFilterToDefFilter"
-      v-on:click="saveDefFilter"/>
-  </form>
+  <b-form>
+    <b-form-group id="filter-name-group" label="Filter by name" label-for="filter-name">
+      <b-form-input
+        type="text"
+        id="filter-name"
+        :value="filter.name"
+        @input="val => updateFilter({changes: { name: val }})"></b-form-input>
+    </b-form-group>
+
+    <b-form-group id="filter-source-group" label="Filter by source" label-for="filter-card">
+      <b-form-input
+        type="text"
+        id="filter-card"
+        :value="filter.card"
+        @input="val => updateFilter({changes: { card: val }})"></b-form-input>
+    </b-form-group>
+
+    <b-form-group id="filter-tags-group" label="Filter by tags" label-for="filter-tags">
+      <b-form-input
+        type="text"
+        id="filter-tags"
+        :value="filter.tags"
+        @input="val => updateFilter({changes: { tags: val }})"></b-form-input>
+    </b-form-group>
+
+    <b-form-group id="filter-from" label="Performed from" label-for="filter-from">
+      <b-form-datepicker
+        type="date"
+        id="filter-from"
+        :value="filter.from"
+        @input="date => updateFilter({changes: { from: date }})"> </b-form-datepicker>
+    </b-form-group>
+
+    <b-form-group id="filter-to" label="Performed to" lablel-for="filter-to">
+      <b-form-datepicker
+        type="date"
+        id="filter-to"
+        :value="filter.to"
+        @change="date => updateFilter({changes: { to: date }})"> </b-form-datepicker>
+    </b-form-group>
+
+    <b-button class="float-left" @click="() => updateFilter({changes: defFilter})">Reset</b-button>
+    <b-button class="float-right" :disabled="isEqlFilterToDefFilter" @click="saveDefFilter">Save as Default</b-button>
+  </b-form>
 </template>
 <script>
 import { mapState, mapMutations } from 'vuex'
@@ -89,5 +82,5 @@ export default {
   }
 }
 </script>
-<style lang="css">
+<style>
 </style>

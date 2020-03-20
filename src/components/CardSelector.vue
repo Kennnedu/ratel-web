@@ -1,16 +1,17 @@
 <template>
-  <select
-    v-bind:required="required"
+  <b-form-select
+    id="record-card"
     v-model="currentCardId"
-    v-on:change="$emit('selectCard', cards.filter(card => currentCardId === card.id)[0])">
-    <option
+    :required="required"
+    @change="$emit('selectCard', cards.filter(card => currentCardId === card.id)[0])">
+    <b-form-select-option
       v-for="card in cards"
-      v-bind:key="card.id"
-      v-bind:value="card.id"
-      v-bind:selected="currentCardId === card.id">
+      :key="card.id"
+      :value="card.id"
+      :selected="currentCardId === card.id">
       {{card.name}}
-    </option>
-  </select>
+    </b-form-select-option>
+  </b-form-select>
 </template>
 <script>
 import { mapState } from 'vuex'

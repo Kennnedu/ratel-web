@@ -1,23 +1,27 @@
 <template>
-  <article class="record-card"
-       v-on:click="$emit('click')"
-       v-bind:class="{ positive: record.amount > 0 }">
-    <header class="head">
-      <span v-on:click="filterByTheName">
-        {{ record.name }}
-      </span>
-    </header>
-    <main class="body"
-         v-on:click="isOpenEditDialog = true">
-      <section class="tags">
-        <span v-for="recordsTag in record.records_tags" v-bind:key="recordsTag.tag_id">{{recordsTag.tag.name}}</span>
-      </section>
-      <section class="card">{{ record.card.name }}</section>
-      <section class="amount">{{ `${record.amount} BYN` }}</section>
-      <section class="rest" v-if="record.rest">{{ `${record.rest} BYN` }}</section>
-      <section class="performed-at">{{ moment(record.performed_at).format('LT') }}</section>
-    </main>
-  </article>
+  <b-card
+    class="record-card"
+    no-body
+    :sub-title="record.name"
+    :title="record.amount"
+    @click="$emit('click')" :class="{ positive: record.amount > 0 }">
+    
+    <b-card-body @click="$emit('click')">
+      <b-card-sub-title class="mb-2">{{record.name}}</b-card-sub-title>
+      <b-card-title>{{record.amount}}</b-card-title>
+      <b-card-text>
+        <section class="tags">
+          <b-badge
+            variant="secondary"
+            class="mr-1"
+            v-for="recordsTag in record.records_tags"
+            v-bind:key="recordsTag.tag_id">{{recordsTag.tag.name}}</b-badge>
+        </section>
+        <section class="source">{{ record.card.name }}</section>
+        <section class="performed-at">{{ moment(record.performed_at).format('LT') }}</section>
+      </b-card-text>
+    </b-card-body>
+  </b-card>
 </template>
 <script>
 import moment from 'moment'
@@ -33,63 +37,17 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['addFilteringName']),
-
-    filterByTheName(e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      this.addFilteringName({name: `!${this.record.name}`})
-    }
+    ...mapMutations(['addFilteringName'])
   }
 
 }
 </script>
 <style lang="css" scoped>
-  .record-card {
-    border: 1px solid #e0e0e0;
-    border-radius: 7px;
-  }
-
-  .record-card .head {
-    text-align: center;
-  }
-
-  .record-card .head span:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-
-  .record-card .body, .record-card .head, .record-card .body section {
-    padding: 5px;
-  }
-
   .record-card.positive {
     background-color: #ddfbdd;
   }
 
   .record-card:hover, .record-card:focus, .record-card:active {
     background-color: #e0e8ff75;
-  }
-
-  .record-card .body:hover {
-    cursor: pointer;
-  }
-
-  .record-card .head, .record-card .body .amount {
-    font-weight: bold;
-  }
-
-  .record-card .head, .record-card .body .card, .record-card .body .performed-at, .record-card .body .rest {
-    font-size: 13px;
-  }
-
-  .tags span {
-    font-size: 12px;
-    background-color: #ababa9;
-    padding: 3px;
-    color: white;
-    border-radius: 6px;
-    margin-right: 3px;
   }
 </style>

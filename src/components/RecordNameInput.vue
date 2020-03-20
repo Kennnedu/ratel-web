@@ -1,17 +1,18 @@
 <template>
   <div>
-    <input 
+    <b-input 
       type="text"
+      class="form-control"
       id="record-name"
       placeholder="Enter operation"
-      v-bind:value="recordName"
-      v-on:input="e => $emit('change', e.target.value)"
+      :value="recordName"
+      @input="val => $emit('change', val)"
       list="suggested-record-names"
       autocomplete="off"
-      v-bind:required="isRequired" />
+      :required="isRequired"></b-input>
 
     <datalist id="suggested-record-names">
-      <option v-for="(recName, index) in suggestedRecordNames" v-bind:key="recName.toLowerCase() + index">
+      <option v-for="(recName, index) in suggestedRecordNames" :key="recName.toLowerCase() + index">
         {{recName}}
       </option>
     </datalist>
