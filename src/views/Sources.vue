@@ -12,9 +12,9 @@
       </b-row>
       <b-row>
         <b-col md="8">
-          <b-row class="cards-deck">
+          <b-row class="cards-deck active">
             <b-col v-for="source in sources" :key="source.id" md="4" class="py-3">
-              <b-card no-body :class="{ positive: source.records_sum > 0 }">
+              <b-card no-body :class="{ positive: source.records_sum > 0 }" class="shadow-sm">
                 <b-card-body @click="currentSource = source; $bvModal.show('edit-source')">
                   <b-card-sub-title class="mb-2">{{source.name}}</b-card-sub-title>
                   <b-card-title>{{source.records_sum}}</b-card-title>
@@ -35,10 +35,10 @@
       </b-row>
     </b-container>
     <b-modal id="new-source" title="New Source" hide-footer>
-      <CardForm @save="$bvModal.hide('new-source'); fetchFilteredCards()" :card="{'name': ''}" />
+      <CardForm @close="$bvModal.hide('new-source'); fetchFilteredCards()" :card="{'name': ''}" />
     </b-modal>
     <b-modal id="edit-source" title="Edit Source" hide-footer>
-      <CardForm @save="$bvModal.hide('edit-source'); fetchFilteredCards()" :card="currentSource" />
+      <CardForm @close="$bvModal.hide('edit-source'); fetchFilteredCards()" :card="currentSource" />
     </b-modal> 
   </section>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <b-card
-    class="record-card"
+    class="record-card shadow-sm"
     no-body
     :class="{ positive: record.amount > 0 }">
     <b-card-body @click="$emit('click')">

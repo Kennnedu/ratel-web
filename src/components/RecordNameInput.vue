@@ -4,14 +4,14 @@
       type="text"
       class="form-control"
       id="record-name"
-      placeholder="Enter operation"
+      placeholder="Enter name"
       :value="recordName"
       @input="val => $emit('change', val)"
-      list="suggested-record-names"
+      :list="datalistClass()"
       autocomplete="off"
       :required="isRequired"></b-input>
 
-    <datalist id="suggested-record-names">
+    <datalist :id="datalistClass()">
       <option v-for="(recName, index) in suggestedRecordNames" :key="recName.toLowerCase() + index">
         {{recName}}
       </option>
@@ -22,7 +22,7 @@
 import axios from 'axios'
 
 export default {
-  props: ['recordName', 'isRequired'],
+  props: ['recordName', 'isRequired', 'dataListId'],
 
   data: function(){
     return {
@@ -41,6 +41,10 @@ export default {
   },
 
   methods: {
+    datalistClass(){
+      return this.dataListId || 'suggested-record-names'
+    },
+
     findSuggestions(keyword) {
       axios.get('/records/names', {params: { name: keyword }})
         .then(resp => this.suggestedRecordNames = resp.data.record_names.map(el => el.name))

@@ -1,10 +1,11 @@
 <template>
-  <b-form>
+  <b-form @submit="submitForm">
     <b-form-group id="source-name-group" label="Source Name" label-for="source-name">
-      <b-form-input type="text" id="source-name" required v-model="currentCard.name"></b-form-input>
+      <b-form-input type="text" id="source-name" v-model="currentCard.name" :required="true">
+      </b-form-input>
     </b-form-group>
 
-    <b-button variant="outline-primary" @click="submitForm">{{saveButtonName}}</b-button>
+    <b-button type="submit" variant="outline-primary">{{saveButtonName}}</b-button>
     <b-button variant="danger" v-if="currentCard.id" @click="deleteCard" class="float-right">
       Delete
     </b-button>
@@ -26,9 +27,7 @@ export default {
 
   computed: {
     savingCard() {
-      let savingCard = Object.assign({}, this.currentCard);
-      delete savingCard.id;
-      return { card: savingCard }
+      return { card: { name: this.currentCard.name } }
     }
   },
 
@@ -46,10 +45,7 @@ export default {
       const _this = this
 
       axios.post('/cards', _this.savingCard)
-      .then(() => {
-        _this.fetchCards();
-        _this.$emit('save');
-      })
+      .then(() => _this.fetchCards())
       .then(() => _this.$emit('close'));
     },
 
@@ -57,10 +53,7 @@ export default {
       const _this = this
 
       axios.put(`/cards/${_this.currentCard.id}`, _this.savingCard)
-      .then(() => {
-        _this.fetchCards();
-        _this.$emit('close');
-      })
+      .then(() => _this.fetchCards())
       .then(() => _this.$emit('close'))
     },
 
@@ -74,7 +67,6 @@ export default {
         _this.fetchRecords();
         _this.$emit('close');
       })
-      .then(() => _this.$emit('close'));
     }
   }
 }

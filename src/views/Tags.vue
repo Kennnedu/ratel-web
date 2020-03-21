@@ -7,15 +7,15 @@
           <FilterChips />
         </b-col>
         <b-col md="4">
-          <b-button block variant="primary" v-b-modal.new-source>+ Add Tag</b-button>
+          <b-button block variant="primary" v-b-modal.new-tag>+ Add Tag</b-button>
         </b-col>
       </b-row>
       <b-row>
         <b-col md="8">
-          <b-row class="cards-deck">
+          <b-row class="cards-deck active">
             <b-col v-for="tag in tags" :key="tag.id" md="4" class="py-3">
-              <b-card no-body :class="{ positive: tag.records_sum > 0 }">
-                <b-card-body>
+              <b-card no-body :class="{ positive: tag.records_sum > 0 }" class="shadow-sm">
+                <b-card-body @click="currentTag = tag; $bvModal.show('edit-tag')">
                   <b-card-sub-title class="mb-2">{{tag.name}}</b-card-sub-title>
                   <b-card-title>{{tag.records_sum}}</b-card-title>
                 </b-card-body>
@@ -34,22 +34,30 @@
         </b-col>
       </b-row>
     </b-container>
+    <b-modal id="new-tag" title="New Tag" hide-footer>
+      <TagForm @close="$bvModal.hide('new-tag'); fetchFilteredTags()" :tag="{'name': ''}" />
+    </b-modal>
+    <b-modal id="edit-tag" title="Edit Tag" hide-footer>
+      <TagForm @close="$bvModal.hide('edit-tag'); fetchFilteredTags()" :tag="currentTag" />
+    </b-modal>
   </section>
 </template>
 <script>
   import RecordFilter from '../components/RecordFilter.vue'
   import FilterChips from '../components/FilterChips.vue'
+  import TagForm from '../components/TagForm.vue'
   import Navbar from '../components/Navbar.vue'
   import axios from 'axios'
   import debounce from 'lodash.debounce'
   import { mapState } from 'vuex'
 
   export default {
-    components: { RecordFilter, FilterChips, Navbar },
+    components: { RecordFilter, FilterChips, Navbar, TagForm },
 
     data: function() {
       return {
-        tags: []
+        tags: [],
+        currentTag: {}
       }
     },
 

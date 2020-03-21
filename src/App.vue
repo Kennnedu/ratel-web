@@ -19,7 +19,7 @@
       let _this = this;
 
       axios.interceptors.request.use((config) => {
-        config.url = `http://192.168.1.6:4567/api/v1${config.url}`;
+        config.url = `https://ratel-app.herokuapp.com/api/v1${config.url}`;
         config.headers.common.Authorization = `Bearer ${this.cookies().get('session_token')}`
         return config
       }, error => Promise.reject(error));

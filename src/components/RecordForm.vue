@@ -1,34 +1,35 @@
 <template>
-  <b-form>
-    <b-form-group id="record-tags-group" label="Tags" label-for="record-tags">
-      <TagsInput
-        :recordsTags="currentRecord.records_tags"
-        @change="newRecordsTags => currentRecord.records_tags = newRecordsTags" />
-    </b-form-group>
-
+  <b-form @submit="submitForm">
     <b-form-group id="record-name-group" label="Name" label-for="record-name">
       <RecordNameInput
         :recordName="currentRecord.name"
+        :dataListId="'record-name-suggestions'"
         :isRequired="true"
         @change="newName => currentRecord.name = newName" />
     </b-form-group>
 
+    <b-form-group id="record-amount-group" label="Amount" label-for="record-amount">
+      <b-form-input type="number" id="record-amount" step="0.01" v-model.number="currentRecord.amount" :required="true">
+      </b-form-input>
+    </b-form-group>
+    
     <b-form-group id="record-card-group" label="Source" label-for="record-card">
       <CardSelector
-        :required="true"
         :card="currentRecord.card"
         @selectCard="newCard => currentRecord.card = newCard"/>
     </b-form-group>
-
-    <b-form-group id="record-amount-group" label="Amount" label-for="record-amount">
-      <b-form-input type="number" id="record-amount" step="0.01" required v-model.number="currentRecord.amount"></b-form-input>
+    
+    <b-form-group id="record-tags-group" label="Tags">
+      <TagsInput
+        :recordsTags="currentRecord.records_tags"
+        @change="newRecordsTags => currentRecord.records_tags = newRecordsTags" />
     </b-form-group>
 
     <b-form-group id="record-performed-at-group" label="Performed At" label-for="record-performed-at">
       <b-form-input type="datetime-local" id="record-performed-at" v-model="currentRecord.performed_at"></b-form-input>
     </b-form-group>
 
-    <b-button variant="outline-primary" @click="submitForm">{{saveButtonName}}</b-button>
+    <b-button type="submit" variant="outline-primary">{{saveButtonName}}</b-button>
     <b-button variant="danger" class="float-right" @click="destroy" v-if="currentRecord.id">Delete</b-button>
   </b-form>
 </template>
@@ -91,7 +92,6 @@
     },
 
     methods: {
-
       ...mapActions(['fetchRecords']),
 
       submitForm(e){

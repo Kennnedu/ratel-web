@@ -1,28 +1,29 @@
 <template>
   <b-form>
-    <b-form-group id="filter-to" label="Add tags">
-      <TagsInput
-        v-bind:recordsTags="batchForm.addRecordsTags"
-        v-on:change="newRecordsTags => batchForm.addRecordsTags = newRecordsTags" />
-    </b-form-group>
-
-    <b-form-group id="filter-to" label="Remove Tags">
-      <TagsInput
-        v-bind:recordsTags="batchForm.removeRecordsTags"
-        v-bind:defaultDatalistID="'suggested-removing-tags'"
-        v-on:change="newRecordsTags => batchForm.removeRecordsTags = newRecordsTags" />
-    </b-form-group>
-
     <b-form-group id="filter-to" label="Record Name">
       <RecordNameInput
-        v-bind:recordName="batchForm.name"
-        v-on:change="newName => batchForm.name = newName" />
+        :recordName="batchForm.name"
+        @change="newName => batchForm.name = newName" />
     </b-form-group>
 
     <b-form-group id="filter-to" label="Sources">
       <CardSelector
-        v-bind:card="batchForm.card"
-        v-on:selectCard="newCard => batchForm.card = newCard"/>
+        :card="batchForm.card"
+        @selectCard="newCard => batchForm.card = newCard"/>
+    </b-form-group>
+
+    <b-form-group id="filter-to" label="Add tags">
+      <TagsInput
+        :recordsTags="batchForm.addRecordsTags"
+        :defaultDatalistID="'suggested-adding-tags'"
+        @change="newRecordsTags => batchForm.addRecordsTags = newRecordsTags" />
+    </b-form-group>
+
+    <b-form-group id="filter-to" label="Remove Tags">
+      <TagsInput
+        :recordsTags="batchForm.removeRecordsTags"
+        :defaultDatalistID="'suggested-removing-tags'"
+        @change="newRecordsTags => batchForm.removeRecordsTags = newRecordsTags" />
     </b-form-group>
 
     <b-button class="" variant="outline-primary" :disabled="!validBatchForm" @click="submitForm">{{submitButtonName}}</b-button>
@@ -70,6 +71,15 @@ export default {
   methods: {
     ...mapActions(['fetchRecords']),
 
+    clearForm() {
+      this.batchForm = {
+        name: '',
+        addRecordsTags: [],
+        removeRecordsTags: [],
+        card: {}
+      }
+    },
+
     submitForm(e) {
       e.preventDefault();
       this.submitButtonName = 'Saving...'
@@ -78,6 +88,7 @@ export default {
         .then(() => {
           this.submitButtonName = 'Apply';
           this.fetchRecords();
+          this.clearForm()
           this.$emit('close');
         })
     },
@@ -90,6 +101,7 @@ export default {
       axios({url: '/records', method: 'delete', params: this.filterParams })
         .then(() => {
           this.fetchRecords();
+          this.clearForm()
           this.$emit('close');
         })
     },

@@ -4,6 +4,7 @@
     v-model="currentCardId"
     :required="required"
     @change="$emit('selectCard', cards.filter(card => currentCardId === card.id)[0])">
+    <b-form-select-option :value="null">Select source</b-form-select-option>
     <b-form-select-option
       v-for="card in cards"
       :key="card.id"

@@ -3,7 +3,7 @@
     <b-row class="login-wrapper">
       <b-col md="4" offset="4" class="my-auto">
         <b-card title="Login" class="shadow p-3 mb-5 rounded">
-          <b-form>
+          <b-form @submit="submitForm">
             <b-form-invalid-feedback :state="!hasError">
               Invalid username or password. Please try again.
             </b-form-invalid-feedback>
@@ -15,11 +15,11 @@
               <b-input type="password" id="password" v-model="password" placeholder="Enter password" :required='true'></b-input>
             </b-form-group>
 
-            <b-from-group id="secure-login-group">
+            <b-form-group id="secure-login-group">
               <b-checkbox v-model="secureLogin">Secure login</b-checkbox>
-            </b-from-group>
+            </b-form-group>
 
-            <b-button class="mt-3" block variant="primary" @click="submitForm">Login</b-button>
+            <b-button type="submit" class="mt-3" block variant="primary">Login</b-button>
           </b-form>
         </b-card>
       </b-col>

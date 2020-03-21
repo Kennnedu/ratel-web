@@ -12,7 +12,7 @@
       </b-row>
       <b-row>
         <b-col md="8">
-          <b-row class="cards-deck" @scroll="recordsScroll">
+          <b-row class="cards-deck active" @scroll="recordsScroll">
             <template v-for="(record, index) in records">
                 <b-col
                   :key="`${record.id}${index}`"
@@ -127,7 +127,7 @@
 </script>
 <style>
   .cards-deck {
-    background-color: #f3f2f2;
+    background-color: #f4f3ef;
     overflow-y: auto;
     height: calc(100vh - 130px);
   }
@@ -141,7 +141,7 @@
     background-color: #ddfbdd;
   }
 
-  .cards-deck .card:hover, .cards-deck .card:focus, .cards-deck .card:active {
+  .cards-deck.active .card:hover, .cards-deck.active .card:focus, .cards-deck.active .card:active {
     background-color: #e0e8ff75;
   }
 </style>
