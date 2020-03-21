@@ -55,7 +55,7 @@
           secure_login: _this.secureLogin
         }).then(function(resp){
           _this.cookies().set('session_token', resp.data.session_token)
-          _this.$emit('login');
+          _this.$router.push('/');
         }).catch(() => _this.hasError = true)
       }
     }

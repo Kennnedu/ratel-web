@@ -2,10 +2,7 @@
   <b-card
     class="record-card"
     no-body
-    :sub-title="record.name"
-    :title="record.amount"
-    @click="$emit('click')" :class="{ positive: record.amount > 0 }">
-    
+    :class="{ positive: record.amount > 0 }">
     <b-card-body @click="$emit('click')">
       <b-card-sub-title class="mb-2">{{record.name}}</b-card-sub-title>
       <b-card-title>{{record.amount}}</b-card-title>
@@ -43,12 +40,5 @@ export default {
 
 }
 </script>
-<style lang="css" scoped>
-  .record-card.positive {
-    background-color: #ddfbdd;
-  }
-
-  .record-card:hover, .record-card:focus, .record-card:active {
-    background-color: #e0e8ff75;
-  }
+<style>
 </style>

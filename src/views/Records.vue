@@ -12,7 +12,7 @@
       </b-row>
       <b-row>
         <b-col md="8">
-          <b-row class="records" @scroll="recordsScroll">
+          <b-row class="cards-deck" @scroll="recordsScroll">
             <template v-for="(record, index) in records">
                 <b-col
                   :key="`${record.id}${index}`"
@@ -80,12 +80,10 @@
 
     mounted() {
       this.fetchRecords();
-      this.fetchCards();
-      document.addEventListener('scroll', this.recordsScroll)
     },
 
     computed: {
-      ...mapState(['records', 'totalSum', 'totalRecords']),
+      ...mapState(['records', 'totalRecords']),
       ...mapGetters(['recordsCount'])
     },
 
@@ -128,11 +126,7 @@
   }
 </script>
 <style>
-  html {
-    overflow: hidden;
-  }
-
-  .records {
+  .cards-deck {
     background-color: #f3f2f2;
     overflow-y: auto;
     height: calc(100vh - 130px);
@@ -141,5 +135,13 @@
   .side-tab {
     height: 450px;
     overflow-y: auto;
+  }
+
+  .cards-deck .card.positive {
+    background-color: #ddfbdd;
+  }
+
+  .cards-deck .card:hover, .cards-deck .card:focus, .cards-deck .card:active {
+    background-color: #e0e8ff75;
   }
 </style>

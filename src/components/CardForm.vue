@@ -1,20 +1,17 @@
 <template>
-  <form class="pure-form pure-form-stacked" v-on:submit="submitForm">
-    <fieldset>
-      <label for="card-name">Name</label>
-      <input type="text" id="card-name" placeholder="Enter card name" v-model="currentCard.name" required>
-    </fieldset>
+  <b-form>
+    <b-form-group id="source-name-group" label="Source Name" label-for="source-name">
+      <b-form-input type="text" id="source-name" required v-model="currentCard.name"></b-form-input>
+    </b-form-group>
 
-    <input type="submit" v-bind:value="saveButtonName" class="pure-button pure-button-primary">
-    <input type="button"
-           value="Delete"
-           v-if="currentCard.id"
-           class="pure-button button-error"
-           v-on:click="deleteCard">
-  </form>
+    <b-button variant="outline-primary" @click="submitForm">{{saveButtonName}}</b-button>
+    <b-button variant="danger" v-if="currentCard.id" @click="deleteCard" class="float-right">
+      Delete
+    </b-button>
+  </b-form>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import axios from 'axios'
 
 export default {
@@ -22,15 +19,15 @@ export default {
 
   data: function(){
     return {
-      currentCard: Object.assign({}, this.card),
+      currentCard: Object.assign({ name: '' }, this.card),
       saveButtonName: this.card.id ? "Update" : "Create"
     }
   },
 
   computed: {
     savingCard() {
-      let savingCard = this.currentCard
-      delete savingCard.id
+      let savingCard = Object.assign({}, this.currentCard);
+      delete savingCard.id;
       return { card: savingCard }
     }
   },
@@ -49,9 +46,9 @@ export default {
       const _this = this
 
       axios.post('/cards', _this.savingCard)
-      .then(resp => {
+      .then(() => {
         _this.fetchCards();
-        _this.$emit('close');
+        _this.$emit('save');
       })
       .then(() => _this.$emit('close'));
     },
@@ -60,7 +57,7 @@ export default {
       const _this = this
 
       axios.put(`/cards/${_this.currentCard.id}`, _this.savingCard)
-      .then(resp => {
+      .then(() => {
         _this.fetchCards();
         _this.$emit('close');
       })
@@ -72,7 +69,7 @@ export default {
       const _this = this
 
       axios.delete(`/cards/${_this.currentCard.id}`)
-      .then(resp => {
+      .then(() => {
         _this.fetchCards();
         _this.fetchRecords();
         _this.$emit('close');
@@ -82,5 +79,5 @@ export default {
   }
 }
 </script>
-<style lang="css" scoped>
+<style>
 </style>

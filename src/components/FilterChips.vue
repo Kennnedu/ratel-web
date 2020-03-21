@@ -9,14 +9,14 @@
     </template>
     <template v-for="name in sourceNames">
       <b-badge :key="name" href="#" class="mr-1" :variant="badgeVariant(name)"
-        @click="() => updateFilter({changes: { card: recordNames.filter(n => n !== name).join('&') }})">
+        @click="() => updateFilter({changes: { card: sourceNames.filter(n => n !== name).join('&') }})">
         <font-awesome-icon icon="credit-card" class="mr-1" />
         {{badgeText(name)}}
       </b-badge>
     </template>
     <template v-for="name in tagNames">
       <b-badge :key="name" href="#" class="mr-1" :variant="badgeVariant(name)"
-        @click="() => updateFilter({changes: { tags: recordNames.filter(n => n !== name).join('&') }})">
+        @click="() => updateFilter({changes: { tags: tagNames.filter(n => n !== name).join('&') }})">
         <font-awesome-icon icon="tags" class="mr-1" />
         {{badgeText(name)}}
       </b-badge>
