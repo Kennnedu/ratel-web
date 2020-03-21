@@ -7,7 +7,10 @@
           <FilterChips />
         </b-col>
         <b-col md="4">
-          <b-button block variant="primary" v-b-modal.new-record>+ Add Record</b-button>
+          <b-dropdown block variant="primary" text="+ Add Record">
+            <b-dropdown-item href="#" v-b-modal.new-record>Add one</b-dropdown-item>
+            <b-dropdown-item href="#" v-b-modal.html-upload-record>Upload batch(html)</b-dropdown-item>
+          </b-dropdown>
         </b-col>
       </b-row>
       <b-row>

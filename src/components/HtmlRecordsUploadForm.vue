@@ -1,18 +1,13 @@
 <template>
-  <form class="pure-form pure-form-stacked" v-on:submit="submitForm">
-    <fieldset>
-      <div class="pure-control-group">
-        <label for="statements-html">Html table</label>
-        <input id="statements-html"
-               type="file"
-               placeholder="Past your statements html table"
-               v-bind:disabled="isDisabledTextArea"
-               v-on:change="e => { this.file = e.target.files[0] }"/>
-      </div>
-    </fieldset>
-    <div class="pure-controls">
-      <input type="submit" class="pure-button pure-button-primary" v-bind:value="saveButtonName">
-    </div>
+  <form v-on:submit="submitForm">
+    <b-form-group id="statements-html-group" label="Amount" label-for="statements-html">
+      <b-form-file 
+        id="statements-html"
+        placeholder="Choose a file or drop it here..."
+        :disabled="isDisabledTextArea"
+        @change="e => { this.file = e.target.files[0] }"></b-form-file>
+    </b-form-group>
+    <b-button type="submit" variant="primary">{{saveButtonName}}</b-button>
   </form>
 </template>
 <script>
