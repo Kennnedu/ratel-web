@@ -1,19 +1,18 @@
 <template>
   <main id="ratel-app">
+    <Navbar v-show="$route.name !== 'login'"/>
     <router-view></router-view>
   </main>
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex'
+  import { mapActions } from 'vuex'
+  import Navbar from './components/Navbar.vue'
   import axios from 'axios'
-  import debounce from 'lodash.debounce'
   import Cookies from 'js-cookie'
 
   export default {
-    computed: {
-      ...mapState(['filter'])
-    },
+    components: { Navbar },
 
     created() {
       let _this = this;
@@ -31,22 +30,11 @@
     },
 
     mounted() {
-      this.fetchRecords();
       this.fetchCards();
-      this.debouncedFetchRecords = debounce(this.fetchRecords, 500);
-    },
-
-    watch: {
-      filter: {
-        handler: function(){
-          this.debouncedFetchRecords()
-        },
-        deep: true
-      }
     },
 
     methods: {
-      ...mapActions(['fetchRecords', 'fetchCards']),
+      ...mapActions(['fetchCards']),
 
       cookies() {
         return Cookies

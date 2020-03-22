@@ -1,6 +1,5 @@
 <template>
   <section id="content">
-    <Navbar />
     <b-container class="mt-5">
       <b-row class="py-3">
         <b-col md="8">
@@ -46,13 +45,12 @@
   import RecordFilter from '../components/RecordFilter.vue'
   import FilterChips from '../components/FilterChips.vue'
   import CardForm from '../components/CardForm.vue'
-  import Navbar from '../components/Navbar.vue'
   import axios from 'axios'
   import debounce from 'lodash.debounce'
   import { mapState } from 'vuex'
 
   export default {
-    components: { RecordFilter, FilterChips, Navbar, CardForm },
+    components: { RecordFilter, FilterChips, CardForm },
 
     data: function() {
       return {

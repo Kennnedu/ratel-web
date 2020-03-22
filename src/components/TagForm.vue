@@ -49,18 +49,14 @@ export default {
     updateTag(){
       const _this = this
 
-      axios.put(`/tags/${_this.currentTag.id}`, _this.savingTag)
-        .then(() => _this.fetchRecords())
-        .then(() => _this.$emit('close'));
+      axios.put(`/tags/${_this.currentTag.id}`, _this.savingTag).then(() => _this.$emit('close'));
     },
 
     deleteTag(e){
       e.preventDefault();
       const _this = this
 
-      axios.delete(`/tags/${_this.currentTag.id}`)
-      .then(() => _this.fetchRecords())
-      .then(() => _this.$emit('close'));
+      axios.delete(`/tags/${_this.currentTag.id}`).then(() => _this.$emit('close'));
     }
   }
 }

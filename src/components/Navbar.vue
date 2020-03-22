@@ -13,18 +13,41 @@
   </b-navbar>
 </template>
 <script>
-  import { mapState } from 'vuex'
+  import debounce from 'lodash.debounce'
+  import { mapState, mapActions } from 'vuex'
 
   export default {
     computed: {
-      ...mapState(['totalSum']),
+      ...mapState(['filter', 'totalSum']),
 
       balanceColorClass() {
         if(this.totalSum > 0) return 'text-success';
         else if(this.totalSum < 0) return 'text-danger';
         else return ''; 
       }
-    }
+    },
+
+    mounted() {
+      this.fetchTotalSum();
+      this.debouncedFetchSum = debounce(this.fetchTotalSum, 500);
+    },
+
+    watch: {
+      filter: {
+        handler: function(){
+          this.fetchTotalSum()
+        },
+        deep: true
+      },
+
+      $route(to, from) {
+        if(from.name === 'login' && this.totalSum === 0) this.fetchTotalSum();
+      }
+    },
+
+    methods: {
+      ...mapActions(['fetchTotalSum'])
+    },
   }
 </script>
 <style></style>

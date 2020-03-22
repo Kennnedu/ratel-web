@@ -1,6 +1,5 @@
 <template>
   <section id="content">
-    <Navbar />
     <b-container class="mt-5">
       <b-row class="py-3">
         <b-col md="8">
@@ -39,7 +38,7 @@
                 <RecordFilter/>
               </b-tab>
               <b-tab title="Edit batch" class="side-tab">
-                <RecordBatchForm />
+                <RecordBatchForm @remoteAction = "fetchTotalSum(); fetchRecords()" />
               </b-tab>
             </b-tabs>
           </b-card>
@@ -47,13 +46,15 @@
       </b-row>
     </b-container>
     <b-modal id="new-record" title="New Record" hide-footer>
-      <RecordForm @save="$bvModal.hide('new-record')" />
+      <RecordForm @save="$bvModal.hide('new-record'); fetchRecords(); fetchTotalSum()" />
     </b-modal>
     <b-modal id="edit-record" title="Edit Record" hide-footer>
-      <RecordForm @save="$bvModal.hide('edit-record')" :record="currentRecord" />
+      <RecordForm 
+        :record="currentRecord"
+        @save="$bvModal.hide('edit-record'); fetchRecords({ limit: recordsCount }); fetchTotalSum()" />
     </b-modal>
     <b-modal id="html-upload-record" title="Upload Records html" hide-footer>
-      <HtmlRecordsUploadForm @save="$bvModal.hide('html-upload-record')"/>
+      <HtmlRecordsUploadForm @save="$bvModal.hide('html-upload-record'); fetchRecords(); fetchTotalSum()"/>
     </b-modal>
   </section>
 </template>
@@ -64,40 +65,50 @@
   import RecordBatchForm from '../components/RecordBatchForm.vue'
   import HtmlRecordsUploadForm from '../components/HtmlRecordsUploadForm.vue'
   import FilterChips from '../components/FilterChips.vue'
-  import Navbar from '../components/Navbar.vue'
   import moment from 'moment'
-
+  import debounce from 'lodash.debounce'
+  import axios from 'axios'
   import { mapState, mapGetters, mapActions } from 'vuex'
 
   export default {
-    components: { Navbar, Record, RecordForm, RecordFilter, RecordBatchForm, HtmlRecordsUploadForm, FilterChips },
+    components: { Record, RecordForm, RecordFilter, RecordBatchForm, HtmlRecordsUploadForm, FilterChips },
 
     data: function() {
       return {
         isFetchingRecords: false,
         displayBackButton: false,
         currentRecord: {},
-        moment: moment
+        moment: moment,
+        records: [],
+        totalRecords: 0
       }
     },
 
     mounted() {
       this.fetchRecords();
+      this.debouncedFetchRecords = debounce(this.fetchRecords, 500);
     },
 
     computed: {
-      ...mapState(['records', 'totalRecords']),
-      ...mapGetters(['recordsCount'])
+      ...mapState(['filter']),
+      ...mapGetters(['filterParams']),
+
+      recordsCount() {
+        return this.records.length
+      }
     },
 
     watch: {
-      recordsCount() {
-        if(this.isFetchingRecords) this.isFetchingRecords = false
+      filter: {
+        handler: function(){
+          this.debouncedFetchRecords()
+        },
+        deep: true
       }
     },
 
     methods: {
-      ...mapActions(['fetchRecords', 'fetchCards']),
+      ...mapActions(['fetchRecords', 'fetchTotalSum']),
 
       recordsScroll(e) {
         e.preventDefault();
@@ -120,10 +131,21 @@
       },
 
       scrollBack(e){
-      e.preventDefault();
+        e.preventDefault();
 
         this.reduceScroll(document.querySelector('.records'));
         this.displayBackButton = false;
+      },
+
+      fetchRecords(params = {}) {
+        this.isFetchingRecords = true;
+
+        axios.get('/records', { params: Object.assign({}, this.filterParams, params) })
+          .then(data => {
+            if(params.offset) this.records = [...[], this.records, ...data.data.records]
+            else this.records = data.data.records
+            this.totalRecords = data.data.total_count
+          })
       }
     }
   }

@@ -29,7 +29,7 @@
     },
 
     methods: {
-      ...mapActions(['fetchRecords', 'fetchCards']),
+      ...mapActions(['fetchCards']),
 
       submitForm(e){
         e.preventDefault();
@@ -42,7 +42,6 @@
         axios.post('/records/bulk', this.getFormData())
           .then(() => {
             _this.saveButtonName = 'Upload';
-            _this.fetchRecords();
             _this.fetchCards()
             _this.$emit('save');
           })

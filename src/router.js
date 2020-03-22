@@ -12,7 +12,7 @@ Vue.use(VueRouter)
 export default new VueRouter({
   mode: 'history',
   routes: [
-    { path: '/login', component: Login },
+    { name: 'login', path: '/login', component: Login },
     { name: 'records', path: '/', component: Records, alias: '/records' },
     { name: 'sources', path: '/sources', component: Sources },
     { name: 'tags', path: '/tags', component: Tags },

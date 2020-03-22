@@ -36,7 +36,6 @@
 <script>
   import axios from 'axios'
   import moment from 'moment'
-  import { mapActions, mapGetters } from 'vuex'
   import CardSelector from'./CardSelector.vue'
   import TagsInput from'./TagsInput.vue'
   import RecordNameInput from'./RecordNameInput.vue'
@@ -74,8 +73,6 @@
     },
 
     computed: {
-      ...mapGetters(['recordsCount']),
-
       savingRecord: function(){
         const performedAt = this.record ? moment(this.currentRecord.performed_at) : moment()
         let savingRecord = Object.assign({}, this.currentRecord, { performed_at: performedAt },
@@ -92,8 +89,6 @@
     },
 
     methods: {
-      ...mapActions(['fetchRecords']),
-
       submitForm(e){
         e.preventDefault();
 
@@ -109,10 +104,7 @@
         _this.saveButtonName = 'Saving...'
 
         axios.post('/records', { record: _this.savingRecord })
-        .then(() => {
-          _this.$emit("save");
-          _this.fetchRecords()
-        })
+        .then(() => _this.$emit("save"))
         .then(() => _this.saveButtonName = 'Save')
       },
 
@@ -121,10 +113,7 @@
         _this.saveButtonName = 'Updating...';
 
         axios.put(`/records/${_this.currentRecord.id}`, { record: _this.savingRecord })
-          .then(() => {
-            _this.fetchRecords({limit: this.recordsCount});
-            _this.$emit("save");
-          })
+          .then(() => _this.$emit("save"))
           .then(() => _this.saveButtonName = 'Update');
       },
 
@@ -132,10 +121,7 @@
         const _this = this;
 
         axios.delete(`/records/${_this.record.id}`)
-          .then(() => {
-            _this.fetchRecords({limit: this.recordsCount});
-            _this.$emit('save');
-          })
+          .then(() => _this.$emit('save'))
       }
     }
   }

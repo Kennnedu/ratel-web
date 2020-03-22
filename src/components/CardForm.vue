@@ -64,7 +64,6 @@ export default {
       axios.delete(`/cards/${_this.currentCard.id}`)
       .then(() => {
         _this.fetchCards();
-        _this.fetchRecords();
         _this.$emit('close');
       })
     }

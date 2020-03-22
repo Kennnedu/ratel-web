@@ -19,19 +19,13 @@ function initializeFilter(){
 
 export default new Vuex.Store({
   state: {
-    records: [],
     totalSum: 0,
-    totalRecords: 0,
     filter: initializeFilter(),
     defaultFilter: initializeFilter(),
     cards: []
   },
 
   getters: {
-    recordsCount: state => {
-      return state.records.length
-    },
-
     filterParams: state => {
       return {
         'name': state.filter.name,
@@ -44,18 +38,6 @@ export default new Vuex.Store({
   },
 
   mutations: {
-    addRecords(state, payload) {
-      state.records = [...state.records, ...payload.records]
-    },
-
-    updateRecords(state, payload) {
-      state.records = payload.records
-    },
-
-    updateTotalRecords(state, payload) {
-      state.totalRecords = payload.totalRecords
-    },
-
     updateCards(state, payload) {
       state.cards = payload.cards
     },
@@ -80,30 +62,14 @@ export default new Vuex.Store({
   },
 
   actions: {
-    fetchRecords({ commit, getters }, params){
-      !params && (params = {});
+    fetchTotalSum(context) {
       return new Promise((resolve, reject) => {
-        let paramsObj = Object.assign({}, getters.filterParams, { limit: 32 }, params)
-
-        if(!params.offset) { 
-          axios.get('/records/sum', { params: paramsObj })
-          .then(data => commit('updateTotalSum', { totalSum: data.data.sum }))
-          .catch(error => reject(error.response));
-        }
-
-        axios.get('/records', { params: paramsObj })
+        axios.get('/records/sum', { params: context.getters.filterParams })
         .then(data => {
-          if(params.offset){
-            commit('addRecords', { records: data.data.records });
-          }
-          else {
-            commit('updateRecords', { records: data.data.records });
-            commit('updateTotalRecords', { totalRecords: data.data.total_count })
-          }
-
-          resolve();
+          context.commit('updateTotalSum', { totalSum: data.data.sum })
+          resolve(data.data) 
         })
-        .catch(error => reject(error.response))
+        .catch(error => reject(error.response));
       })
     },
 

@@ -32,7 +32,7 @@
 </template>
 <script>
 import axios from 'axios'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import TagsInput from'./TagsInput.vue'
 import CardSelector from'./CardSelector.vue'
 import RecordNameInput from'./RecordNameInput.vue'
@@ -69,8 +69,6 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchRecords']),
-
     clearForm() {
       this.batchForm = {
         name: '',
@@ -87,9 +85,8 @@ export default {
       axios.put('/records', this.submitFormParams())
         .then(() => {
           this.submitButtonName = 'Apply';
-          this.fetchRecords();
           this.clearForm()
-          this.$emit('close');
+          this.$emit('remoteAction');
         })
     },
 
@@ -99,11 +96,7 @@ export default {
       if (!confirm('Are you sure do you want tor remove all selected records?')) return null;
 
       axios({url: '/records', method: 'delete', params: this.filterParams })
-        .then(() => {
-          this.fetchRecords();
-          this.clearForm()
-          this.$emit('close');
-        })
+        .then(() => { this.clearForm(); this.$emit('remoteAction')})
     },
 
     submitFormParams() {
