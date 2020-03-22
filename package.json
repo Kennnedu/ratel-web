@@ -17,6 +17,7 @@
     "core-js": "^3.4.4",
     "js-cookie": "^2.2.1",
     "lodash.debounce": "^4.0.8",
+    "mobile-detect": "^1.4.4",
     "moment": "^2.24.0",
     "purecss": "^1.0.1",
     "vue": "^2.6.11",
