@@ -168,6 +168,7 @@
             else this.records = data.data.records
             this.totalRecords = data.data.total_count
           })
+          .then(() =>  this.isFetchingRecords = false)
       },
 
       shouldShowDivideDate(index, record, prevRecord) {
