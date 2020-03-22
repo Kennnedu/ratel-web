@@ -23,13 +23,13 @@
           <b-row class="cards-deck active" @scroll="recordsScroll">
             <template v-for="(record, index) in records">
                 <b-col
-                  :key="`${record.id}${index}`"
+                  :key="`${record.id}${moment(record.performed_at).format('X')}`"
                   md="12"
                   class="divide-date text-center"
                   v-if="shouldShowDivideDate(index, record, records[index - 1])">
                   <em>{{ moment(record.performed_at).format('LL') }}</em>
                 </b-col>
-                <b-col md="4" class="py-3" :key="record.id">
+                <b-col md="4" class="py-3" :key="`${record.id}${index}`">
                   <Record
                     :record="record"
                     @click="currentRecord = record; $bvModal.show('edit-record')"/>
@@ -164,7 +164,7 @@
 
         axios.get('/records', { params:  paramsResult})
           .then(data => {
-            if(paramsResult.offset) this.records = [...[], this.records, ...data.data.records]
+            if(paramsResult.offset) this.records = [...[], ...this.records, ...data.data.records]
             else this.records = data.data.records
             this.totalRecords = data.data.total_count
           })
