@@ -2,8 +2,14 @@
   <section id="content">
     <b-container class="mt-5">
       <b-row class="py-3">
-        <b-col md="8">
+        <b-col md="6">
           <FilterChips />
+        </b-col>
+        <b-col md="2">
+          <SortByDropdown
+            :options="orderOptions"
+            :selectedOption="orderOption"
+            @selectOption="opt => { this.orderOption = opt; this.fetch() }" />
         </b-col>
         <b-col md="4">
         </b-col>
@@ -37,38 +43,50 @@
 <script>
   import RecordFilter from '../components/RecordFilter.vue'
   import FilterChips from '../components/FilterChips.vue'
+  import SortByDropdown from '../components/SortByDropdown.vue'
   import axios from 'axios'
   import debounce from 'lodash.debounce'
   import { mapState } from 'vuex'
 
   export default {
-    components: { RecordFilter, FilterChips },
+    components: { RecordFilter, FilterChips, SortByDropdown },
 
     data: function() {
       return {
-        replenishments: []
+        replenishments: [],
+        orderOption: null
       }
     },
 
     watch: {
       filter: {
         handler: function(){
-          this.debouncedReplenishments()
+          this.debouncedFetch()
         },
         deep: true
       }
     },
 
+    created() {
+      this.orderOptions = [
+        { "order[field]": "records_sum", "order[type]": "asc" },
+        { "order[field]": "records_sum", "order[type]": "desc" },
+        { "order[field]": "name", "order[type]": "asc" },
+        { "order[field]": "name", "order[type]": "desc" }
+      ];
+      this.orderOption = this.orderOptions[1];
+    },
+
     mounted() {
-      this.fetchReplenishments();
-      this.debouncedReplenishments = debounce(this.fetchReplenishments, 500);
+      this.fetch();
+      this.debouncedFetch = debounce(this.fetch, 500);
     },
 
     computed: {
       ...mapState(['filter']),
 
       sourceParams() {
-        return {
+        return Object.assign({
           'fields': 'records_sum',
           'order[field]': 'records_sum',
           'record[name]': this.filter.name,
@@ -79,12 +97,12 @@
           'record[amount][gt]': 0,
           'order[type]': 'desc',
           'limit': 150
-        }
+        }, this.orderOption)
       }
     },
 
     methods: {
-      fetchReplenishments() {
+      fetch() {
         axios.get('/records/names', { params: this.sourceParams })
             .then(resp => this.replenishments = resp.data.record_names)
       }

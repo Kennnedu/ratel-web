@@ -2,8 +2,14 @@
   <section id="content">
     <b-container class="mt-5">
       <b-row class="py-3">
-        <b-col md="8">
+        <b-col md="6">
           <FilterChips />
+        </b-col>
+        <b-col md="2">
+          <SortByDropdown
+            :options="orderOptions"
+            :selectedOption="orderOption"
+            @selectOption="opt => { this.orderOption = opt; this.fetchFilteredCards() }" />
         </b-col>
         <b-col md="4">
           <b-button block variant="primary" v-b-modal.new-source>+ Add Source</b-button>
@@ -45,17 +51,19 @@
   import RecordFilter from '../components/RecordFilter.vue'
   import FilterChips from '../components/FilterChips.vue'
   import CardForm from '../components/CardForm.vue'
+  import SortByDropdown from '../components/SortByDropdown.vue'
   import axios from 'axios'
   import debounce from 'lodash.debounce'
   import { mapState } from 'vuex'
 
   export default {
-    components: { RecordFilter, FilterChips, CardForm },
+    components: { RecordFilter, FilterChips, CardForm, SortByDropdown },
 
     data: function() {
       return {
         sources: [],
-        currentSource: {}
+        currentSource: {},
+        orderOption: null
       }
     },
 
@@ -68,6 +76,16 @@
       }
     },
 
+    created() {
+      this.orderOptions = [
+        { "order[field]": "records_sum", "order[type]": "asc" },
+        { "order[field]": "records_sum", "order[type]": "desc" },
+        { "order[field]": "name", "order[type]": "asc" },
+        { "order[field]": "name", "order[type]": "desc" }
+      ];
+      this.orderOption = this.orderOptions[1];
+    },
+
     mounted() {
       this.fetchFilteredCards();
       this.debouncedFilteredCards = debounce(this.fetchFilteredCards, 500);
@@ -77,7 +95,7 @@
       ...mapState(['filter']),
 
       sourceParams() {
-        return {
+        return Object.assign({
           'fields': 'records_sum',
           'order[field]': 'records_sum',
           'order[type]': 'desc',
@@ -86,7 +104,7 @@
           'record[tags]': this.filter.tags,
           'record[performed_at][gt]': this.filter.from,
           'record[performed_at][lt]': this.filter.to
-        }
+        }, this.orderOption)
       }
     },
 

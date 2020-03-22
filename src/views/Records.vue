@@ -2,8 +2,14 @@
   <section id="content">
     <b-container class="mt-5">
       <b-row class="py-3">
-        <b-col md="8">
+        <b-col md="6">
           <FilterChips />
+        </b-col>
+        <b-col md="2">
+          <SortByDropdown
+            :options="orderOptions"
+            :selectedOption="orderOption"
+            @selectOption="opt => { this.orderOption = opt; this.fetchRecords() }" />
         </b-col>
         <b-col md="4">
           <b-dropdown block variant="primary" text="+ Add Record">
@@ -20,7 +26,7 @@
                   :key="`${record.id}${index}`"
                   md="12"
                   class="divide-date text-center"
-                  v-if="index === 0 || (index !== 0 && !moment(record.performed_at).isSame(moment(records[index-1].performed_at), 'day'))">
+                  v-if="shouldShowDivideDate(index, record, records[index - 1])">
                   <em>{{ moment(record.performed_at).format('LL') }}</em>
                 </b-col>
                 <b-col md="4" class="py-3" :key="record.id">
@@ -65,13 +71,14 @@
   import RecordBatchForm from '../components/RecordBatchForm.vue'
   import HtmlRecordsUploadForm from '../components/HtmlRecordsUploadForm.vue'
   import FilterChips from '../components/FilterChips.vue'
+  import SortByDropdown from '../components/SortByDropdown.vue'
   import moment from 'moment'
   import debounce from 'lodash.debounce'
   import axios from 'axios'
   import { mapState, mapGetters, mapActions } from 'vuex'
 
   export default {
-    components: { Record, RecordForm, RecordFilter, RecordBatchForm, HtmlRecordsUploadForm, FilterChips },
+    components: { Record, RecordForm, RecordFilter, RecordBatchForm, HtmlRecordsUploadForm, FilterChips, SortByDropdown },
 
     data: function() {
       return {
@@ -80,8 +87,21 @@
         currentRecord: {},
         moment: moment,
         records: [],
-        totalRecords: 0
+        totalRecords: 0,
+        orderOption: null
       }
+    },
+
+    created() {
+      this.orderOptions = [
+        { "order[field]": "amount", "order[type]": "asc" },
+        { "order[field]": "amount", "order[type]": "desc" },
+        { "order[field]": "performed_at", "order[type]": "asc" },
+        { "order[field]": "performed_at", "order[type]": "desc" },
+        { "order[field]": "name", "order[type]": "asc" },
+        { "order[field]": "name", "order[type]": "desc" }
+      ];
+      this.orderOption = this.orderOptions[3];
     },
 
     mounted() {
@@ -140,12 +160,22 @@
       fetchRecords(params = {}) {
         this.isFetchingRecords = true;
 
-        axios.get('/records', { params: Object.assign({}, this.filterParams, params) })
+        const paramsResult = Object.assign({}, this.filterParams, this.orderOption, params);
+
+        axios.get('/records', { params:  paramsResult})
           .then(data => {
-            if(params.offset) this.records = [...[], this.records, ...data.data.records]
+            if(paramsResult.offset) this.records = [...[], this.records, ...data.data.records]
             else this.records = data.data.records
             this.totalRecords = data.data.total_count
           })
+      },
+
+      shouldShowDivideDate(index, record, prevRecord) {
+        return this.orderOption['order[field]'] === 'performed_at' && (
+          index === 0 || (
+            index !== 0 && !this.moment(record.performed_at).isSame(this.moment(prevRecord.performed_at), 'day')
+          )
+        )
       }
     }
   }
