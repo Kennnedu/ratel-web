@@ -26,8 +26,10 @@
         @change="newRecordsTags => batchForm.removeRecordsTags = newRecordsTags" />
     </b-form-group>
 
-    <b-button class="" variant="outline-primary" :disabled="!validBatchForm" @click="submitForm">{{submitButtonName}}</b-button>
-    <b-button class="float-right" variant="danger" @click="destroyRecords">Destroy All</b-button>
+    <b-button variant="outline-primary" :disabled="!validBatchForm" @click="submitForm">{{submitButtonName}}</b-button>
+    <b-button class="float-right" variant="danger" @click="destroyRecords" v-if="shouldDisplayDestroyAllBtn">
+      Destroy All
+    </b-button>
   </b-form>
 </template>
 <script>
@@ -66,6 +68,10 @@ export default {
       const { name, card, addRecordsTags, removeRecordsTags } = this.batchForm
       return name.length > 0 || card.id || addRecordsTags.length > 0 || removeRecordsTags.length > 0
     }
+  },
+
+  created() {
+    this.shouldDisplayDestroyAllBtn = process.env.NODE_ENV === 'development'
   },
 
   methods: {

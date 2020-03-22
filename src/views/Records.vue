@@ -189,7 +189,7 @@
   }
 
   .side-tab {
-    height: 450px;
+    height: calc(100vh - 185px);
     overflow-y: auto;
   }
 

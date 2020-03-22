@@ -4,7 +4,9 @@
     no-body
     :class="{ positive: record.amount > 0 }">
     <b-card-body @click="$emit('click')">
-      <b-card-sub-title class="mb-2">{{record.name}}</b-card-sub-title>
+      <b-card-sub-title class="mb-2" @click.prevent.stop="() => addFilteringName({name: record.name})">
+        {{record.name}}
+      </b-card-sub-title>
       <b-card-title>{{record.amount}}</b-card-title>
       <b-card-text>
         <section class="tags">
@@ -41,4 +43,8 @@ export default {
 }
 </script>
 <style>
+  .record-card .card-subtitle:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
 </style>

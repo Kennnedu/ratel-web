@@ -57,7 +57,7 @@ export default new Vuex.Store({
     },
 
     addFilteringName(state, payload) {
-      state.filter.name = `${state.filter.name}&${payload.name}`
+      state.filter.name = [...state.filter.name.split('&'), ...['!' + payload.name]].join('&')
     }
   },
 
