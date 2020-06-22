@@ -1,7 +1,7 @@
 <template>
   <b-form @submit="submitForm">
     <b-form-group id="tag-name-group" label="Tag Name" label-for="tag-name">
-      <b-form-input type="text" id="tag-name" required v-model="currentTag.name"></b-form-input>
+      <b-form-input type="text" autofocus id="tag-name" required v-model="currentTag.name"></b-form-input>
     </b-form-group>
 
     <b-button type="submit" variant="outline-primary">{{saveButtonName}}</b-button>

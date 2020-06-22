@@ -5,6 +5,7 @@
         :recordName="currentRecord.name"
         :dataListId="'record-name-suggestions'"
         :isRequired="true"
+	:autofocus="true"
         @change="newName => currentRecord.name = newName" />
     </b-form-group>
 

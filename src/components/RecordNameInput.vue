@@ -9,6 +9,7 @@
       @input="val => $emit('change', val)"
       :list="datalistClass()"
       autocomplete="off"
+      :autofocus="autofocus"
       :required="isRequired"></b-input>
 
     <datalist :id="datalistClass()">
@@ -22,7 +23,7 @@
 import axios from 'axios'
 
 export default {
-  props: ['recordName', 'isRequired', 'dataListId'],
+  props: ['recordName', 'isRequired', 'dataListId', 'autofocus'],
 
   data: function(){
     return {
