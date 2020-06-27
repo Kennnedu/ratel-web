@@ -16,7 +16,7 @@
       </b-row>
       <b-row>
         <b-col md="8">
-          <b-row class="cards-deck">
+					<b-row class="cards-deck" @scroll="recordsScroll">
             <b-col v-for="replenishmentItem in replenishments" :key="replenishmentItem.name" md="4" class="py-3">
               <b-card no-body :class="{ positive: replenishmentItem.records_sum > 0 }">
                 <b-card-body>
@@ -54,7 +54,9 @@
     data: function() {
       return {
         replenishments: [],
-        orderOption: null
+        orderOption: null,
+        total: 0,
+        isFetching: false
       }
     },
 
@@ -85,6 +87,10 @@
     computed: {
       ...mapState(['filter']),
 
+      replenishmentsCount() {
+        return this.replenishments.length
+      },
+
       sourceParams() {
         return Object.assign({
           'fields': 'records_sum',
@@ -96,15 +102,30 @@
           'record[performed_at][lt]': this.filter.to,
           'record[amount][gt]': 0,
           'order[type]': 'desc',
-          'limit': 150
+          'limit': 30
         }, this.orderOption)
       }
     },
 
     methods: {
-      fetch() {
-        axios.get('/records/names', { params: this.sourceParams })
-            .then(resp => this.replenishments = resp.data.record_names)
+      fetch(params = {}) {
+        this.isFetching = true;
+        axios.get('/records/names', { params: Object.assign({}, this.sourceParams, params) })
+          .then(resp => {
+            if(params.offset) this.replenishments = [...[], ...this.replenishments, ...resp.data.record_names]
+            else this.replenishments = resp.data.record_names
+            this.total = resp.data.total_count
+          })
+          .then(() => this.isFetching = false)
+      },
+
+      recordsScroll(e) {
+        e.preventDefault();
+        const elem = e.target;
+
+        if((elem.scrollTop + 1000) > elem.scrollHeight && !this.isFetching && this.replenishmentsCount < this.total) {
+          this.fetch({offset: this.replenishmentsCount, limit: 30});
+        }
       }
     }
   }

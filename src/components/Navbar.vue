@@ -28,7 +28,10 @@
     },
 
     mounted() {
-      this.fetchTotalSum();
+			let params = {}
+			if(this.$route.name === 'expences') params = {'amount[lt]': 0}
+			if(this.$route.name === 'replenishments') params = {'amount[gt]': 0}
+      this.fetchTotalSum(params);
       this.debouncedFetchSum = debounce(this.fetchTotalSum, 500);
     },
 
@@ -41,7 +44,9 @@
       },
 
       $route(to, from) {
-        if(from.name === 'login' && this.totalSum === 0) this.fetchTotalSum();
+				if(from.name !== 'expences' && to.name === 'expences') this.fetchTotalSum({'amount[lt]': 0});
+				if(from.name !== 'replenishments' && to.name === 'replenishments') this.fetchTotalSum({'amount[gt]': 0});
+				if(['login', 'expences', 'replenishments'].includes(from.name) && !['expences', 'replenishments'].includes(to.name)) this.fetchTotalSum();
       }
     },
 

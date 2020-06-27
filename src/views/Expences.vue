@@ -16,7 +16,7 @@
       </b-row>
       <b-row>
         <b-col md="8">
-          <b-row class="cards-deck">
+          <b-row class="cards-deck" @scroll="recordsScroll">
             <b-col v-for="expenceItem in expences" :key="expenceItem.name" md="4" class="py-3">
               <b-card no-body :class="{ positive: expenceItem.records_sum > 0 }">
                 <b-card-body>
@@ -54,7 +54,9 @@
     data: function() {
       return {
         expences: [],
-        orderOption: null
+        orderOption: null,
+        isFetching: false,
+        total: 0
       }
     },
 
@@ -85,6 +87,10 @@
     computed: {
       ...mapState(['filter']),
 
+      expencesCount() {
+        return this.expences.length
+      },
+
       sourceParams() {
         return Object.assign({
           'fields': 'records_sum',
@@ -95,15 +101,31 @@
           'record[performed_at][gt]': this.filter.from,
           'record[performed_at][lt]': this.filter.to,
           'record[amount][lt]': 0,
-          'order[type]': 'asc'
+          'order[type]': 'asc',
+					'limit': 30
         }, this.orderOption)
       }
     },
 
     methods: {
-      fetch() {
-        axios.get('/records/names', { params: this.sourceParams })
-            .then(resp => this.expences = resp.data.record_names)
+      fetch(params = {}) {
+        this.isFetching= true
+        axios.get('/records/names', { params: Object.assign({}, this.sourceParams, params)})
+          .then(resp => {
+            if(params.offset) this.expences = [...[], ...this.expences, ...resp.data.record_names]
+            else this.expences = resp.data.record_names
+            this.total = resp.data.total_count
+          })
+          .then(() => this.isFetching = false)
+      },
+
+      recordsScroll(e) {
+        e.preventDefault();
+        const elem = e.target;
+
+        if((elem.scrollTop + 1000) > elem.scrollHeight && !this.isFetching && this.expencesCount < this.total) {
+          this.fetch({offset: this.expencesCount, limit: 30});
+        }
       }
     }
   }

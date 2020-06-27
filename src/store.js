@@ -62,9 +62,9 @@ export default new Vuex.Store({
   },
 
   actions: {
-    fetchTotalSum(context) {
+    fetchTotalSum(context, params) {
       return new Promise((resolve, reject) => {
-        axios.get('/records/sum', { params: context.getters.filterParams })
+        axios.get('/records/sum', { params: Object.assign({}, context.getters.filterParams, params) })
         .then(data => {
           context.commit('updateTotalSum', { totalSum: data.data.sum })
           resolve(data.data) 

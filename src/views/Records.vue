@@ -136,7 +136,6 @@
         const elem = e.target;
 
         if((elem.scrollTop + 1000) > elem.scrollHeight && !this.isFetchingRecords && this.recordsCount < this.totalRecords) {
-          this.isFetchingRecords = true
           this.fetchRecords({offset: this.recordsCount, limit: 30});
         }
 
