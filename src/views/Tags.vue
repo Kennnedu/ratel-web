@@ -2,10 +2,10 @@
   <section id="content">
     <b-container class="mt-5">
       <b-row class="py-3">
-        <b-col md="6">
+        <b-col md="7">
           <FilterChips />
         </b-col>
-        <b-col md="2">
+        <b-col md="1">
           <SortByDropdown
             :options="orderOptions"
             :selectedOption="orderOption"

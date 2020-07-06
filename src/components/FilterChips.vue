@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-2">
+  <div class="filter-chips mt-2 pl-2">
     <template v-for="name in recordNames">
       <b-badge :key="name" href="#" class="mr-1" :variant="badgeVariant(name)"
         @click="() => updateFilter({changes: { name: recordNames.filter(n => n !== name).join('&') }})">
@@ -71,4 +71,8 @@ export default {
 }
 </script>
 <style>
+  .filter-chips {
+    max-height: 50px;
+    overflow-y: auto;
+  }
 </style>
