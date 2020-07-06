@@ -16,20 +16,22 @@
       </b-row>
       <b-row>
         <b-col md="8">
-					<b-row class="cards-deck" @scroll="recordsScroll">
-            <b-col v-for="replenishmentItem in replenishments" :key="replenishmentItem.name" md="4" class="py-3">
-              <b-card no-body :class="{ positive: replenishmentItem.records_sum > 0 }">
-                <b-card-body>
-                  <b-card-sub-title class="mb-2">{{replenishmentItem.name}}</b-card-sub-title>
-                  <b-card-title>{{replenishmentItem.records_sum}}</b-card-title>
-                </b-card-body>
-              </b-card>
-            </b-col>
-          </b-row>
+          <b-overlay :show="isFetching">
+            <b-row class="cards-deck" @scroll="recordsScroll" :aria-hidden="isFetchingRecords ? 'true' : null">
+              <b-col v-for="replenishmentItem in replenishments" :key="replenishmentItem.name" md="4" class="py-3">
+                <b-card no-body :class="{ positive: replenishmentItem.records_sum > 0 }">
+                  <b-card-body>
+                    <b-card-sub-title class="mb-2">{{replenishmentItem.name}}</b-card-sub-title>
+                    <b-card-title>{{replenishmentItem.records_sum}}</b-card-title>
+                  </b-card-body>
+                </b-card>
+              </b-col>
+            </b-row>
+          </b-overlay>
         </b-col>
         <b-col md="4">
           <b-card no-body>
-            <b-tabs card>
+            <b-tabs card justified>
               <b-tab title="Filter" class="side-tab" active>
                 <RecordFilter/>
               </b-tab>

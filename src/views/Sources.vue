@@ -17,20 +17,22 @@
       </b-row>
       <b-row>
         <b-col md="8">
-          <b-row class="cards-deck active">
-            <b-col v-for="source in sources" :key="source.id" md="4" class="py-3">
-              <b-card no-body :class="{ positive: source.records_sum > 0 }" class="shadow-sm">
-                <b-card-body @click="currentSource = source; $bvModal.show('edit-source')">
-                  <b-card-sub-title class="mb-2">{{source.name}}</b-card-sub-title>
-                  <b-card-title>{{source.records_sum}}</b-card-title>
-                </b-card-body>
-              </b-card>
-            </b-col>
-          </b-row>
+          <b-overlay :show="isFetching">
+            <b-row class="cards-deck active" :aria-hidden="isFetching ? 'true' : null">
+              <b-col v-for="source in sources" :key="source.id" md="4" class="py-3">
+                <b-card no-body :class="{ positive: source.records_sum > 0 }" class="shadow-sm">
+                  <b-card-body @click="currentSource = source; $bvModal.show('edit-source')">
+                    <b-card-sub-title class="mb-2">{{source.name}}</b-card-sub-title>
+                    <b-card-title>{{source.records_sum}}</b-card-title>
+                  </b-card-body>
+                </b-card>
+              </b-col>
+            </b-row>
+          </b-overlay>	
         </b-col>
         <b-col md="4">
           <b-card no-body>
-            <b-tabs card>
+            <b-tabs card justified>
               <b-tab title="Filter" class="side-tab" active>
                 <RecordFilter/>
               </b-tab>
@@ -63,7 +65,8 @@
       return {
         sources: [],
         currentSource: {},
-        orderOption: null
+        orderOption: null,
+				isFetching: false
       }
     },
 
@@ -110,8 +113,10 @@
 
     methods: {
       fetchFilteredCards() {
+				this.isFetching = true
         axios.get('/cards', { params: this.sourceParams })
             .then(resp => this.sources = resp.data.cards)
+						.then(() => this.isFetching = false)
       }
     }
   }

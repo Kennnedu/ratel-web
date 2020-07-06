@@ -1,6 +1,6 @@
 <template>
   <b-form>
-    <b-form-group id="filter-name-group" label="Filter by name" label-for="filter-name">
+    <b-form-group id="filter-name-group" label="Name" label-for="filter-name">
       <b-form-input
         type="text"
         id="filter-name"
@@ -8,7 +8,7 @@
         @input="val => updateFilter({changes: { name: val }})"></b-form-input>
     </b-form-group>
 
-    <b-form-group id="filter-source-group" label="Filter by source" label-for="filter-card">
+    <b-form-group id="filter-source-group" label="Source" label-for="filter-card">
       <b-form-input
         type="text"
         id="filter-card"
@@ -16,7 +16,7 @@
         @input="val => updateFilter({changes: { card: val }})"></b-form-input>
     </b-form-group>
 
-    <b-form-group id="filter-tags-group" label="Filter by tags" label-for="filter-tags">
+    <b-form-group id="filter-tags-group" label="Tags" label-for="filter-tags">
       <b-form-input
         type="text"
         id="filter-tags"

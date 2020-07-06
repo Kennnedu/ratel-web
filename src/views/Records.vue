@@ -20,26 +20,28 @@
       </b-row>
       <b-row>
         <b-col md="8">
-          <b-row class="cards-deck active" @scroll="recordsScroll">
-            <template v-for="(record, index) in records">
-                <b-col
-                  :key="`${record.id}${moment(record.performed_at).format('X')}`"
-                  md="12"
-                  class="divide-date text-center"
-                  v-if="shouldShowDivideDate(index, record, records[index - 1])">
-                  <em>{{ moment(record.performed_at).format('LL') }}</em>
-                </b-col>
-                <b-col md="4" class="py-3" :key="`${record.id}${index}`">
-                  <Record
-                    :record="record"
-                    @click="currentRecord = record; $bvModal.show('edit-record')"/>
-                </b-col>
-            </template>
-          </b-row>
+          <b-overlay :show="isFetchingRecords">
+            <b-row class="cards-deck active" @scroll="recordsScroll" :aria-hidden="isFetchingRecords ? 'true' : null">
+              <template v-for="(record, index) in records">
+                  <b-col
+                    :key="`${record.id}${moment(record.performed_at).format('X')}`"
+                    md="12"
+                    class="divide-date text-center"
+                    v-if="shouldShowDivideDate(index, record, records[index - 1])">
+                    <em>{{ moment(record.performed_at).format('LL') }}</em>
+                  </b-col>
+                  <b-col md="4" class="py-3" :key="`${record.id}${index}`">
+                    <Record
+                      :record="record"
+                      @click="currentRecord = record; $bvModal.show('edit-record')"/>
+                  </b-col>
+              </template>
+            </b-row>
+          </b-overlay>
         </b-col>
         <b-col md="4">
           <b-card no-body>
-            <b-tabs card>
+            <b-tabs card justified>
               <b-tab title="Filter" class="side-tab" active>
                 <RecordFilter/>
               </b-tab>
