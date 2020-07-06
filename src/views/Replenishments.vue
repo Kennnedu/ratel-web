@@ -17,7 +17,7 @@
       <b-row>
         <b-col md="8">
           <b-overlay :show="isFetching">
-            <b-row class="cards-deck" @scroll="recordsScroll" :aria-hidden="isFetchingRecords ? 'true' : null">
+            <b-row class="cards-deck" @scroll="recordsScroll" :aria-hidden="isFetching ? 'true' : null">
               <b-col v-for="replenishmentItem in replenishments" :key="replenishmentItem.name" md="4" class="py-3">
                 <b-card no-body :class="{ positive: replenishmentItem.records_sum > 0 }">
                   <b-card-body>

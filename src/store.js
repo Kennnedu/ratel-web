@@ -23,7 +23,8 @@ export default new Vuex.Store({
     totalSum: 0,
     filter: initializeFilter(),
     defaultFilter: initializeFilter(),
-    cards: []
+    cards: [],
+    tags: []
   },
 
   getters: {
@@ -35,12 +36,19 @@ export default new Vuex.Store({
         'performed_at[gt]': moment(state.filter.from).utc().format('llll'),
         'performed_at[lt]': moment(state.filter.to).utc().format('llll')
       }
-    }
+    },
+
+    cardsCount: state => state.cards.length,
+    tagsCount: state => state.tags.length
   },
 
   mutations: {
     updateCards(state, payload) {
-      state.cards = payload.cards
+      state.cards = payload.cards;
+    },
+
+    updateTags(state, payload) {
+      state.tags = payload.tags;
     },
 
     updateTotalSum(state, payload) {
@@ -84,6 +92,16 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios.get('/cards').then(data => {
           context.commit('updateCards', data.data);
+          resolve();
+        })
+        .catch(error => reject(error.response))
+      })
+    },
+
+    fetchTags(context) {
+      return new Promise((resolve, reject) => {
+        axios.get('/tags').then(data => {
+          context.commit('updateTags', data.data);
           resolve();
         })
         .catch(error => reject(error.response))

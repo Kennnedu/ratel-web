@@ -2,10 +2,14 @@
   <b-navbar type="dark" variant="dark" fixed="top">
     <b-navbar-nav class="mx-auto">
       <b-nav-item href="#" to="records" :active="$route.name === 'records'">Records</b-nav-item>
-      <b-nav-item href="#" to="tags" :active="$route.name === 'tags'">Tags</b-nav-item>
-      <b-nav-item href="#" to="sources" :active="$route.name === 'sources'">Sources</b-nav-item>
+      <b-nav-item href="#" to="tags" :active="$route.name === 'tags'">
+        Tags <b-badge>{{tagsCount}}</b-badge>
+      </b-nav-item>
+      <b-nav-item href="#" to="sources" :active="$route.name === 'sources'">
+        Sources <b-badge>{{cardsCount}}</b-badge>
+      </b-nav-item>
       <b-overlay :show="isFetchingTotalSum" spinner-variant="secondary" spinner-type="grow" variant="dark" opacity="1" spinner-small rounded="sm">
-        <b-nav-text :class="`mx-5 ${balanceColorClass}`" :aria-hidden="isFetchingRecords ? 'true' : null">
+        <b-nav-text :class="`mx-5 ${balanceColorClass}`" :aria-hidden="isFetchingTotalSum ? 'true' : null">
           {{totalSum}}
         </b-nav-text>
       </b-overlay>
@@ -16,11 +20,12 @@
 </template>
 <script>
   import debounce from 'lodash.debounce'
-  import { mapState, mapActions } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
 
   export default {
     computed: {
       ...mapState(['filter', 'totalSum', 'isFetchingTotalSum']),
+      ...mapGetters(['cardsCount', 'tagsCount']),
 
       balanceColorClass() {
         if(this.totalSum > 0) return 'text-success';

@@ -33,6 +33,7 @@
 import axios from 'axios'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { mapState, mapActions } from 'vuex'
 
 library.add(faTimesCircle)
 
@@ -47,6 +48,8 @@ export default {
   },
 
   computed: {
+    ...mapState(['tags']),
+
     displayingRecordsTags() {
       return this.recordsTags.filter(recTag => !recTag._destroy)
     },
@@ -68,6 +71,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['fetchTags']),
+
     addRecordsTag(){
       const _this = this;
 
@@ -76,11 +81,11 @@ export default {
           _this.tagName = "";
           _this.$emit('change', [..._this.recordsTags, ...[Object.assign({tag_id: resp.data.tag.id}, resp.data)] ]);
         })
+        .then(this.fetchTags);
     },
 
     findSuggestions(keyword) {
-      axios.get('/tags', { params: {keyword: keyword} })
-        .then(resp => this.suggestedTags = resp.data.tags)
+      this.suggestedTags = this.tags.filter((t) => t.name.includes(keyword)).slice(0, 30)
     },
 
     deleteRecordsTag(removingRecordsTag) {

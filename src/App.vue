@@ -32,10 +32,11 @@
 
     mounted() {
       this.fetchCards();
+      this.fetchTags();
     },
 
     methods: {
-      ...mapActions(['fetchCards']),
+      ...mapActions(['fetchCards', 'fetchTags']),
 
       cookies() {
         return Cookies

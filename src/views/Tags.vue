@@ -42,10 +42,10 @@
       </b-row>
     </b-container>
     <b-modal id="new-tag" title="New Tag" hide-footer>
-      <TagForm @close="$bvModal.hide('new-tag'); fetchFilteredTags()" :tag="{'name': ''}" />
+      <TagForm @close="$bvModal.hide('new-tag'); fetchFilteredTags(); fetchTags()" :tag="{'name': ''}" />
     </b-modal>
     <b-modal id="edit-tag" title="Edit Tag" hide-footer>
-      <TagForm @close="$bvModal.hide('edit-tag'); fetchFilteredTags()" :tag="currentTag" />
+      <TagForm @close="$bvModal.hide('edit-tag'); fetchFilteredTags(); fetchTags()" :tag="currentTag" />
     </b-modal>
   </section>
 </template>
@@ -56,7 +56,7 @@
   import SortByDropdown from '../components/SortByDropdown.vue'
   import axios from 'axios'
   import debounce from 'lodash.debounce'
-  import { mapState } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
 
   export default {
     components: { RecordFilter, FilterChips, TagForm, SortByDropdown },
@@ -112,6 +112,8 @@
     },
 
     methods: {
+      ...mapActions(['fetchTags']),
+
       fetchFilteredTags() {
 				this.isFetching = true;
 
