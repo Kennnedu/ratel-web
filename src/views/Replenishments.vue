@@ -58,7 +58,7 @@
         replenishments: [],
         orderOption: null,
         total: 0,
-        isFetching: false
+        isFetching: true
       }
     },
 

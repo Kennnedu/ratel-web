@@ -66,7 +66,7 @@
         sources: [],
         currentSource: {},
         orderOption: null,
-				isFetching: false
+				isFetching: true
       }
     },
 

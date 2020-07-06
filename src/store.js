@@ -19,6 +19,7 @@ function initializeFilter(){
 
 export default new Vuex.Store({
   state: {
+    isFetchingTotalSum: true,
     totalSum: 0,
     filter: initializeFilter(),
     defaultFilter: initializeFilter(),
@@ -58,18 +59,24 @@ export default new Vuex.Store({
 
     addFilteringName(state, payload) {
       state.filter.name = [...state.filter.name.split('&'), ...['!' + payload.name]].join('&')
+    },
+
+    changeisFetchingTotalSum(state, payload) {
+      state.isFetchingTotalSum = payload.isFetching;
     }
   },
 
   actions: {
     fetchTotalSum(context, params) {
       return new Promise((resolve, reject) => {
+        context.commit('changeisFetchingTotalSum', { isFetching: true });
         axios.get('/records/sum', { params: Object.assign({}, context.getters.filterParams, params) })
         .then(data => {
           context.commit('updateTotalSum', { totalSum: data.data.sum })
           resolve(data.data) 
         })
-        .catch(error => reject(error.response));
+        .catch(error => reject(error.response))
+        .then(() => context.commit('changeisFetchingTotalSum', { isFetching: false }))
       })
     },
 

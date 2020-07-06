@@ -4,9 +4,11 @@
       <b-nav-item href="#" to="records" :active="$route.name === 'records'">Records</b-nav-item>
       <b-nav-item href="#" to="tags" :active="$route.name === 'tags'">Tags</b-nav-item>
       <b-nav-item href="#" to="sources" :active="$route.name === 'sources'">Sources</b-nav-item>
-      <b-nav-text :class="`mx-5 ${balanceColorClass}`">
-        {{totalSum}}
-      </b-nav-text>
+      <b-overlay :show="isFetchingTotalSum" spinner-variant="secondary" spinner-type="grow" variant="dark" opacity="1" spinner-small rounded="sm">
+        <b-nav-text :class="`mx-5 ${balanceColorClass}`" :aria-hidden="isFetchingRecords ? 'true' : null">
+          {{totalSum}}
+        </b-nav-text>
+      </b-overlay>
       <b-nav-item href="#" to="expences" :active="$route.name === 'expences'">Expences</b-nav-item>
       <b-nav-item href="#" to="replenishments" :active="$route.name === 'replenishments'">Replenish</b-nav-item>
     </b-navbar-nav>
@@ -18,7 +20,7 @@
 
   export default {
     computed: {
-      ...mapState(['filter', 'totalSum']),
+      ...mapState(['filter', 'totalSum', 'isFetchingTotalSum']),
 
       balanceColorClass() {
         if(this.totalSum > 0) return 'text-success';

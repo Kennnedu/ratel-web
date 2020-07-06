@@ -66,7 +66,7 @@
         tags: [],
         currentTag: {},
         orderOption: null,
-				isFetching: false
+				isFetching: true
       }
     },
 

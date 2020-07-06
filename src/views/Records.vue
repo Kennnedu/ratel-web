@@ -84,7 +84,7 @@
 
     data: function() {
       return {
-        isFetchingRecords: false,
+        isFetchingRecords: true,
         displayBackButton: false,
         currentRecord: {},
         moment: moment,

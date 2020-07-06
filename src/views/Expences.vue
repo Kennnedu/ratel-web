@@ -57,7 +57,7 @@
       return {
         expences: [],
         orderOption: null,
-        isFetching: false,
+        isFetching: true,
         total: 0
       }
     },
