@@ -1,12 +1,11 @@
 <template>
   <main id="ratel-app">
-    <Navbar v-show="$route.name !== 'login'"/>
+    <Navbar v-if="$route.name !== 'login'"/>
     <router-view></router-view>
   </main>
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
   import Navbar from './components/Navbar.vue'
   import axios from 'axios'
   import Cookies from 'js-cookie'
@@ -30,14 +29,7 @@
       });
     },
 
-    mounted() {
-      this.fetchCards();
-      this.fetchTags();
-    },
-
     methods: {
-      ...mapActions(['fetchCards', 'fetchTags']),
-
       cookies() {
         return Cookies
       }

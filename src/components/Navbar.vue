@@ -39,6 +39,8 @@
 			if(this.$route.name === 'expences') params = {'amount[lt]': 0}
 			if(this.$route.name === 'replenishments') params = {'amount[gt]': 0}
       this.fetchTotalSum(params);
+      this.fetchCards();
+      this.fetchTags();
       this.debouncedFetchSum = debounce(this.fetchTotalSum, 500);
     },
 
@@ -58,7 +60,7 @@
     },
 
     methods: {
-      ...mapActions(['fetchTotalSum'])
+      ...mapActions(['fetchTotalSum', 'fetchCards', 'fetchTags'])
     },
   }
 </script>
