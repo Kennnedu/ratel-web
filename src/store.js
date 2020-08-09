@@ -2,27 +2,15 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
+import { getDefaultFilter } from './utils/filter'
 
 Vue.use(Vuex)
-
-function initializeFilter(){
-  const savedFilter = JSON.parse(localStorage.getItem('defaultFilter'));
-  if(savedFilter) return savedFilter;
-  return {
-    name: "",
-    card: "",
-    tags: "",
-    from: moment().set('year', moment().get('year') - 1).format('YYYY-MM-DD'),
-    to: moment().format('YYYY-MM-DD')
-  }
-}
 
 export default new Vuex.Store({
   state: {
     isFetchingTotalSum: true,
     totalSum: 0,
-    filter: initializeFilter(),
-    defaultFilter: initializeFilter(),
+    filter: getDefaultFilter(),
     cards: [],
     tags: []
   },
@@ -57,12 +45,6 @@ export default new Vuex.Store({
 
     updateFilter(state, payload) {
       state.filter = Object.assign({}, state.filter, payload.changes)
-    },
-
-    updateDefaultFilter(state, payload) {
-      let newDefaultFilter = Object.assign({}, state.defaultFilter, payload.changes)
-      state.defaultFilter = newDefaultFilter;
-      localStorage.setItem('defaultFilter', JSON.stringify(newDefaultFilter));
     },
 
     addFilteringName(state, payload) {

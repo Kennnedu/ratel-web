@@ -24,32 +24,50 @@
         @input="val => updateFilter({changes: { tags: val }})"></b-form-input>
     </b-form-group>
 
-    <b-form-group id="filter-from" label="Performed from" label-for="filter-from">
-      <b-form-datepicker
-        type="date"
-        id="filter-from"
-        :value="filter.from"
-        @input="date => updateFilter({changes: { from: date }})"> </b-form-datepicker>
+    <b-form-group id="filter-performed-group" label="Performed range" label-for="filter-performed">
+      <b-form-select
+        id="filter-performed"
+        v-model="selectedPerformedHandler"
+        :options="performedHandlerOptions()"
+      ></b-form-select>
     </b-form-group>
 
-    <b-form-group id="filter-to" label="Performed to" lablel-for="filter-to">
-      <b-form-datepicker
-        type="date"
-        id="filter-to"
-        :value="filter.to"
-        @input="date => updateFilter({changes: { to: date }})"> </b-form-datepicker>
-    </b-form-group>
+    <template v-if="selectedPerformedHandler === 'custom'">
+      <b-form-group id="filter-from" label="From" label-for="filter-from">
+        <b-form-datepicker
+          type="date"
+          id="filter-from"
+          :value="filter.from"
+          @input="date => updateFilter({changes: { from: date }})"> </b-form-datepicker>
+      </b-form-group>
 
-    <b-button class="float-left" @click="() => updateFilter({changes: defaultFilter})">Reset</b-button>
-    <b-button class="float-right" :disabled="isEqlFilterToDefFilter" @click="() => updateDefaultFilter({changes: filter})">Save as Default</b-button>
+      <b-form-group id="filter-to" label="To" lablel-for="filter-to">
+        <b-form-datepicker
+          type="date"
+          id="filter-to"
+          :value="filter.to"
+          @input="date => updateFilter({changes: { to: date }})"> </b-form-datepicker>
+      </b-form-group>
+    </template>
+
+    <b-button class="float-left" @click="resetFilter">Reset</b-button>
+    <b-button class="float-right" :disabled="isEqlFilterToDefFilter" @click="saveDefaultFilter">Save as Default</b-button>
   </b-form>
 </template>
 <script>
 import { mapState, mapMutations } from 'vuex'
+import { getDefaultFilter, getDefaultPerformedHandler, getPerformedHandlerOptions, performedHandlerObject } from '../utils/filter'
 
 export default {
+  data: function() {
+    return {
+      selectedPerformedHandler: getDefaultPerformedHandler(),
+      defaultFilter: getDefaultFilter()
+    }
+  },
+
   computed: {
-    ...mapState(['filter', 'defaultFilter']),
+    ...mapState(['filter']),
 
     isEqlFilterToDefFilter() {
       const defFilter = this.defaultFilter;
@@ -61,7 +79,28 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['updateFilter', 'resetFilter', 'updateDefaultFilter'])
+    ...mapMutations(['updateFilter']),
+
+    saveDefaultFilter() {
+      this.defaultFilter = this.filter
+      localStorage.setItem('performedHandler', this.selectedPerformedHandler)
+      localStorage.setItem('defaultFilter', JSON.stringify(this.defaultFilter))
+    },
+
+    resetFilter() {
+      this.selectedPerformedHandler = getDefaultPerformedHandler();
+      this.updateFilter({changes: this.defaultFilter});
+    },
+
+    performedHandlerOptions() {
+      return getPerformedHandlerOptions()
+    }
+  },
+
+  watch: {
+    selectedPerformedHandler: function(val) {
+      if(val !== 'custom') this.updateFilter({ changes: performedHandlerObject()[val] })
+    }
   }
 }
 </script>
