@@ -106,7 +106,9 @@
           'record[card]': this.filter.card,
           'record[tags]': this.filter.tags,
           'record[performed_at][gt]': this.filter.from,
-          'record[performed_at][lt]': this.filter.to
+          'record[performed_at][lt]': this.filter.to,
+          'record[amount][gt]': this.filter.type  === 'Replenish' ? 0 : null,
+          'record[amount][lt]': this.filter.type === 'Expences' ?  0 : null,
         }, this.orderOption)
       }
     },
