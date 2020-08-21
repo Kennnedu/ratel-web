@@ -2,8 +2,11 @@
   <section id="content">
     <b-container class="mt-5">
       <b-row class="py-3">
-        <b-col md="7">
+        <b-col md="10">
           <FilterChips />
+        </b-col>
+        <b-col md="1">
+          <b-button v-b-toggle.sidebar-1 size="sm" class="mt-2">Filter</b-button>
         </b-col>
         <b-col md="1">
           <SortByDropdown
@@ -11,14 +14,12 @@
             :selectedOption="orderOption"
             @selectOption="opt => { this.orderOption = opt; this.fetch() }" />
         </b-col>
-        <b-col md="4">
-        </b-col>
       </b-row>
       <b-row>
-        <b-col md="8">
+        <b-col md="12">
           <b-overlay :show="isFetching">
             <b-row class="cards-deck" @scroll="recordsScroll" :aria-hidden="isFetching ? 'true' : null">
-              <b-col v-for="expenceItem in expences" :key="expenceItem.name" md="4" class="py-3">
+              <b-col v-for="expenceItem in expences" :key="expenceItem.name" md="3" class="py-3">
                 <b-card no-body :class="{ positive: expenceItem.records_sum > 0 }">
                   <b-card-body>
                     <b-card-sub-title class="mb-2">{{expenceItem.name}}</b-card-sub-title>
@@ -29,17 +30,13 @@
             </b-row>
           </b-overlay>
         </b-col>
-        <b-col md="4">
-          <b-card no-body>
-            <b-tabs card fill>
-              <b-tab title="Filter" class="side-tab" active>
-                <RecordFilter/>
-              </b-tab>
-            </b-tabs>
-          </b-card>
-        </b-col>
       </b-row>
     </b-container>
+    <b-sidebar id="sidebar-1" title="Filter" right shadow>
+      <b-container>
+        <RecordFilter/>
+      </b-container>
+    </b-sidebar>
   </section>
 </template>
 <script>

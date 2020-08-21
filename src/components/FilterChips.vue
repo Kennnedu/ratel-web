@@ -21,6 +21,11 @@
         {{badgeText(name)}}
       </b-badge>
     </template>
+    <b-badge href="#" class="mr-1" variant="secondary" v-if="filter.type === 'Replenish' || filter.type === 'Expences'"
+      @click="() => updateFilter({changes: { type: 'Both' }})">
+      <font-awesome-icon icon="search-dollar" class="mr-1"/>
+      {{filter.type}}
+    </b-badge>
     <b-badge href="#" class="mr-1" variant="secondary" v-if="filter.from"
       @click="() => updateFilter({changes: { from: '' }})">
       <font-awesome-icon icon="calendar-alt" /> <span class="mr-1">from:</span>
@@ -36,9 +41,9 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faReceipt, faCreditCard, faTags, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
+import { faReceipt, faCreditCard, faTags, faCalendarAlt, faSearchDollar } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faReceipt, faCreditCard, faTags, faCalendarAlt)
+library.add(faReceipt, faCreditCard, faTags, faCalendarAlt, faSearchDollar)
 
 export default {
   computed: {
@@ -54,7 +59,7 @@ export default {
 
     tagNames() {
       return this.filter.tags.split('&').filter(name => name);
-    }
+    },
   },
 
   methods: {

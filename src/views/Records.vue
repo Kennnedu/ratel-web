@@ -11,15 +11,21 @@
             :selectedOption="orderOption"
             @selectOption="opt => { this.orderOption = opt; this.fetchRecords() }" />
         </b-col>
-        <b-col md="4">
-          <b-dropdown block variant="primary" text="+ Add Record">
+        <b-col md="1">
+          <b-button v-b-toggle.sidebar-1 size="sm" class="mt-2">Filter</b-button>
+        </b-col>
+        <b-col md="1">
+          <b-button v-b-toggle.sidebar-2 size="sm" class="mt-2">Edit</b-button>
+        </b-col>
+        <b-col md="2">
+          <b-dropdown block variant="primary" text="+ Add">
             <b-dropdown-item href="#" v-b-modal.new-record>Add one</b-dropdown-item>
             <b-dropdown-item href="#" v-b-modal.html-upload-record>Upload batch(html)</b-dropdown-item>
           </b-dropdown>
         </b-col>
       </b-row>
       <b-row>
-        <b-col md="8">
+        <b-col md="12">
           <b-overlay :show="isFetchingRecords">
             <b-row class="cards-deck active" @scroll="recordsScroll" :aria-hidden="isFetchingRecords ? 'true' : null">
               <template v-for="(record, index) in records">
@@ -30,7 +36,7 @@
                     v-if="shouldShowDivideDate(index, record, records[index - 1])">
                     <em>{{ moment(record.performed_at).format('LL') }}</em>
                   </b-col>
-                  <b-col md="4" class="py-3" :key="`${record.id}${index}`">
+                  <b-col md="3" class="py-3" :key="`${record.id}${index}`">
                     <Record
                       :record="record"
                       @click="currentRecord = record; $bvModal.show('edit-record')"/>
@@ -39,20 +45,18 @@
             </b-row>
           </b-overlay>
         </b-col>
-        <b-col md="4">
-          <b-card no-body>
-            <b-tabs card justified>
-              <b-tab title="Filter" class="side-tab" active>
-                <RecordFilter/>
-              </b-tab>
-              <b-tab title="Edit batch" class="side-tab">
-                <RecordBatchForm @remoteAction = "fetchTotalSum(); fetchRecords()" />
-              </b-tab>
-            </b-tabs>
-          </b-card>
-        </b-col>
       </b-row>
     </b-container>
+    <b-sidebar id="sidebar-1" title="Filter" right shadow>
+      <b-container>
+        <RecordFilter/>
+      </b-container>
+    </b-sidebar>
+    <b-sidebar id="sidebar-2" title="Edit" right shadow>
+      <b-container>
+        <RecordBatchForm @remoteAction = "fetchTotalSum(); fetchRecords()" />
+      </b-container>
+    </b-sidebar>
     <b-modal id="new-record" title="New Record" hide-footer>
       <RecordForm @save="$bvModal.hide('new-record'); fetchRecords(); fetchTotalSum()" />
     </b-modal>

@@ -2,7 +2,7 @@
   <section id="content">
     <b-container class="mt-5">
       <b-row class="py-3">
-        <b-col md="7">
+        <b-col md="8">
           <FilterChips />
         </b-col>
         <b-col md="1">
@@ -11,15 +11,18 @@
             :selectedOption="orderOption"
             @selectOption="opt => { this.orderOption = opt; this.fetchFilteredCards() }" />
         </b-col>
-        <b-col md="4">
-          <b-button block variant="primary" v-b-modal.new-source>+ Add Source</b-button>
+        <b-col md="1">
+          <b-button v-b-toggle.sidebar-1 size="sm" class="mt-2">Filter</b-button>
+        </b-col>
+        <b-col md="2">
+          <b-button block variant="primary" v-b-modal.new-source>+ Add</b-button>
         </b-col>
       </b-row>
       <b-row>
-        <b-col md="8">
+        <b-col md="12">
           <b-overlay :show="isFetching">
             <b-row class="cards-deck active" :aria-hidden="isFetching ? 'true' : null">
-              <b-col v-for="source in sources" :key="source.id" md="4" class="py-3">
+              <b-col v-for="source in sources" :key="source.id" md="3" class="py-3">
                 <b-card no-body :class="{ positive: source.records_sum > 0 }" class="shadow-sm">
                   <b-card-body @click="currentSource = source; $bvModal.show('edit-source')">
                     <b-card-sub-title class="mb-2">{{source.name}}</b-card-sub-title>
@@ -30,17 +33,13 @@
             </b-row>
           </b-overlay>	
         </b-col>
-        <b-col md="4">
-          <b-card no-body>
-            <b-tabs card justified>
-              <b-tab title="Filter" class="side-tab" active>
-                <RecordFilter/>
-              </b-tab>
-            </b-tabs>
-          </b-card>
-        </b-col>
       </b-row>
     </b-container>
+    <b-sidebar id="sidebar-1" title="Filter" right shadow>
+      <b-container>
+        <RecordFilter/>
+      </b-container>
+    </b-sidebar>
     <b-modal id="new-source" title="New Source" hide-footer>
       <CardForm @close="$bvModal.hide('new-source'); fetchFilteredCards()" :card="{'name': ''}" />
     </b-modal>
