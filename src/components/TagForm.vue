@@ -43,7 +43,7 @@ export default {
     createTag(){
       const _this = this
 
-      axios.post('/tags', _this.savingTag).then(() => _this.$emit('close'));
+      axios.post('/tags', _this.savingTag).then(() => _this.$emit('close'))
     },
 
     updateTag(){
