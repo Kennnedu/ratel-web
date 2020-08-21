@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 export const getDefaultFilter = () => {
-  const defaultFilter= JSON.parse("{\"name\":\"\",\"card\":\"\",\"tags\":\"\"}")
+  const defaultFilter= JSON.parse("{\"name\":\"\",\"card\":\"\",\"tags\":\"\",\"type\":\"Both\"}")
   const filter = JSON.parse(localStorage.getItem('defaultFilter')) || defaultFilter;
 
   return { ...filter, ...performedHandlerObject()[getDefaultPerformedHandler()] }

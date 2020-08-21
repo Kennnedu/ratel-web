@@ -79,7 +79,9 @@ export default {
       axios.post(`/tags/${_this.tagName}`)
         .then(resp => {
           _this.tagName = "";
-          _this.$emit('change', [..._this.recordsTags, ...[Object.assign({tag_id: resp.data.tag.id}, resp.data)] ]);
+          if(!_this.recordsTags.map(el => el.tag_id).includes(resp.data.tag.id)) {
+            _this.$emit('change', [..._this.recordsTags, ...[Object.assign({tag_id: resp.data.tag.id}, resp.data)] ]);
+          }
         })
         .then(this.fetchTags);
     },

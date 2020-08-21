@@ -4,8 +4,7 @@ import Login from './views/Login.vue'
 import Records from './views/Records.vue'
 import Sources from './views/Sources.vue'
 import Tags from './views/Tags.vue'
-import Expences from './views/Expences.vue'
-import Replenishments from './views/Replenishments.vue'
+import RecordNames from './views/RecordNames.vue'
 
 Vue.use(VueRouter)
 
@@ -16,7 +15,6 @@ export default new VueRouter({
     { name: 'records', path: '/', component: Records, alias: '/records' },
     { name: 'sources', path: '/sources', component: Sources },
     { name: 'tags', path: '/tags', component: Tags },
-    { name: 'expences', path: '/expences', component: Expences },
-    { name: 'replenishments', path: '/replenishments', component: Replenishments }
+    { name: 'record_names', path: '/record_names', component: RecordNames },
   ]
 }) 

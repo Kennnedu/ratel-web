@@ -22,7 +22,9 @@ export default new Vuex.Store({
         'card': state.filter.card,
         'tags': state.filter.tags,
         'performed_at[gt]': moment(state.filter.from).utc().format('llll'),
-        'performed_at[lt]': moment(state.filter.to).utc().format('llll')
+        'performed_at[lt]': moment(state.filter.to).utc().format('llll'),
+        'amount[lt]': state.filter.type === 'Expences' ? 0 : null,
+        'amount[gt]': state.filter.type === 'Replenish' ? 0 : null
       }
     },
 

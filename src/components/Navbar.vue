@@ -13,8 +13,7 @@
           {{totalSum}}
         </b-nav-text>
       </b-overlay>
-      <b-nav-item href="#" to="expences" :active="$route.name === 'expences'">Expences</b-nav-item>
-      <b-nav-item href="#" to="replenishments" :active="$route.name === 'replenishments'">Replenish</b-nav-item>
+      <b-nav-item href="#" to="record_names" :active="$route.name === 'record_names'">Record names</b-nav-item>
     </b-navbar-nav>
   </b-navbar>
 </template>
@@ -37,7 +36,6 @@
     mounted() {
 			let params = {}
 			if(this.$route.name === 'expences') params = {'amount[lt]': 0}
-			if(this.$route.name === 'replenishments') params = {'amount[gt]': 0}
       this.fetchTotalSum(params);
       this.fetchCards();
       this.fetchTags();
@@ -54,8 +52,7 @@
 
       $route(to, from) {
 				if(from.name !== 'expences' && to.name === 'expences') this.fetchTotalSum({'amount[lt]': 0});
-				if(from.name !== 'replenishments' && to.name === 'replenishments') this.fetchTotalSum({'amount[gt]': 0});
-				if(['login', 'expences', 'replenishments'].includes(from.name) && !['expences', 'replenishments'].includes(to.name)) this.fetchTotalSum();
+				if(['login', 'expences'].includes(from.name) && !['expences'].includes(to.name)) this.fetchTotalSum();
       }
     },
 

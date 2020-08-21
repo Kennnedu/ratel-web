@@ -1,6 +1,21 @@
 <template>
   <b-form>
-    <b-form-group id="filter-name-group" label="Name" label-for="filter-name">
+    <b-form-group
+      label-cols-sm="3"
+      label="Type:"
+    >
+      <b-form-radio-group
+        class="pt-2"
+        :options="['Expences', 'Replenish', 'Both']"
+        buttons
+        button-variant="outline-secondary"
+        size="sm"
+        :checked="filter.type"
+        @input="val => updateFilter({changes: { type: val }})"
+      ></b-form-radio-group>
+    </b-form-group>
+
+    <b-form-group id="filter-name-group" label="Name:" label-for="filter-name" label-cols-sm="3">
       <b-form-input
         type="text"
         id="filter-name"
@@ -8,7 +23,7 @@
         @input="val => updateFilter({changes: { name: val }})"></b-form-input>
     </b-form-group>
 
-    <b-form-group id="filter-source-group" label="Source" label-for="filter-card">
+    <b-form-group id="filter-source-group" label="Source:" label-for="filter-card" label-cols-sm="3">
       <b-form-input
         type="text"
         id="filter-card"
@@ -16,7 +31,7 @@
         @input="val => updateFilter({changes: { card: val }})"></b-form-input>
     </b-form-group>
 
-    <b-form-group id="filter-tags-group" label="Tags" label-for="filter-tags">
+    <b-form-group id="filter-tags-group" label="Tags:" label-for="filter-tags" label-cols-sm="3">
       <b-form-input
         type="text"
         id="filter-tags"
@@ -24,16 +39,16 @@
         @input="val => updateFilter({changes: { tags: val }})"></b-form-input>
     </b-form-group>
 
-    <b-form-group id="filter-performed-group" label="Performed range" label-for="filter-performed">
+    <b-form-group id="filter-performed-group" label="Period:" label-for="filter-performed" label-cols-sm="3">
       <b-form-select
         id="filter-performed"
         v-model="selectedPerformedHandler"
         :options="performedHandlerOptions()"
       ></b-form-select>
-    </b-form-group>
+    </b-form-group> 
 
     <template v-if="selectedPerformedHandler === 'custom'">
-      <b-form-group id="filter-from" label="From" label-for="filter-from">
+      <b-form-group id="filter-from" label="From" label-for="filter-from" label-cols-sm="3">
         <b-form-datepicker
           type="date"
           id="filter-from"
@@ -41,7 +56,7 @@
           @input="date => updateFilter({changes: { from: date }})"> </b-form-datepicker>
       </b-form-group>
 
-      <b-form-group id="filter-to" label="To" lablel-for="filter-to">
+      <b-form-group id="filter-to" label="To" label-for="filter-to" label-cols-sm="3">
         <b-form-datepicker
           type="date"
           id="filter-to"
@@ -74,7 +89,8 @@ export default {
       const filter= this.filter;
 
       return filter.name === defFilter.name && filter.card === defFilter.card &&
-        filter.from === defFilter.from && filter.to === defFilter.to && filter.tags === defFilter.tags
+        filter.from === defFilter.from && filter.to === defFilter.to && filter.tags === defFilter.tags &&
+        filter.type === defFilter.type
     }
   },
 

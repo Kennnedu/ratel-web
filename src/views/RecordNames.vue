@@ -102,7 +102,8 @@
           'record[tags]': this.filter.tags,
           'record[performed_at][gt]': this.filter.from,
           'record[performed_at][lt]': this.filter.to,
-          'record[amount][lt]': 0,
+          'record[amount][gt]': this.filter.type  === 'Replenish' ? 0 : null,
+          'record[amount][lt]': this.filter.type === 'Expences' ?  0 : null,
           'order[type]': 'asc',
 					'limit': 30
         }, this.orderOption)
