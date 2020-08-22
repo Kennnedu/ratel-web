@@ -26,7 +26,30 @@
                 <b-card no-body :class="{ positive: tag.records_sum > 0 }" class="shadow-sm">
                   <b-card-body @click="currentTag = tag; $bvModal.show('edit-tag')">
                     <b-card-sub-title class="mb-2">{{tag.name}}</b-card-sub-title>
-                    <b-card-title>{{tag.records_sum}}</b-card-title>
+                    <template v-if="filter.type === 'Expences'">
+                      <b-card-title>{{recordsSumPercent(tag.records_sum)}} %</b-card-title>
+                      <div>{{tag.records_sum}}</div>
+                      <b-progress :value="recordsSumPercent(tag.records_sum)" variant="danger" key="danger"></b-progress>
+                    </template>
+                    <template v-else-if="filter.type === 'Replenish'">
+                      <b-card-title>{{recordsSumPercent(tag.records_sum)}} %</b-card-title>
+                      <div>{{tag.records_sum}}</div>
+                      <b-progress :value="recordsSumPercent(tag.records_sum)" variant="success" key="success"></b-progress>
+                    </template>
+                    <template v-else>
+                      <b-card-title>{{tag.records_sum}}</b-card-title>
+                    </template>
+                  </b-card-body>
+                </b-card>
+              </b-col>
+              <b-col v-if="otherPercentCard" md="3" class="py-3">
+                <b-card no-body class="shadow-sm" border-variant="dark">
+                  <b-card-body>
+                    <b-card-sub-title class="mb-2">{{otherPercentCard.name}}</b-card-sub-title>
+                    <b-card-title>{{recordsSumPercent(otherPercentCard.records_sum)}} %</b-card-title>
+                    <div v-if="filter.type === 'Expences' || filter.type === 'Replenish'">{{otherPercentCard.records_sum}}</div>
+                    <b-progress :value="recordsSumPercent(otherPercentCard.records_sum)" variant="danger" key="danger" v-if="filter.type === 'Expences'"></b-progress>
+                    <b-progress :value="recordsSumPercent(otherPercentCard.records_sum)" variant="success" key="success" v-if="filter.type === 'Replenish'"></b-progress>
                   </b-card-body>
                 </b-card>
               </b-col>
@@ -94,7 +117,7 @@
     },
 
     computed: {
-      ...mapState(['filter']),
+      ...mapState(['filter', 'totalSum']),
 
       sourceParams() {
         return Object.assign({
@@ -109,6 +132,15 @@
           'record[amount][gt]': this.filter.type  === 'Replenish' ? 0 : null,
           'record[amount][lt]': this.filter.type === 'Expences' ?  0 : null,
         }, this.orderOption)
+      },
+
+      otherPercentCard() {
+        if (this.filter.type === 'Expences' || this.filter.type === 'Replenish') {
+          const sum = this.tags.reduce((calc, tag) => Number((calc + Number(tag.records_sum)).toFixed(2)), 0)
+          if(sum !== this.totalSum) return { name: 'Other', records_sum: Number((this.totalSum - sum).toFixed(2)) }
+        }
+
+        return null
       }
     },
 
@@ -121,6 +153,10 @@
         axios.get('/tags', { params: this.sourceParams })
             .then(resp => this.tags = resp.data.tags)
             .then(() => this.isFetching = false)
+      },
+    
+      recordsSumPercent(recordsSum) {
+        return Number((Number(recordsSum)*100/this.totalSum).toFixed(2)) 
       }
     }
   }
