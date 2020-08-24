@@ -2,26 +2,28 @@
   <section id="content">
     <b-container class="mt-5">
       <b-row class="py-3">
-        <b-col md="7">
+        <b-col md="9">
           <FilterChips />
         </b-col>
-        <b-col md="1">
-          <SortByDropdown
-            :options="orderOptions"
-            :selectedOption="orderOption"
-            @selectOption="opt => { this.orderOption = opt; this.fetchRecords() }" />
-        </b-col>
-        <b-col md="1">
-          <b-button v-b-toggle.sidebar-1 size="sm" class="mt-2">Filter</b-button>
-        </b-col>
-        <b-col md="1">
-          <b-button v-b-toggle.sidebar-2 size="sm" class="mt-2">Edit</b-button>
-        </b-col>
-        <b-col md="2">
-          <b-dropdown block variant="primary" text="+ Add">
-            <b-dropdown-item href="#" v-b-modal.new-record>Add one</b-dropdown-item>
-            <b-dropdown-item href="#" v-b-modal.html-upload-record>Upload batch(html)</b-dropdown-item>
-          </b-dropdown>
+        <b-col md="3">
+          <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu" class="float-right">
+            <b-button-group  class="mr-1" size="sm">
+              <b-dropdown block variant="primary" text="New" size="sm">
+                <b-dropdown-item href="#" v-b-modal.new-record>One</b-dropdown-item>
+                <b-dropdown-item href="#" v-b-modal.html-upload-record>Upload batch(html)</b-dropdown-item>
+              </b-dropdown>
+            </b-button-group>
+            <b-button-group  class="mr-1" size="sm">
+              <b-button v-b-toggle.sidebar-2 size="sm">Edit</b-button>
+            </b-button-group>
+            <b-button-group size="sm" >
+              <b-button v-b-toggle.sidebar-1 size="sm">Filter</b-button>
+              <SortByDropdown
+                :options="orderOptions"
+                :selectedOption="orderOption"
+                @selectOption="opt => { this.orderOption = opt; this.fetchRecords() }" />
+            </b-button-group>
+          </b-button-toolbar>
         </b-col>
       </b-row>
       <b-row>

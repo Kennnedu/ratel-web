@@ -2,17 +2,19 @@
   <section id="content">
     <b-container class="mt-5">
       <b-row class="py-3">
-        <b-col md="10">
+        <b-col md="9">
           <FilterChips />
         </b-col>
-        <b-col md="1">
-          <b-button v-b-toggle.sidebar-1 size="sm" class="mt-2">Filter</b-button>
-        </b-col>
-        <b-col md="1">
-          <SortByDropdown
-            :options="orderOptions"
-            :selectedOption="orderOption"
-            @selectOption="opt => { this.orderOption = opt; this.fetch() }" />
+        <b-col md="3">
+          <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu" class="float-right">
+            <b-button-group size="sm" >
+              <b-button v-b-toggle.sidebar-1 size="sm">Filter</b-button>
+              <SortByDropdown
+                :options="orderOptions"
+                :selectedOption="orderOption"
+                @selectOption="opt => { this.orderOption = opt; this.fetch() }" />
+            </b-button-group>
+          </b-button-toolbar>
         </b-col>
       </b-row>
       <b-row>

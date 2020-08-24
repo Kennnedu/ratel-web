@@ -1,5 +1,5 @@
 <template>
-  <b-dropdown id="dropdown-buttons" text="Sort By" class="mt-2 float-right" size="sm">
+  <b-dropdown id="dropdown-buttons" text="Sort By" size="sm">
     <b-dropdown-item-button v-for="option in options" 
       :key="JSON.stringify(option)"
       :active="JSON.stringify(option) === JSON.stringify(selectedOption)"
