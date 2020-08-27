@@ -1,36 +1,57 @@
 <template>
   <div>
-    <div class="mb-1">
-      <b-badge
-        pill
-        variant="secondary"
-        class="mr-1"
-        v-for="(recordsTag, index) in recordsTags.filter(recTag => !recTag._destroy)"
-        :key="recordsTag.tag.name.toLowerCase() + index">
-        {{recordsTag.tag.name}}
-        <font-awesome-icon
-          prefix="far"
-          icon="times-circle"
-          @click="e => deleteRecordsTag(recordsTag)" />
-      </b-badge>
-    </div>
+      <b-form-tags v-model="currentTags" no-outer-focus class="mb-2">
+        <template v-slot="{ tags, disabled, addTag, removeTag }">
+          <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
+            <li v-for="tag in tags" :key="tag" class="list-inline-item">
+              <b-form-tag
+                @remove="removeTag(tag)"
+                :title="tag"
+                :disabled="disabled"
+                variant="secondary"
+              >{{ tag }}</b-form-tag>
+            </li>
+          </ul>
 
-    <b-form-input
-      type="text"
-      id="record-tags"
-      placeholder="Press space to add new tag"
-      v-model="tagName"
-      @keyup.space="addRecordsTag"
-      :list="dataListId"
-      autocomplete="off"></b-form-input>
-
-    <datalist :id="dataListId">
-      <option v-for="tag in suggestedTags" :key="tag.id">{{tag.name}}</option>
-    </datalist>
+          <b-dropdown size="sm" variant="outline-secondary" block menu-class="w-100">
+            <template v-slot:button-content>
+              Choose tags
+            </template>
+            <b-dropdown-form @submit.stop.prevent="() => {}">
+              <b-form-group
+                label-for="tag-search-input"
+                label="Search tags"
+                label-cols-md="auto"
+                class="mb-0"
+                label-size="sm"
+                :disabled="disabled"
+              >
+                <b-form-input
+                  v-model="search"
+                  id="tag-search-input"
+                  type="search"
+                  size="sm"
+                  autocomplete="off"
+                 ></b-form-input>
+              </b-form-group>
+            </b-dropdown-form>
+            <b-dropdown-divider></b-dropdown-divider>
+            <b-dropdown-item-button
+              v-for="option in availableOptions"
+              :key="option"
+              @click="onOptionClick({ option, addTag })"
+            >
+              {{ option }}
+            </b-dropdown-item-button>
+            <b-dropdown-text v-if="availableOptions.length === 0">
+              There are no tags available to select
+            </b-dropdown-text>
+          </b-dropdown>
+        </template>
+      </b-form-tags>
   </div>
 </template>
 <script>
-import axios from 'axios'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { mapState, mapActions } from 'vuex'
@@ -38,56 +59,64 @@ import { mapState, mapActions } from 'vuex'
 library.add(faTimesCircle)
 
 export default {
-  props: ['recordsTags', 'defaultDatalistID'],
+  props: ['recordsTags', 'labelTagInput'],
 
   data: function(){
     return {
-      tagName: '',
-      suggestedTags: []
+      search: ''
     }
   },
 
   computed: {
     ...mapState(['tags']),
 
-    displayingRecordsTags() {
-      return this.recordsTags.filter(recTag => !recTag._destroy)
+    currentTags: {
+      get: function() {
+        return this.recordsTags.filter(recTag => !recTag._destroy).map(rt => rt.tag.name)
+      },
+
+      set: function(newVal) {
+        if(newVal.length > this.currentTags.length ) {
+          this.addTag(newVal[newVal.length - 1]);
+        } else if (newVal.length < this.currentTags.length) {
+          let removingTag = this.currentTags.find(t => newVal.indexOf(t) === -1);
+          this.removeTag(removingTag);
+        }
+      }
     },
 
-    dataListId(){
-      return this.defaultDatalistID || 'suggested-tags'
-    }
-  },
+    criteria() {
+      return this.search.trim().toLowerCase()
+    },
 
-  watch: {
-    tagName(newVal) {
-      if(newVal.length === 0) {
-        this.suggestedTags = [];
-        return null;
+    options() {
+      return this.tags.map(t => t.name)
+    },
+
+    availableOptions() {
+      const criteria = this.criteria
+      // Filter out already selected options
+      const options = this.options.filter(opt => this.currentTags.indexOf(opt) === -1)
+      if (criteria) {
+        // Show only options that match criteria
+        return options.filter(opt => opt.toLowerCase().indexOf(criteria) > -1);
       }
-
-      this.findSuggestions(newVal)
-    }
+      // Show all options available
+      return options
+    },
   },
 
   methods: {
     ...mapActions(['fetchTags']),
 
-    addRecordsTag(){
-      const _this = this;
-
-      axios.post(`/tags/${_this.tagName}`)
-        .then(resp => {
-          _this.tagName = "";
-          if(!_this.recordsTags.map(el => el.tag_id).includes(resp.data.tag.id)) {
-            _this.$emit('change', [..._this.recordsTags, ...[Object.assign({tag_id: resp.data.tag.id}, resp.data)] ]);
-          }
-        })
-        .then(this.fetchTags);
+    addTag(newTag) {
+      let newTagObj = this.tags.find(t => t.name === newTag);
+      this.$emit('change', [...this.recordsTags, ...[Object.assign({tag_id: newTagObj.id}, { tag: newTagObj })] ]);
     },
 
-    findSuggestions(keyword) {
-      this.suggestedTags = this.tags.filter((t) => t.name.includes(keyword)).slice(0, 30)
+    removeTag(removingTag) {
+      let removingRecordsTag = this.recordsTags.find(rt => rt.tag.name === removingTag);
+      this.deleteRecordsTag(removingRecordsTag);
     },
 
     deleteRecordsTag(removingRecordsTag) {
@@ -95,6 +124,11 @@ export default {
         removingRecordsTag._destroy = true
         this.$emit('change', [...[], ...this.recordsTags])
       } else this.$emit('change', this.recordsTags.filter(recTag => recTag.tag_id !== removingRecordsTag.tag_id))
+    },
+
+    onOptionClick({ option, addTag }) {
+      addTag(option)
+      this.search = ''
     }
   }
 }

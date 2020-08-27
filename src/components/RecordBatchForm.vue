@@ -15,14 +15,12 @@
     <b-form-group id="filter-to" label="Add tags">
       <TagsInput
         :recordsTags="batchForm.addRecordsTags"
-        :defaultDatalistID="'suggested-adding-tags'"
         @change="newRecordsTags => batchForm.addRecordsTags = newRecordsTags" />
     </b-form-group>
 
     <b-form-group id="filter-to" label="Remove Tags">
       <TagsInput
         :recordsTags="batchForm.removeRecordsTags"
-        :defaultDatalistID="'suggested-removing-tags'"
         @change="newRecordsTags => batchForm.removeRecordsTags = newRecordsTags" />
     </b-form-group>
 
