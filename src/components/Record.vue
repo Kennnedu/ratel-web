@@ -46,5 +46,13 @@ export default {
   .record-card .card-subtitle:hover {
     cursor: pointer;
     text-decoration: underline;
+    white-space: initial;
+  }
+
+  .record-card .card-subtitle {
+    width: inherit;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>
