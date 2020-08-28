@@ -16,7 +16,6 @@
     created() {
       let _this = this;
       const host = process.env.NODE_ENV === 'development' ? 'http://localhost:4567' : 'https://ratel-app.herokuapp.com';
-
       axios.interceptors.request.use((config) => {
         config.url = `${host}/api/v1${config.url}`;
         config.headers.common.Authorization = `Bearer ${this.cookies().get('session_token')}`

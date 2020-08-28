@@ -1,12 +1,12 @@
 <template>
   <section id="content">
-    <b-container class="mt-5">
-      <b-row class="py-3">
-        <b-col md="9">
+    <b-container>
+      <b-row class="py-2">
+        <b-col md="9" cols="12" class="pb-1 pt-1">
           <FilterChips />
         </b-col>
-        <b-col md="3">
-          <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu" class="float-right">
+        <b-col md="3" offset-md="0" cols="auto" offset="2" class="pb-1 pt-1">
+          <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
             <b-button-group  class="mr-1" size="sm">
               <b-dropdown block variant="primary" text="New" size="sm">
                 <b-dropdown-item href="#" v-b-modal.new-record>One</b-dropdown-item>

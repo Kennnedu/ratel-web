@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <b-row class="login-wrapper">
-      <b-col md="4" offset="4" class="my-auto">
+      <b-col md="4" offset-md="4" cols="10" offset="1" class="my-auto">
         <b-card title="Login" class="shadow p-3 mb-5 rounded">
           <b-form @submit="submitForm">
             <b-form-invalid-feedback :state="!hasError">
