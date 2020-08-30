@@ -29,9 +29,14 @@
     <b-form-group id="record-performed-at-group" label="Performed At" label-for="record-performed-at">
       <b-form-input type="datetime-local" id="record-performed-at" v-model="currentRecord.performed_at"></b-form-input>
     </b-form-group>
-
-    <b-button type="submit" variant="outline-primary">{{saveButtonName}}</b-button>
-    <b-button variant="danger" class="float-right" @click="destroy" v-if="currentRecord.id">Delete</b-button>
+    <b-row>
+      <b-col>
+        <b-button type="submit" variant="primary" block>{{saveButtonName}}</b-button>
+      </b-col>
+      <b-col v-if="currentRecord.id">
+        <b-button variant="danger" class="float-right" @click="destroy" block>Delete</b-button>
+      </b-col>
+    </b-row>
   </b-form>
 </template>
 <script>

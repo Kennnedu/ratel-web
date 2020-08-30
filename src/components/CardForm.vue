@@ -5,10 +5,16 @@
       </b-form-input>
     </b-form-group>
 
-    <b-button type="submit" variant="outline-primary">{{saveButtonName}}</b-button>
-    <b-button variant="danger" v-if="currentCard.id" @click="deleteCard" class="float-right">
-      Delete
-    </b-button>
+    <b-row>
+      <b-col>
+        <b-button type="submit" variant="primary" block>{{saveButtonName}}</b-button>
+      </b-col>
+      <b-col v-if="currentCard.id">
+        <b-button variant="danger" @click="deleteCard" block>
+          Delete
+        </b-button>
+      </b-col>
+    </b-row>
   </b-form>
 </template>
 <script>

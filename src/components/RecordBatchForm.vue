@@ -23,11 +23,16 @@
         :recordsTags="batchForm.removeRecordsTags"
         @change="newRecordsTags => batchForm.removeRecordsTags = newRecordsTags" />
     </b-form-group>
-
-    <b-button variant="outline-primary" :disabled="!validBatchForm" @click="submitForm">{{submitButtonName}}</b-button>
-    <b-button class="float-right" variant="danger" @click="destroyRecords" v-if="shouldDisplayDestroyAllBtn">
-      Destroy All
-    </b-button>
+    <b-row>
+      <b-col>
+        <b-button variant="primary" :disabled="!validBatchForm" @click="submitForm" block>{{submitButtonName}}</b-button>
+      </b-col>
+      <b-col v-if="shouldDisplayDestroyAllBtn">
+        <b-button class="float-right" variant="danger" @click="destroyRecords" block>
+          Destroy All
+        </b-button>
+      </b-col>
+    </b-row>
   </b-form>
 </template>
 <script>

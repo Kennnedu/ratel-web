@@ -3,11 +3,16 @@
     <b-form-group id="tag-name-group" label="Tag Name" label-for="tag-name">
       <b-form-input type="text" autofocus id="tag-name" required v-model="currentTag.name"></b-form-input>
     </b-form-group>
-
-    <b-button type="submit" variant="outline-primary">{{saveButtonName}}</b-button>
-    <b-button variant="danger" v-if="currentTag.id" @click="deleteTag" class="float-right">
-      Delete
-    </b-button>
+    <b-row>
+      <b-col>
+        <b-button type="submit" variant="primary" block>{{saveButtonName}}</b-button>
+      </b-col>
+      <b-col v-if="currentTag.id">
+        <b-button variant="danger" @click="deleteTag" block>
+          Delete
+        </b-button>
+      </b-col>
+    </b-row>
   </b-form>
 </template>
 <script>
