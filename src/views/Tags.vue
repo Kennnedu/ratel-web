@@ -19,13 +19,14 @@
           <FilterChips />
         </b-col>
       </b-row>
-      <b-row v-else>
+      <b-row class="py-2" v-else>
         <b-col md="9" cols="12" class="pb-1 pt-1">
           <FilterChips />
         </b-col>
         <b-col md="3" offset-md="0" cols="auto" offset="3" class="pb-1 pt-1">
           <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu" class="float-right">
             <b-button-group  class="mr-1" size="sm">
+              <b-button size="sm" block variant="primary" v-b-modal.new-tag>New</b-button>
             </b-button-group>
             <b-button-group size="sm" >
               <b-button v-b-toggle.sidebar-1>Filter</b-button>
@@ -82,10 +83,10 @@
         <RecordFilter/>
       </b-container>
     </b-sidebar>
-    <b-modal id="new-tag" title="New Tag" hide-footer>
+    <b-modal id="new-tag" centered title="New Tag" hide-footer>
       <TagForm @close="$bvModal.hide('new-tag'); fetchFilteredTags(); fetchTags()" :tag="{'name': ''}" />
     </b-modal>
-    <b-modal id="edit-tag" title="Edit Tag" hide-footer>
+    <b-modal id="edit-tag" centered title="Edit Tag" hide-footer>
       <TagForm @close="$bvModal.hide('edit-tag'); fetchFilteredTags(); fetchTags()" :tag="currentTag" />
     </b-modal>
   </section>

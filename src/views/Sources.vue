@@ -87,7 +87,7 @@
     <b-modal id="new-source" centered title="New Source" hide-footer>
       <CardForm @close="$bvModal.hide('new-source'); fetchFilteredCards()" :card="{'name': ''}" />
     </b-modal>
-    <b-modal id="edit-source" title="Edit Source" hide-footer>
+    <b-modal id="edit-source" centered title="Edit Source" hide-footer>
       <CardForm @close="$bvModal.hide('edit-source'); fetchFilteredCards()" :card="currentSource" />
     </b-modal> 
   </section>

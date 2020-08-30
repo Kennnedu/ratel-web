@@ -9,7 +9,7 @@
           </b-dropdown>
         </b-col>
         <b-col cols="6" class="pb-1">
-          <b-button v-b-toggle.sidebar-2 size="sm" block>Edit</b-button>
+          <b-button v-b-modal.edit-records size="sm" block>Edit</b-button>
         </b-col>
         <b-col cols="6">
           <b-button v-b-toggle.sidebar-1 size="sm" block>Filter</b-button>
@@ -31,7 +31,7 @@
           <FilterChips />
         </b-col>
         <b-col md="3" class="pb-1 pt-1">
-          <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
+          <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu" class="float-right">
             <b-button-group  class="mr-1" size="sm">
               <b-dropdown block variant="primary" text="New" size="sm">
                 <b-dropdown-item href="#" v-b-modal.new-record>One</b-dropdown-item>
@@ -39,7 +39,7 @@
               </b-dropdown>
             </b-button-group>
             <b-button-group  class="mr-1" size="sm">
-              <b-button v-b-toggle.sidebar-2 size="sm">Edit</b-button>
+              <b-button v-b-modal.edit-records size="sm">Edit</b-button>
             </b-button-group>
             <b-button-group size="sm" >
               <b-button v-b-toggle.sidebar-1 size="sm">Filter</b-button>
@@ -79,20 +79,20 @@
         <RecordFilter/>
       </b-container>
     </b-sidebar>
-    <b-sidebar id="sidebar-2" title="Edit" right shadow>
+    <b-modal id="edit-records" centered title="Edit Record" hide-footer>
       <b-container>
         <RecordBatchForm @remoteAction = "fetchTotalSum(); fetchRecords()" />
       </b-container>
-    </b-sidebar>
-    <b-modal id="new-record" title="New Record" hide-footer>
+    </b-modal>
+    <b-modal id="new-record" centered title="New Record" hide-footer>
       <RecordForm @save="$bvModal.hide('new-record'); fetchRecords(); fetchTotalSum()" />
     </b-modal>
-    <b-modal id="edit-record" title="Edit Record" hide-footer>
+    <b-modal id="edit-record" centered title="Edit Record" hide-footer>
       <RecordForm 
         :record="currentRecord"
         @save="$bvModal.hide('edit-record'); fetchRecords({ limit: recordsCount }); fetchTotalSum()" />
     </b-modal>
-    <b-modal id="html-upload-record" title="Upload Records html" hide-footer>
+    <b-modal id="html-upload-record" centered title="Upload Records html" hide-footer>
       <HtmlRecordsUploadForm @save="$bvModal.hide('html-upload-record'); fetchRecords(); fetchTotalSum()"/>
     </b-modal>
   </section>
