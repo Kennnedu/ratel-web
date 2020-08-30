@@ -1,7 +1,22 @@
 <template>
   <section id="content">
     <b-container>
-      <b-row class="py-2">
+      <b-row class="py-2" v-if="isMobile()">
+        <b-col cols="6">
+          <b-button v-b-toggle.sidebar-1 size="sm" block>Filter</b-button>
+        </b-col>
+        <b-col cols="6">
+          <SortByDropdown
+            :options="orderOptions"
+            :selectedOption="orderOption"
+            :block="true"
+            @selectOption="opt => { this.orderOption = opt; this.fetch() }" />
+        </b-col>
+        <b-col cols="12" class="pb-1">
+          <FilterChips />
+        </b-col>
+      </b-row>
+      <b-row class="py-2" v-else>
         <b-col md="9" cols="12" class="pb-1 pt-1">
           <FilterChips />
         </b-col>
@@ -48,6 +63,7 @@
   import axios from 'axios'
   import debounce from 'lodash.debounce'
   import { mapState } from 'vuex'
+  import { isMobile } from './../utils/mobileDetect.js'
 
   export default {
     components: { RecordFilter, FilterChips, SortByDropdown },
@@ -128,6 +144,10 @@
         if((elem.scrollTop + 1000) > elem.scrollHeight && !this.isFetching && this.expencesCount < this.total) {
           this.fetch({offset: this.expencesCount, limit: 30});
         }
+      },
+
+      isMobile() {
+        return isMobile();
       }
     }
   }

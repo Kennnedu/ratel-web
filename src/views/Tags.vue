@@ -1,14 +1,31 @@
 <template>
   <section id="content">
     <b-container>
-      <b-row class="py-2">
+      <b-row class="py-2" v-if="isMobile()">
+        <b-col cols="12" class="pb-1">
+          <b-button size="sm" block variant="primary" v-b-modal.new-tag>New</b-button>
+        </b-col>
+        <b-col cols="6">
+          <b-button v-b-toggle.sidebar-1 size="sm" block>Filter</b-button>
+        </b-col>
+        <b-col cols="6">
+          <SortByDropdown
+            :options="orderOptions"
+            :selectedOption="orderOption"
+            :block="true"
+            @selectOption="opt => { this.orderOption = opt; this.fetchFilteredTags() }" />
+        </b-col>
+        <b-col cols="12" class="pb-1">
+          <FilterChips />
+        </b-col>
+      </b-row>
+      <b-row v-else>
         <b-col md="9" cols="12" class="pb-1 pt-1">
           <FilterChips />
         </b-col>
         <b-col md="3" offset-md="0" cols="auto" offset="3" class="pb-1 pt-1">
           <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu" class="float-right">
             <b-button-group  class="mr-1" size="sm">
-              <b-button size="sm" block variant="primary" v-b-modal.new-tag>New</b-button>
             </b-button-group>
             <b-button-group size="sm" >
               <b-button v-b-toggle.sidebar-1>Filter</b-button>
@@ -81,7 +98,8 @@
   import axios from 'axios'
   import debounce from 'lodash.debounce'
   import { mapState, mapActions } from 'vuex'
-
+  import { isMobile } from './../utils/mobileDetect.js'
+  
   export default {
     components: { RecordFilter, FilterChips, TagForm, SortByDropdown },
 
@@ -159,6 +177,10 @@
     
       recordsSumPercent(recordsSum) {
         return Number((Number(recordsSum)*100/this.totalSum).toFixed(2)) 
+      },
+
+      isMobile() {
+        return isMobile();
       }
     }
   }

@@ -1,11 +1,36 @@
 <template>
   <section id="content">
     <b-container>
-      <b-row class="py-2">
-        <b-col md="9" cols="12" class="pb-1 pt-1">
+      <b-row class="py-2" v-if="isMobile()">
+        <b-col cols="6" class="pb-1">
+          <b-dropdown block variant="primary" text="New" size="sm">
+            <b-dropdown-item href="#" v-b-modal.new-record>One</b-dropdown-item>
+            <b-dropdown-item href="#" v-b-modal.html-upload-record>Upload batch(html)</b-dropdown-item>
+          </b-dropdown>
+        </b-col>
+        <b-col cols="6" class="pb-1">
+          <b-button v-b-toggle.sidebar-2 size="sm" block>Edit</b-button>
+        </b-col>
+        <b-col cols="6">
+          <b-button v-b-toggle.sidebar-1 size="sm" block>Filter</b-button>
+        </b-col>
+        <b-col cols="6">
+          <SortByDropdown
+            :options="orderOptions"
+            :selectedOption="orderOption"
+            :block="true"
+            @selectOption="opt => { this.orderOption = opt; this.fetchRecords() }" />
+        </b-col>
+        <b-col cols="12" class="pb-1">
           <FilterChips />
         </b-col>
-        <b-col md="3" offset-md="0" cols="auto" offset="2" class="pb-1 pt-1">
+      </b-row>
+      
+      <b-row class="py-2" v-else>
+        <b-col md="9" class="pb-1 pt-1">
+          <FilterChips />
+        </b-col>
+        <b-col md="3" class="pb-1 pt-1">
           <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
             <b-button-group  class="mr-1" size="sm">
               <b-dropdown block variant="primary" text="New" size="sm">
@@ -84,6 +109,7 @@
   import debounce from 'lodash.debounce'
   import axios from 'axios'
   import { mapState, mapGetters, mapActions } from 'vuex'
+  import { isMobile } from './../utils/mobileDetect.js'
 
   export default {
     components: { Record, RecordForm, RecordFilter, RecordBatchForm, HtmlRecordsUploadForm, FilterChips, SortByDropdown },
@@ -184,6 +210,10 @@
             index !== 0 && !this.moment(record.performed_at).isSame(this.moment(prevRecord.performed_at), 'day')
           )
         )
+      },
+
+      isMobile() {
+        return isMobile();
       }
     }
   }

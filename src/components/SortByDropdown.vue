@@ -1,5 +1,5 @@
 <template>
-  <b-dropdown id="dropdown-buttons" text="Sort By" size="sm" right>
+  <b-dropdown id="dropdown-buttons" text="Sort By" size="sm" right :block="block">
     <b-dropdown-item-button v-for="option in options" 
       :key="JSON.stringify(option)"
       :active="JSON.stringify(option) === JSON.stringify(selectedOption)"
@@ -18,7 +18,7 @@
     faSortNumericUp)
 
   export default {
-    props: ['options', 'selectedOption'],
+    props: ['options', 'selectedOption', 'block'],
 
     methods: {
       sortOptionIcon(opt){
