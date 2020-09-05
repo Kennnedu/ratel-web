@@ -27,8 +27,11 @@
           </b-col>
         </b-row>
         <b-row class="py-2" v-show="selectedOption !== 'None'">
-          <b-col cols="6" class="pb-1">
+          <b-col cols="6" class="pb-1" v-show="selectedOption !== 'One'">
             <b-button v-b-modal.edit-batch-records size="sm" block>Edit</b-button>
+          </b-col>
+          <b-col cols="6" class="pb-1" v-show="selectedOption === 'One'">
+            <b-button v-b-modal.edit-record size="sm" block>Edit</b-button>
           </b-col>
           <b-col cols="6" class="pb-1">
             <b-button @click="selectedRecordIds = []" size="sm" block>Cancel</b-button>
