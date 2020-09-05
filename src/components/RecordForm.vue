@@ -27,7 +27,9 @@
     </b-form-group>
 
     <b-form-group id="record-performed-at-group" label="Performed At" label-for="record-performed-at">
-      <b-form-input type="datetime-local" id="record-performed-at" v-model="currentRecord.performed_at"></b-form-input>
+      <flat-pickr v-model="currentRecord.performed_at"
+                  class="form-control"
+                  :config="{enableTime: true}"></flat-pickr>
     </b-form-group>
     <b-row>
       <b-col>
@@ -45,6 +47,8 @@
   import CardSelector from'./CardSelector.vue'
   import TagsInput from'./TagsInput.vue'
   import RecordNameInput from'./RecordNameInput.vue'
+  import flatPickr from 'vue-flatpickr-component';
+  import 'flatpickr/dist/flatpickr.css';
 
   const emptyNewRecord = () => {
     return {
@@ -66,7 +70,7 @@
   }
 
   export default {
-    components: { CardSelector, TagsInput, RecordNameInput },
+    components: { CardSelector, TagsInput, RecordNameInput, flatPickr },
 
     props: ['record'],
 

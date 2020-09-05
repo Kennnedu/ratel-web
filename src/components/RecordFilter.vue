@@ -46,25 +46,11 @@
         :options="performedHandlerOptions()"
       ></b-form-select>
     </b-form-group> 
-
-    <template v-if="selectedPerformedHandler === 'custom'">
-      <b-form-group id="filter-from" label="From" label-for="filter-from" label-cols-sm="3">
-        <b-form-datepicker
-          type="date"
-          id="filter-from"
-          :value="filter.from"
-          @input="date => updateFilter({changes: { from: date }})"> </b-form-datepicker>
-      </b-form-group>
-
-      <b-form-group id="filter-to" label="To" label-for="filter-to" label-cols-sm="3">
-        <b-form-datepicker
-          type="date"
-          id="filter-to"
-          :value="filter.to"
-          @input="date => updateFilter({changes: { to: date }})"> </b-form-datepicker>
-      </b-form-group>
-    </template>
-
+    <b-form-group id="filter-range" label="Range" v-if="selectedPerformedHandler === 'custom'">
+      <flat-pickr :value="[...[], ...[filter.from, filter.to]]"
+                  class="form-control"
+                  :config="{mode: 'range', onChange: updateDateRange}"></flat-pickr>
+    </b-form-group>
     <b-button class="float-left" @click="resetFilter">Reset</b-button>
     <b-button class="float-right" :disabled="isEqlFilterToDefFilter" @click="saveDefaultFilter">Save as Default</b-button>
   </b-form>
@@ -72,8 +58,13 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import { getDefaultFilter, getDefaultPerformedHandler, getPerformedHandlerOptions, performedHandlerObject } from '../utils/filter'
+import flatPickr from 'vue-flatpickr-component';
+import 'flatpickr/dist/flatpickr.css';
+import moment from 'moment'
 
 export default {
+  components: { flatPickr },
+
   data: function() {
     return {
       selectedPerformedHandler: getDefaultPerformedHandler(),
@@ -110,6 +101,15 @@ export default {
 
     performedHandlerOptions() {
       return getPerformedHandlerOptions()
+    },
+
+    updateDateRange(dateRange) {
+      dateRange = dateRange.map(el => moment(el).format('YYYY-MM-DD'))
+
+      if(dateRange.length === 2 && (this.filter.from !== dateRange[0]
+        && this.filter.to !== dateRange[1])) {
+        this.updateFilter({changes: { from: dateRange[0], to: dateRange[1] }})
+      }
     }
   },
 
