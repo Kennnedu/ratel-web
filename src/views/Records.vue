@@ -1,37 +1,47 @@
 <template>
   <section id="content">
     <b-container>
-      <b-row class="py-2" v-if="isMobile()">
-        <b-col cols="6" class="pb-1">
-          <b-dropdown block variant="primary" text="New" size="sm">
-            <b-dropdown-item href="#" v-b-modal.new-record>One</b-dropdown-item>
-            <b-dropdown-item href="#" v-b-modal.html-upload-record>Upload batch(html)</b-dropdown-item>
-          </b-dropdown>
-        </b-col>
-        <b-col cols="6" class="pb-1">
-          <b-button v-b-modal.edit-records size="sm" block>Edit</b-button>
-        </b-col>
-        <b-col cols="6">
-          <b-button v-b-toggle.sidebar-1 size="sm" block>Filter</b-button>
-        </b-col>
-        <b-col cols="6">
-          <SortByDropdown
-            :options="orderOptions"
-            :selectedOption="orderOption"
-            :block="true"
-            @selectOption="opt => { this.orderOption = opt; this.fetchRecords() }" />
-        </b-col>
-        <b-col cols="12" class="pb-1">
-          <FilterChips />
-        </b-col>
-      </b-row>
+      <template v-if="isMobile()">
+        <b-row class="py-2" v-show="selectedOption === 'None'">
+          <b-col cols="6" class="pb-1">
+            <b-dropdown block variant="primary" text="New" size="sm">
+              <b-dropdown-item href="#" v-b-modal.new-record>One</b-dropdown-item>
+              <b-dropdown-item href="#" v-b-modal.html-upload-record>Upload batch(html)</b-dropdown-item>
+            </b-dropdown>
+          </b-col>
+          <b-col cols="6" class="pb-1">
+            <b-button @click="selectedRecordIds = [0]" size="sm" block>Select All</b-button>
+          </b-col>
+          <b-col cols="6">
+            <b-button v-b-toggle.sidebar-1 size="sm" block>Filter</b-button>
+          </b-col>
+          <b-col cols="6">
+            <SortByDropdown
+              :options="orderOptions"
+              :selectedOption="orderOption"
+              :block="true"
+              @selectOption="opt => { this.orderOption = opt; this.fetchRecords() }" />
+          </b-col>
+          <b-col cols="12" class="pb-1">
+            <FilterChips />
+          </b-col>
+        </b-row>
+        <b-row class="py-2" v-show="selectedOption !== 'None'">
+          <b-col cols="6" class="pb-1">
+            <b-button v-b-modal.edit-batch-records size="sm" block>Edit</b-button>
+          </b-col>
+          <b-col cols="6" class="pb-1">
+            <b-button @click="selectedRecordIds = []" size="sm" block>Cancel</b-button>
+          </b-col>
+        </b-row>
+      </template>
       
       <b-row class="py-2" v-else>
-        <b-col md="9" class="pb-1 pt-1">
-          <FilterChips />
+        <b-col md="8" class="pb-1 pt-1">
+          <FilterChips v-show="selectedOption === 'None'" />
         </b-col>
-        <b-col md="3" class="pb-1 pt-1">
-          <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu" class="float-right">
+        <b-col md="4" class="pb-1 pt-1">
+          <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu" class="float-right" v-show="selectedOption === 'None'">
             <b-button-group  class="mr-1" size="sm">
               <b-dropdown block variant="primary" text="New" size="sm">
                 <b-dropdown-item href="#" v-b-modal.new-record>One</b-dropdown-item>
@@ -39,7 +49,7 @@
               </b-dropdown>
             </b-button-group>
             <b-button-group  class="mr-1" size="sm">
-              <b-button v-b-modal.edit-records size="sm">Edit</b-button>
+              <b-button size="sm" @click="selectedRecordIds = [0]">Select All</b-button>
             </b-button-group>
             <b-button-group size="sm" >
               <b-button v-b-toggle.sidebar-1 size="sm">Filter</b-button>
@@ -49,9 +59,25 @@
                 @selectOption="opt => { this.orderOption = opt; this.fetchRecords() }" />
             </b-button-group>
           </b-button-toolbar>
+          <b-button-toolbar v-show="selectedOption !== 'None'" class="float-right">
+            <b-button-group class="mr-1" size="sm" v-show="selectedOption === 'One'">
+              <b-button v-b-modal.edit-record size="sm" >Edit</b-button>
+            </b-button-group>
+            <b-button-group class="mr-1" size="sm" v-show="selectedOption !== 'One'">
+              <b-button v-b-modal.edit-batch-records size="sm">Edit</b-button>
+            </b-button-group>
+            <!-- TODO: replace delete logic
+              <b-button-group size="sm" class="mr-3">
+              <b-button size="sm" variant="danger" v-if="selectedOption === 'One'">Delete</b-button>
+              <b-button size="sm" variant="danger" v-else>Delete All</b-button>
+            </b-button-group> -->
+            <b-button-group size="sm">
+              <b-button size="sm" @click="selectedRecordIds = []">Cancel</b-button>
+            </b-button-group>
+          </b-button-toolbar>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row :class="`work-space ${selectedOption !== 'None' && 'edit'}`" >
         <b-col md="12">
           <b-overlay :show="isFetchingRecords">
             <b-row class="cards-deck active" @scroll="recordsScroll" :aria-hidden="isFetchingRecords ? 'true' : null">
@@ -65,8 +91,13 @@
                   </b-col>
                   <b-col md="3" class="py-3" :key="`${record.id}${index}`">
                     <Record
+                      :isSelected="(() => selectedOption === 'All' ||
+                        (selectedOption === 'Many' && !selectedRecordIds.includes(record.id)) ||
+                        (selectedOption !== 'Many' && selectedRecordIds.includes(record.id))
+                      )()"
+                      :filterable="selectedOption === 'None'"
                       :record="record"
-                      @click="currentRecord = record; $bvModal.show('edit-record')"/>
+                      @click="selectRecord(record)"/>
                   </b-col>
               </template>
             </b-row>
@@ -79,9 +110,12 @@
         <RecordFilter/>
       </b-container>
     </b-sidebar>
-    <b-modal id="edit-records" centered title="Edit Record" hide-footer>
+    <b-modal id="edit-batch-records" centered title="Edit Batch Record" hide-footer>
       <b-container>
-        <RecordBatchForm @remoteAction = "fetchTotalSum(); fetchRecords()" />
+        <RecordBatchForm
+          :selectedOption = "selectedOption"
+          :selectedRecordIds = "selectedRecordIds"
+          @remoteAction = "fetchTotalSum(); fetchRecords(); selectedRecordIds = []" />
       </b-container>
     </b-modal>
     <b-modal id="new-record" centered title="New Record" hide-footer>
@@ -89,8 +123,8 @@
     </b-modal>
     <b-modal id="edit-record" centered title="Edit Record" hide-footer>
       <RecordForm 
-        :record="currentRecord"
-        @save="$bvModal.hide('edit-record'); fetchRecords({ limit: recordsCount }); fetchTotalSum()" />
+        :record="records.find(r => r.id === selectedRecordIds[0])"
+        @save="$bvModal.hide('edit-record'); fetchRecords({ limit: recordsCount }); fetchTotalSum(); selectedRecordIds = []" />
     </b-modal>
     <b-modal id="html-upload-record" centered title="Upload Records html" hide-footer>
       <HtmlRecordsUploadForm @save="$bvModal.hide('html-upload-record'); fetchRecords(); fetchTotalSum()"/>
@@ -122,7 +156,8 @@
         moment: moment,
         records: [],
         totalRecords: 0,
-        orderOption: null
+        orderOption: null,
+        selectedRecordIds: []
       }
     },
 
@@ -149,6 +184,18 @@
 
       recordsCount() {
         return this.records.length
+      },
+
+      selectedOption() {
+        let opt;
+
+        if(this.selectedRecordIds.length === 1 && this.selectedRecordIds[0] === 0) opt = 'All'
+        else if(this.selectedRecordIds.length === 1) opt = 'One'
+        else if(this.selectedRecordIds.length > 1 && this.selectedRecordIds[0] === 0) opt = 'Many'
+        else if(this.selectedRecordIds.length > 1) opt = 'Several'
+        else if(this.selectedRecordIds.length === 0) opt = 'None'
+
+        return opt
       }
     },
 
@@ -212,6 +259,14 @@
         )
       },
 
+      selectRecord(record) {
+        if(this.selectedRecordIds.includes(record.id)) {
+          this.selectedRecordIds = this.selectedRecordIds.filter(id => id !== record.id)
+        } else {
+          this.selectedRecordIds = [...[], ...this.selectedRecordIds, ...[record.id]]
+        }
+      },
+
       isMobile() {
         return isMobile();
       }
@@ -236,5 +291,14 @@
 
   .cards-deck.active .card:hover, .cards-deck.active .card:focus, .cards-deck.active .card:active {
     background-color: #e0e8ff75;
+  }
+
+  .work-space {
+    border-radius: 3px;
+    border: 3px solid lightgray;
+  }
+
+  .work-space.edit {
+    border: 3px dashed lightgray;
   }
 </style>

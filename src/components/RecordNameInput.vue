@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-input 
+    <b-textarea
       type="text"
       class="form-control"
       id="record-name"
@@ -10,7 +10,7 @@
       :list="datalistClass()"
       autocomplete="off"
       :autofocus="autofocus"
-      :required="isRequired"></b-input>
+      :required="isRequired"></b-textarea>
 
     <datalist :id="datalistClass()">
       <option v-for="(recName, index) in suggestedRecordNames" :key="recName.toLowerCase() + index">

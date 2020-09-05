@@ -49,6 +49,8 @@ export default {
     RecordNameInput
   },
 
+  props: ['selectedOption', 'selectedRecordIds'],
+
   data: function() {
     return {
       batchForm: {
@@ -104,19 +106,39 @@ export default {
 
       if (!confirm('Are you sure do you want tor remove all selected records?')) return null;
 
-      axios({url: '/records', method: 'delete', params: this.filterParams })
+      axios({url: '/records', method: 'delete', params: this.destroyRecordsParams() })
         .then(() => { this.clearForm(); this.$emit('remoteAction')})
+    },
+
+    destroyRecordsParams() {
+      let dRP = {...{}, ...this.filterParams}
+
+      if(this.selectedOption === 'Many') {
+        dRP['except_ids'] = this.selectedRecordIds.slice(1, this.selectedRecordIds.length)
+      } else if(this.selectedOption === 'Several') {
+        dRP['ids'] = this.selectedRecordIds
+      }
+
+      return dRP
     },
 
     submitFormParams() {
       const { batchForm, filter } = this
       let fd = new FormData();
 
-      Object.keys(filter).forEach(el => { 
-        if(el === 'from') fd.append('performed_at[gt]', filter.from)
-        else if(el === 'to' ) fd.append('performed_at[lt]', filter.to)
-        else fd.append(el, filter[el])
-      });
+      if(this.selectedOption === 'All' || this.selectedOption === 'Many') {
+        Object.keys(filter).forEach(el => {
+          if(el === 'from') fd.append('performed_at[gt]', filter.from)
+          else if(el === 'to' ) fd.append('performed_at[lt]', filter.to)
+          else fd.append(el, filter[el])
+        });
+
+        if(this.selectedOption === 'Many') {
+          this.selectedRecordIds.slice(1, this.selectedRecordIds.length).forEach(id => fd.append('except_ids[]', id))
+        }
+      } else if(this.selectedOption === 'Several') {
+        this.selectedRecordIds.forEach(id => fd.append('ids[]', id))
+      }
 
       if(batchForm.name.length > 0) fd.append('batch_form[name]', batchForm.name)
       if(batchForm.card.id) fd.append('batch_form[card_id]', batchForm.card.id)

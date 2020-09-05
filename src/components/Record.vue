@@ -2,9 +2,17 @@
   <b-card
     class="record-card shadow-sm"
     no-body
+    :border-variant='isSelected ? "warning" : "light"'
     :class="{ positive: record.amount > 0 }">
     <b-card-body @click="$emit('click')">
-      <b-card-sub-title class="mb-2" @click.prevent.stop="() => addFilteringName({name: record.name})">
+      <font-awesome-icon icon="check-circle" size="lg" class="selected-icon" v-if="isSelected" />
+      <b-card-sub-title class="mb-2" @click="(e) => {
+         if(filterable) {
+           e.preventDefault()
+           e.stopPropagation()
+           addFilteringName({name: record.name})
+         } else return true
+       }">
         {{record.name}}
       </b-card-sub-title>
       <b-card-title>{{record.amount}}</b-card-title>
@@ -26,9 +34,13 @@
 <script>
 import moment from 'moment'
 import { mapMutations } from 'vuex'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faCheckCircle)
 
 export default {
-  props: ['record'],
+  props: ['record', 'isSelected', 'filterable'],
 
   data: function(){
     return {
@@ -37,7 +49,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['addFilteringName'])
+    ...mapMutations(['addFilteringName']),
   }
 
 }
@@ -54,5 +66,16 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .record-card.border-warning {
+    border: 2px solid;
+  }
+
+  .selected-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #ffc107;
   }
 </style>

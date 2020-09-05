@@ -32,7 +32,7 @@
           </b-button-toolbar>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row class="work-space">
         <b-col md="12">
           <b-overlay :show="isFetching">
             <b-row class="cards-deck" @scroll="recordsScroll" :aria-hidden="isFetching ? 'true' : null">
@@ -153,4 +153,8 @@
   }
 </script>
 <style>
+  .work-space {
+    border-radius: 3px;
+    border: 3px solid lightgray;
+  }
 </style>
