@@ -36,12 +36,16 @@
           <b-col cols="6" class="pb-1">
             <b-button @click="selectedRecordIds = []" size="sm" block>Cancel</b-button>
           </b-col>
+          <b-col cols="12" class="pb-1">
+            <div v-show="selectedOption !== 'None'" class="text-secondary font-weight-bolder">Selected records: {{selectedCount}}</div>
+          </b-col>
         </b-row>
       </template>
       
       <b-row class="py-2" v-else>
         <b-col md="8" class="pb-1 pt-1">
           <FilterChips v-show="selectedOption === 'None'" />
+          <div v-show="selectedOption !== 'None'" class="text-secondary font-weight-bolder">Selected records: {{selectedCount}}</div>
         </b-col>
         <b-col md="4" class="pb-1 pt-1">
           <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu" class="float-right" v-show="selectedOption === 'None'">
@@ -199,6 +203,18 @@
         else if(this.selectedRecordIds.length === 0) opt = 'None'
 
         return opt
+      },
+
+      selectedCount() {
+        let count = 0;
+
+        if(this.selectedRecordIds.length > 0){
+          if(this.selectedRecordIds.includes(0)) {
+            count = this.totalRecords - this.selectedRecordIds.filter(id => id !== 0).length
+          } else count = this.selectedRecordIds.length
+        }
+
+        return count;
       }
     },
 
