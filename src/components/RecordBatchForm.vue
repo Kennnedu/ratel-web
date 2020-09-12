@@ -1,28 +1,44 @@
 <template>
   <b-form>
-    <b-form-group id="filter-to" label="Record Name">
+    <b-form-group label="Source:">
+      <b-input-group>
+        <b-input-group-prepend>
+          <b-input-group-text ><font-awesome-icon icon="credit-card"/></b-input-group-text>
+        </b-input-group-prepend>
+        <CardSelector
+          :card="batchForm.card"
+          @selectCard="newCard => batchForm.card = newCard"/>
+      </b-input-group>
+    </b-form-group>
+
+    <b-form-group label="Add tags:">
+      <b-input-group>
+        <b-input-group-prepend>
+          <b-input-group-text ><font-awesome-icon icon="tags"/></b-input-group-text>
+        </b-input-group-prepend>
+        <TagsInput
+          :recordsTags="batchForm.addRecordsTags"
+          @change="newRecordsTags => batchForm.addRecordsTags = newRecordsTags" />
+      </b-input-group>
+    </b-form-group>
+
+    <b-form-group label="Remove tags:">
+      <b-input-group>
+        <b-input-group-prepend>
+          <b-input-group-text ><font-awesome-icon icon="tags"/></b-input-group-text>
+        </b-input-group-prepend>
+        <TagsInput
+          :recordsTags="batchForm.removeRecordsTags"
+          @change="newRecordsTags => batchForm.removeRecordsTags = newRecordsTags" />
+      </b-input-group>
+    </b-form-group>
+
+    <b-form-group>
       <RecordNameInput
         :recordName="batchForm.name"
         @change="newName => batchForm.name = newName" />
     </b-form-group>
 
-    <b-form-group id="filter-to" label="Sources">
-      <CardSelector
-        :card="batchForm.card"
-        @selectCard="newCard => batchForm.card = newCard"/>
-    </b-form-group>
-
-    <b-form-group id="filter-to" label="Add tags">
-      <TagsInput
-        :recordsTags="batchForm.addRecordsTags"
-        @change="newRecordsTags => batchForm.addRecordsTags = newRecordsTags" />
-    </b-form-group>
-
-    <b-form-group id="filter-to" label="Remove Tags">
-      <TagsInput
-        :recordsTags="batchForm.removeRecordsTags"
-        @change="newRecordsTags => batchForm.removeRecordsTags = newRecordsTags" />
-    </b-form-group>
     <b-row>
       <b-col>
         <b-button variant="primary" :disabled="!validBatchForm" @click="submitForm" block>{{submitButtonName}}</b-button>
@@ -41,6 +57,10 @@ import { mapState, mapGetters } from 'vuex'
 import TagsInput from'./TagsInput.vue'
 import CardSelector from'./CardSelector.vue'
 import RecordNameInput from'./RecordNameInput.vue'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCreditCard, faTags } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faCreditCard, faTags,)
 
 export default {
   components: {

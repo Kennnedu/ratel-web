@@ -1,9 +1,6 @@
 <template>
   <b-form>
-    <b-form-group
-      label-cols-sm="3"
-      label="Type:"
-    >
+    <b-form-group>
       <b-form-radio-group
         class="pt-2"
         :options="['Expences', 'Replenish', 'Both']"
@@ -15,36 +12,56 @@
       ></b-form-radio-group>
     </b-form-group>
 
-    <b-form-group id="filter-name-group" label="Name:" label-for="filter-name" label-cols-sm="3">
-      <b-form-input
-        type="text"
-        id="filter-name"
-        :value="filter.name"
-        @input="val => updateFilter({changes: { name: val }})"></b-form-input>
+    <b-form-group id="filter-name-group">
+      <b-input-group>
+        <b-input-group-prepend>
+          <b-input-group-text ><font-awesome-icon icon="receipt"/></b-input-group-text>
+        </b-input-group-prepend>
+        <b-form-input
+          type="text"
+          id="filter-name"
+          :value="filter.name"
+          @input="val => updateFilter({changes: { name: val }})"></b-form-input>
+      </b-input-group>
     </b-form-group>
 
-    <b-form-group id="filter-source-group" label="Source:" label-for="filter-card" label-cols-sm="3">
-      <b-form-input
-        type="text"
-        id="filter-card"
-        :value="filter.card"
-        @input="val => updateFilter({changes: { card: val }})"></b-form-input>
+    <b-form-group id="filter-source-group">
+      <b-input-group>
+        <b-input-group-prepend>
+          <b-input-group-text ><font-awesome-icon icon="credit-card"/></b-input-group-text>
+        </b-input-group-prepend>
+        <b-form-input
+          type="text"
+          id="filter-card"
+          :value="filter.card"
+          @input="val => updateFilter({changes: { card: val }})"></b-form-input>
+      </b-input-group>
     </b-form-group>
 
-    <b-form-group id="filter-tags-group" label="Tags:" label-for="filter-tags" label-cols-sm="3">
-      <b-form-input
-        type="text"
-        id="filter-tags"
-        :value="filter.tags"
-        @input="val => updateFilter({changes: { tags: val }})"></b-form-input>
+    <b-form-group id="filter-tags-group">
+      <b-input-group>
+        <b-input-group-prepend>
+          <b-input-group-text ><font-awesome-icon icon="tags"/></b-input-group-text>
+        </b-input-group-prepend>
+        <b-form-input
+          type="text"
+          id="filter-tags"
+          :value="filter.tags"
+          @input="val => updateFilter({changes: { tags: val }})"></b-form-input>
+      </b-input-group>
     </b-form-group>
 
-    <b-form-group id="filter-performed-group" label="Period:" label-for="filter-performed" label-cols-sm="3">
-      <b-form-select
-        id="filter-performed"
-        v-model="selectedPerformedHandler"
-        :options="performedHandlerOptions()"
-      ></b-form-select>
+    <b-form-group id="filter-performed-group">
+      <b-input-group>
+        <b-input-group-prepend>
+          <b-input-group-text ><font-awesome-icon icon="calendar-alt"/></b-input-group-text>
+        </b-input-group-prepend>
+        <b-form-select
+          id="filter-performed"
+          v-model="selectedPerformedHandler"
+          :options="performedHandlerOptions()"
+        ></b-form-select>
+      </b-input-group>
     </b-form-group> 
     <b-form-group id="filter-range" label="Range" v-if="selectedPerformedHandler === 'custom'">
       <flat-pickr :value="[...[], ...[filter.from, filter.to]]"
@@ -61,6 +78,11 @@ import { getDefaultFilter, getDefaultPerformedHandler, getPerformedHandlerOption
 import flatPickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
 import moment from 'moment'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faReceipt, faCreditCard, faTags, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faReceipt, faCreditCard, faTags, faCalendarAlt)
+
 
 export default {
   components: { flatPickr },

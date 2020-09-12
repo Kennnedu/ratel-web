@@ -1,6 +1,5 @@
 <template>
-  <div>
-      <b-form-tags v-model="currentTags" no-outer-focus class="mb-2">
+      <b-form-tags v-model="currentTags" no-outer-focus>
         <template v-slot="{ tags, disabled, addTag, removeTag }">
           <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
             <li v-for="tag in tags" :key="tag" class="list-inline-item">
@@ -49,7 +48,6 @@
           </b-dropdown>
         </template>
       </b-form-tags>
-  </div>
 </template>
 <script>
 import { library } from '@fortawesome/fontawesome-svg-core'

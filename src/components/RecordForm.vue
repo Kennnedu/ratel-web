@@ -1,36 +1,55 @@
 <template>
   <b-form @submit="submitForm">
-    <b-form-group id="record-name-group" label="Name" label-for="record-name">
+    <b-form-group class="mb-3" id="record-amount-group" label="Amount:">
+      <b-input-group>
+        <b-input-group-prepend>
+          <b-input-group-text ><font-awesome-icon icon="dollar-sign"/></b-input-group-text>
+        </b-input-group-prepend>
+        <b-form-input type="number" id="record-amount" step="0.01" :autofocus="true" v-model.number="currentRecord.amount" :required="true">
+        </b-form-input>
+      </b-input-group>
+    </b-form-group>
+    
+    <b-form-group class="mb-3" id="record-card-group" label="Source:">
+      <b-input-group>
+        <b-input-group-prepend>
+          <b-input-group-text ><font-awesome-icon icon="credit-card"/></b-input-group-text>
+        </b-input-group-prepend>
+        <CardSelector
+          :card="currentRecord.card"
+          @selectCard="newCard => currentRecord.card = newCard"/>
+      </b-input-group>
+    </b-form-group>
+      
+    <b-form-group class="mb-3" id="record-tags-group" label="Tags:">
+      <b-input-group>
+        <b-input-group-prepend>
+          <b-input-group-text ><font-awesome-icon icon="tags"/></b-input-group-text>
+        </b-input-group-prepend>
+        <TagsInput
+          :recordsTags="currentRecord.records_tags"
+          @change="newRecordsTags => currentRecord.records_tags = newRecordsTags" />
+      </b-input-group>
+    </b-form-group>
+
+    <b-form-group class="mb-3" id="record-performed-at-group" label="Performed at:">
+      <b-input-group>
+        <b-input-group-prepend>
+          <b-input-group-text ><font-awesome-icon icon="calendar"/></b-input-group-text>
+        </b-input-group-prepend>
+        <flat-pickr v-model="currentRecord.performed_at"
+                    class="form-control"
+                    :config="{enableTime: true}"></flat-pickr>
+      </b-input-group>
+    </b-form-group>
+    
+    <b-form-group id="record-name-group">
       <RecordNameInput
         :recordName="currentRecord.name"
         :dataListId="'record-name-suggestions'"
-        :isRequired="true"
-	:autofocus="true"
         @change="newName => currentRecord.name = newName" />
     </b-form-group>
 
-    <b-form-group id="record-amount-group" label="Amount" label-for="record-amount">
-      <b-form-input type="number" id="record-amount" step="0.01" v-model.number="currentRecord.amount" :required="true">
-      </b-form-input>
-    </b-form-group>
-    
-    <b-form-group id="record-card-group" label="Source" label-for="record-card">
-      <CardSelector
-        :card="currentRecord.card"
-        @selectCard="newCard => currentRecord.card = newCard"/>
-    </b-form-group>
-    
-    <b-form-group id="record-tags-group" label="Tags">
-      <TagsInput
-        :recordsTags="currentRecord.records_tags"
-        @change="newRecordsTags => currentRecord.records_tags = newRecordsTags" />
-    </b-form-group>
-
-    <b-form-group id="record-performed-at-group" label="Performed At" label-for="record-performed-at">
-      <flat-pickr v-model="currentRecord.performed_at"
-                  class="form-control"
-                  :config="{enableTime: true}"></flat-pickr>
-    </b-form-group>
     <b-row>
       <b-col>
         <b-button type="submit" variant="primary" block>{{saveButtonName}}</b-button>
@@ -49,12 +68,16 @@
   import RecordNameInput from'./RecordNameInput.vue'
   import flatPickr from 'vue-flatpickr-component';
   import 'flatpickr/dist/flatpickr.css';
+  import { library } from '@fortawesome/fontawesome-svg-core'
+  import { faDollarSign, faCreditCard, faTags, faCalendar } from '@fortawesome/free-solid-svg-icons'
+  
+  library.add(faDollarSign, faCreditCard, faTags, faCalendar)
 
   const emptyNewRecord = () => {
     return {
       name: '',
       card: {},
-      amount: 0.0,
+      amount: null,
       rest: 0.0,
       records_tags: [],
       performed_at: moment().format('YYYY-MM-DDTHH:mm')

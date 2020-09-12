@@ -4,7 +4,7 @@
       type="text"
       class="form-control"
       id="record-name"
-      placeholder="Enter name"
+      placeholder="Description"
       :value="recordName"
       @input="val => $emit('change', val)"
       :list="datalistClass()"

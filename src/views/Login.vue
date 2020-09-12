@@ -4,21 +4,25 @@
       <b-col md="4" offset-md="4" cols="10" offset="1" class="my-auto">
         <b-card title="Login" class="shadow p-3 mb-5 rounded">
           <b-form @submit="submitForm">
+            <b-input-group id="username-group" class="mb-3">
+              <b-input-group-prepend>
+                <b-input-group-text ><font-awesome-icon icon="user"/></b-input-group-text>
+              </b-input-group-prepend>
+              <b-form-input type="text" id="username" v-model="username" placeholder="Enter username" :required='true'></b-form-input>
+            </b-input-group>
+
+            <b-input-group id="password-group"> 
+              <b-input-group-prepend>
+                <b-input-group-text ><font-awesome-icon icon="lock"/></b-input-group-text>
+              </b-input-group-prepend>
+              
+              <b-form-input type="password" id="password" v-model="password" placeholder="Enter password" :required='true'></b-form-input>
+            </b-input-group>
+
             <b-form-invalid-feedback :state="!hasError">
               Invalid username or password. Please try again.
             </b-form-invalid-feedback>
-            <b-form-group id="username-group" label="Username" label-for="username">
-              <b-input type="text" id="username" v-model="username" placeholder="Enter username" :required='true'></b-input>
-            </b-form-group>
-
-            <b-form-group id="password-group" label="Password" label-for="password">
-              <b-input type="password" id="password" v-model="password" placeholder="Enter password" :required='true'></b-input>
-            </b-form-group>
-
-            <b-form-group id="secure-login-group">
-              <b-checkbox v-model="secureLogin">Secure login</b-checkbox>
-            </b-form-group>
-
+            
             <b-button type="submit" class="mt-3" block variant="primary">Login</b-button>
           </b-form>
         </b-card>
@@ -29,13 +33,16 @@
 <script>
   import axios from 'axios'
   import Cookies from 'js-cookie'
-
+  import { library } from '@fortawesome/fontawesome-svg-core'
+  import { faUser, faLock } from '@fortawesome/free-solid-svg-icons'
+  
+  library.add(faUser, faLock)
+  
   export default {
     data: function(){
       return {
         username: "",
         password: "",
-        secureLogin: true,
         hasError: false,
       }
     },
