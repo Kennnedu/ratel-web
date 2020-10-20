@@ -56,7 +56,7 @@
         this.hasError = false
 
         let _this = this;
-        axios.post("/session", {
+        axios.post("/sessions", {
           username: _this.username,
           password: _this.password,
           secure_login: _this.secureLogin
