@@ -24,6 +24,8 @@
         </b-overlay>
         <b-navbar-nav class="mx-auto" align='right'>
           <b-nav-item href="#" to="record_names" :active="$route.name === 'record_names'">Record names</b-nav-item>
+          <b-nav-item href="#" to="settings" :active="$route.name === 'settings'">Settings</b-nav-item>
+          <b-nav-item href="#" @click="logout">Logout</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -33,6 +35,7 @@
   import debounce from 'lodash.debounce'
   import { isMobile } from './../utils/mobileDetect.js'
   import { mapState, mapGetters, mapActions } from 'vuex'
+  import Cookies from 'js-cookie'
 
   export default {
     computed: {
@@ -74,6 +77,11 @@
 
       isMobile() {
         return isMobile();
+      },
+
+      logout() {
+        Cookies.remove('session_token');
+        this.$router.push('/login');
       }
     },
   }

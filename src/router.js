@@ -5,6 +5,7 @@ import Records from './views/Records.vue'
 import Sources from './views/Sources.vue'
 import Tags from './views/Tags.vue'
 import RecordNames from './views/RecordNames.vue'
+import Settings from './views/Settings.vue'
 
 Vue.use(VueRouter)
 
@@ -16,5 +17,6 @@ export default new VueRouter({
     { name: 'sources', path: '/sources', component: Sources },
     { name: 'tags', path: '/tags', component: Tags },
     { name: 'record_names', path: '/record_names', component: RecordNames },
+    { name: 'settings', path: '/settings', component: Settings },
   ]
 }) 
