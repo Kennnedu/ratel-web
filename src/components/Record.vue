@@ -2,7 +2,7 @@
   <b-card
     class="record-card shadow-sm"
     no-body
-    :border-variant='isSelected ? "warning" : "light"'
+    :border-variant='isSelected ? "warning" : ""'
     :class="{ positive: record.amount > 0 }">
     <b-card-body @click="$emit('click')">
       <font-awesome-icon icon="check-circle" size="lg" class="selected-icon" v-if="isSelected" />
