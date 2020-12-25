@@ -25,7 +25,7 @@
       axios.interceptors.response.use(response => response, error => {
         if(error.response.status === 401) _this.$router.push('/login');
         if(Array.isArray(error.response.data.message)) {
-         this.$bvToast.toast(error.response.data.message.join('\n'), {title: 'Error', variant: 'danger'});
+         this.$bvToast.toast(error.response.data.message.pop(), {title: 'Error', variant: 'danger'});
         }
         return Promise.reject(error);
       });
