@@ -5,7 +5,7 @@
         <b-card no-body class="mt-3">
           <b-card-header>
             <h3 class="d-inline text-center">Reports</h3>
-            <b-button variant="primary" class="float-right" size="sm">New</b-button>
+            <b-button variant="primary" class="float-right" size="sm" v-b-modal.new-report-form>New</b-button>
           </b-card-header>
           <b-card-body>
             <b-table-lite
@@ -25,10 +25,15 @@
                 <span :class="{
                   'text-danger': data.value === 'error',
                   'text-success': data.value === 'processed',
-                  'text-warrning': data.value === 'queue' 
+                  'text-warning': data.value === 'queue' 
                   }"> 
                   {{data.value}}
                   </span>
+              </template>
+              <template #cell(action)="data">
+                <b-button size="sm" variant="outline-danger" @click="() => confirmDeleteDialog(data.item.id)">
+                  Delete
+                </b-button>
               </template>
             </b-table-lite>
           </b-card-body>
@@ -56,13 +61,19 @@
         </b-card>
       </b-col>
     </b-row>
+    <b-modal id="new-report-form" centered title="New Report" hide-footer>
+      <ReportForm @save="$bvModal.hide('new-report-form'); fetch()"/>
+    </b-modal>
   </b-container>
 </template>
 <script>
 import axios from 'axios'
 import moment from 'moment'
+import ReportForm from '../components/ReportForm.vue'
 
 export default {
+  components: {ReportForm},
+
   data: function() {
     return {
       fields: [
@@ -78,12 +89,17 @@ export default {
           key: 'created_at',
           label: 'Created At',
           formatter: 'createdAtFormatter'
+        },
+        {
+          key: 'action',
+          label: 'Action'
         }
       ],
       reports: [],
       totalReports: 0,
       currentPage: 1,
-      perPage: 5
+      perPage: 5,
+      isFetching: true
     }
   },
 
@@ -102,16 +118,28 @@ export default {
 
   methods: {
     fetch() {
+      this.isFetching = true;
       const offset = (this.currentPage - 1) * this.perPage
       axios.get('/reports', { params: { 'limit': this.perPage, 'offset': offset }}).then(({data}) => {
-        console.log(data) // eslint-disable-line
         this.reports = data.reports
         this.totalReports = data.total_count
+        this.isFetching = false
       })
     },
 
     createdAtFormatter(value) {
       return moment(value).format('lll');
+    },
+
+    confirmDeleteDialog(id) {
+      this.$bvModal.msgBoxConfirm('Are you sure you want to delete the report, all related records will be deleted?', {
+        title: 'Please Confirm',
+        size: 'sm',
+        buttonSize: 'sm',
+        okVariant: 'danger',
+        centered: true
+      })
+        .then(confirmed => confirmed && axios.delete(`/reports/${id}`).then(() =>  this.fetch()))
     }
   }
 }
