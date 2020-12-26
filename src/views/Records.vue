@@ -4,10 +4,7 @@
       <template v-if="isMobile()">
         <b-row class="py-2" v-show="selectedOption === 'None'">
           <b-col cols="6" class="pb-1">
-            <b-dropdown block variant="primary" text="New" size="sm">
-              <b-dropdown-item href="#" v-b-modal.new-record>One</b-dropdown-item>
-              <b-dropdown-item href="#" v-b-modal.html-upload-record>Upload batch(html)</b-dropdown-item>
-            </b-dropdown>
+            <b-button size="sm" block variant="primary" v-b-modal.new-record>New</b-button>
           </b-col>
           <b-col cols="6" class="pb-1">
             <b-button @click="selectedRecordIds = [0]" size="sm" block>Select All</b-button>
@@ -50,10 +47,7 @@
         <b-col md="4" class="pb-1 pt-1">
           <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu" class="float-right" v-show="selectedOption === 'None'">
             <b-button-group  class="mr-1" size="sm">
-              <b-dropdown block variant="primary" text="New" size="sm">
-                <b-dropdown-item href="#" v-b-modal.new-record>One</b-dropdown-item>
-                <b-dropdown-item href="#" v-b-modal.html-upload-record>Upload batch(html)</b-dropdown-item>
-              </b-dropdown>
+              <b-button size="sm" block variant="primary" v-b-modal.new-record>New</b-button>
             </b-button-group>
             <b-button-group  class="mr-1" size="sm">
               <b-button size="sm" @click="selectedRecordIds = [0]">Select All</b-button>
@@ -133,9 +127,6 @@
         :record="records.find(r => r.id === selectedRecordIds[0])"
         @save="$bvModal.hide('edit-record'); fetchRecords({ limit: recordsCount }); fetchTotalSum(); selectedRecordIds = []" />
     </b-modal>
-    <b-modal id="html-upload-record" centered title="Upload Records html" hide-footer>
-      <HtmlRecordsUploadForm @save="$bvModal.hide('html-upload-record'); fetchRecords(); fetchTotalSum()"/>
-    </b-modal>
   </section>
 </template>
 <script>
@@ -143,7 +134,6 @@
   import RecordForm from '../components/RecordForm.vue'
   import RecordFilter from '../components/RecordFilter.vue'
   import RecordBatchForm from '../components/RecordBatchForm.vue'
-  import HtmlRecordsUploadForm from '../components/HtmlRecordsUploadForm.vue'
   import FilterChips from '../components/FilterChips.vue'
   import SortByDropdown from '../components/SortByDropdown.vue'
   import moment from 'moment'
@@ -153,7 +143,7 @@
   import { isMobile } from './../utils/mobileDetect.js'
 
   export default {
-    components: { Record, RecordForm, RecordFilter, RecordBatchForm, HtmlRecordsUploadForm, FilterChips, SortByDropdown },
+    components: { Record, RecordForm, RecordFilter, RecordBatchForm, FilterChips, SortByDropdown },
 
     data: function() {
       return {
