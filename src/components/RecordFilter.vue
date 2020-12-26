@@ -1,6 +1,6 @@
 <template>
   <b-form>
-    <b-form-group>
+    <b-form-group label="Record Type" label-size="sm">
       <b-form-radio-group
         class="pt-2"
         :options="['Expences', 'Replenish', 'Both']"
@@ -12,7 +12,7 @@
       ></b-form-radio-group>
     </b-form-group>
 
-    <b-form-group id="filter-name-group">
+    <b-form-group id="filter-name-group" label="Description" label-size="sm">
       <b-input-group>
         <b-input-group-prepend>
           <b-input-group-text ><font-awesome-icon icon="receipt"/></b-input-group-text>
@@ -25,7 +25,7 @@
       </b-input-group>
     </b-form-group>
 
-    <b-form-group id="filter-source-group">
+    <b-form-group id="filter-source-group" label="Cards" label-size="sm">
       <b-input-group>
         <b-input-group-prepend>
           <b-input-group-text ><font-awesome-icon icon="credit-card"/></b-input-group-text>
@@ -38,7 +38,7 @@
       </b-input-group>
     </b-form-group>
 
-    <b-form-group id="filter-tags-group">
+    <b-form-group id="filter-tags-group" label="Tags" label-size="sm">
       <b-input-group>
         <b-input-group-prepend>
           <b-input-group-text ><font-awesome-icon icon="tags"/></b-input-group-text>
@@ -51,7 +51,7 @@
       </b-input-group>
     </b-form-group>
 
-    <b-form-group id="filter-performed-group">
+    <b-form-group id="filter-performed-group" label="Period" label-size="sm">
       <b-input-group>
         <b-input-group-prepend>
           <b-input-group-text ><font-awesome-icon icon="calendar-alt"/></b-input-group-text>
@@ -68,8 +68,8 @@
                   class="form-control"
                   :config="{mode: 'range', onChange: updateDateRange}"></flat-pickr>
     </b-form-group>
-    <b-button class="float-left" @click="resetFilter">Reset</b-button>
-    <b-button class="float-right" :disabled="isEqlFilterToDefFilter" @click="saveDefaultFilter">Save as Default</b-button>
+    <b-button class="float-left" @click="resetFilter" size="sm">Reset</b-button>
+    <b-button class="float-right" :disabled="isEqlFilterToDefFilter" @click="saveDefaultFilter" size="sm">Save as Default</b-button>
   </b-form>
 </template>
 <script>
