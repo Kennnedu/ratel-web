@@ -23,7 +23,8 @@
           </b-navbar-brand>
         </b-overlay>
         <b-navbar-nav class="mx-auto" align='right'>
-          <b-nav-item href="#" to="record_names" :active="$route.name === 'record_names'">Record names</b-nav-item>
+          <b-nav-item href="#" to="record_names" :active="$route.name === 'record_names'">Record Names</b-nav-item>
+          <b-nav-item href="#" to="reports" :active="$route.name === 'reports'">Bank Reports</b-nav-item>
           <b-nav-item href="#" to="settings" :active="$route.name === 'settings'">Settings</b-nav-item>
           <b-nav-item href="#" @click="logout">Logout</b-nav-item>
         </b-navbar-nav>

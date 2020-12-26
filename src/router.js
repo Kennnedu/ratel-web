@@ -6,6 +6,7 @@ import Sources from './views/Sources.vue'
 import Tags from './views/Tags.vue'
 import RecordNames from './views/RecordNames.vue'
 import Settings from './views/Settings.vue'
+import Reports from './views/Reports.vue'
 
 Vue.use(VueRouter)
 
@@ -18,5 +19,6 @@ export default new VueRouter({
     { name: 'tags', path: '/tags', component: Tags },
     { name: 'record_names', path: '/record_names', component: RecordNames },
     { name: 'settings', path: '/settings', component: Settings },
+    { name: 'reports', path: '/reports', component: Reports },
   ]
 }) 
