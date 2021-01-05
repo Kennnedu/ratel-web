@@ -98,7 +98,7 @@
                       )()"
                       :filterable="selectedOption === 'None'"
                       :record="record"
-                      @click="selectRecord(record)"/>
+                      @click="clickOnRecordCallback(record)"/>
                   </b-col>
               </template>
             </b-row>
@@ -173,6 +173,7 @@
     mounted() {
       this.fetchRecords();
       this.debouncedFetchRecords = debounce(this.fetchRecords, 500);
+      this.recordClicks = 0;
     },
 
     computed: {
@@ -266,6 +267,21 @@
             index !== 0 && !this.moment(record.performed_at).isSame(this.moment(prevRecord.performed_at), 'day')
           )
         )
+      },
+
+      clickOnRecordCallback(record) {
+        this.recordClicks++;
+
+        if(this.recordClicks === 1) {
+          this.selectRecord(record);
+          this.timer = setTimeout(() => this.recordClicks = 0, 300);
+        } else{
+          clearTimeout(this.timer);
+          this.recordClicks = 0;
+          if(this.selectedCount > 1) this.$bvModal.show('edit-batch-records');
+          else if(this.selectedCount === 0) this.$bvModal.show('new-record');
+          else this.$bvModal.show('edit-record');
+        }
       },
 
       selectRecord(record) {
