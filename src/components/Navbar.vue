@@ -1,37 +1,35 @@
 <template>
-  <div>
-    <b-navbar toggleable="lg" type="dark" variant="dark">
-      <b-overlay :show="isFetchingTotalSum" spinner-variant="secondary" spinner-type="grow" variant="dark" opacity="1" spinner-small rounded="sm" v-if="isMobile()">
+  <b-navbar toggleable="lg" type="dark" variant="dark" :sticky="true">
+    <b-overlay :show="isFetchingTotalSum" spinner-variant="secondary" spinner-type="grow" variant="dark" opacity="1" spinner-small rounded="sm" v-if="isMobile()">
+      <b-navbar-brand :class="`mx-5 ${balanceColorClass}`" :aria-hidden="isFetchingTotalSum ? 'true' : null" align="center">
+        {{totalSum}}
+      </b-navbar-brand>
+    </b-overlay>
+    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+    <b-collapse id="nav-collapse" is-nav>
+      <b-navbar-nav class="mx-auto" align='left'>
+        <b-nav-item href="#" to="records" :active="$route.name === 'records'">Records</b-nav-item>
+        <b-nav-item href="#" to="tags" :active="$route.name === 'tags'">
+          Tags <b-badge>{{tagsCount}}</b-badge>
+        </b-nav-item>
+        <b-nav-item href="#" to="sources" :active="$route.name === 'sources'">
+          Sources <b-badge>{{cardsCount}}</b-badge>
+        </b-nav-item>
+        <b-nav-item href="#" to="record_names" :active="$route.name === 'record_names'">Record Names</b-nav-item>
+      </b-navbar-nav>
+      <b-overlay :show="isFetchingTotalSum" spinner-variant="secondary" spinner-type="grow" variant="dark" opacity="1" spinner-small rounded="sm" v-if="!isMobile()">
         <b-navbar-brand :class="`mx-5 ${balanceColorClass}`" :aria-hidden="isFetchingTotalSum ? 'true' : null" align="center">
           {{totalSum}}
         </b-navbar-brand>
       </b-overlay>
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-      <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav class="mx-auto" align='left'>
-          <b-nav-item href="#" to="records" :active="$route.name === 'records'">Records</b-nav-item>
-          <b-nav-item href="#" to="tags" :active="$route.name === 'tags'">
-            Tags <b-badge>{{tagsCount}}</b-badge>
-          </b-nav-item>
-          <b-nav-item href="#" to="sources" :active="$route.name === 'sources'">
-            Sources <b-badge>{{cardsCount}}</b-badge>
-          </b-nav-item>
-          <b-nav-item href="#" to="record_names" :active="$route.name === 'record_names'">Record Names</b-nav-item>
-        </b-navbar-nav>
-        <b-overlay :show="isFetchingTotalSum" spinner-variant="secondary" spinner-type="grow" variant="dark" opacity="1" spinner-small rounded="sm" v-if="!isMobile()">
-          <b-navbar-brand :class="`mx-5 ${balanceColorClass}`" :aria-hidden="isFetchingTotalSum ? 'true' : null" align="center">
-            {{totalSum}}
-          </b-navbar-brand>
-        </b-overlay>
-        <b-navbar-nav class="mx-auto" align='right'>
-          <b-nav-item href="#" to="dashboard" :active="$route.name === 'dashboard'">Dashboard</b-nav-item>
-          <b-nav-item href="#" to="reports" :active="$route.name === 'reports'">Bank Reports</b-nav-item>
-          <b-nav-item href="#" to="settings" :active="$route.name === 'settings'">Settings</b-nav-item>
-          <b-nav-item href="#" @click="logout">Logout</b-nav-item>
-        </b-navbar-nav>
-      </b-collapse>
-    </b-navbar>
-  </div>
+      <b-navbar-nav class="mx-auto" align='right'>
+        <b-nav-item href="#" to="dashboard" :active="$route.name === 'dashboard'">Dashboard</b-nav-item>
+        <b-nav-item href="#" to="reports" :active="$route.name === 'reports'">Bank Reports</b-nav-item>
+        <b-nav-item href="#" to="settings" :active="$route.name === 'settings'">Settings</b-nav-item>
+        <b-nav-item href="#" @click="logout">Logout</b-nav-item>
+      </b-navbar-nav>
+    </b-collapse>
+  </b-navbar>
 </template>
 <script>
   import debounce from 'lodash.debounce'
