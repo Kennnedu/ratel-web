@@ -3,7 +3,7 @@
     <b-row>
       <b-col cols="12" class="mt-3">
         <b-card no-body>
-          <b-card-header class="d-flex justify-content-between">
+          <b-card-header class="d-flex justify-content-between flex-wrap">
             <h4>Expences/Income</h4>
             <b-form-group>
               <b-form-radio-group
@@ -22,19 +22,7 @@
           </b-card-body>
         </b-card>
       </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols="12" md="6" class="mt-3">
-        <b-card no-body>
-          <b-card-header>
-            <h4>Cards</h4>
-          </b-card-header>
-          <b-card-body>
-            <canvas id="cards-chart" style="position: relative; height: 40vh; width: 80vh;"></canvas>
-          </b-card-body>
-        </b-card>
-      </b-col>
-      <b-col cols="12" md="6" class="mt-3">
+      <b-col cols="12" class="mt-3">
         <b-card no-body>
           <b-card-header>
             <h4>Tags</h4>
@@ -44,8 +32,17 @@
           </b-card-body>
         </b-card>
       </b-col>
+      <b-col cols="12" class="mt-3">
+        <b-card no-body>
+          <b-card-header>
+            <h4>Cards</h4>
+          </b-card-header>
+          <b-card-body>
+            <canvas id="cards-chart" style="position: relative; height: 40vh; width: 80vh;"></canvas>
+          </b-card-body>
+        </b-card>
+      </b-col>
     </b-row>
-
   </b-container>
 </template>
 <script>
@@ -92,16 +89,14 @@ export default {
     },
 
     fetchTagData() {
-      axios.get(`/tags?fields=records_sum&limit=${this.tagsCount}`).then(({data}) => {     
-        const chartData = prepareTagsData(data.tags, this.totalSum)
-        initTagsChart(document.getElementById('tags-chart'), chartData['dataset'], chartData['labels'], chartData['colors'])
+      axios.get(`/tags?fields=records_sum&limit=${this.tagsCount}`).then(({data}) => {
+        initTagsChart(document.getElementById('tags-chart'), prepareTagsData(data.tags, this.totalSum))
       })
     },
 
     fetchCardData() {
       axios.get(`/cards?fields=records_sum&limit=${this.cardsCount}`).then(({data}) => {
-        const chartData = prepareCardsData(data.cards, this.totalSum)
-        initCardsChart(document.getElementById('cards-chart'), chartData['dataset'], chartData['labels'], chartData['colors'])
+        initCardsChart(document.getElementById('cards-chart'), prepareCardsData(data.cards, this.totalSum))
       })
     }
   }
