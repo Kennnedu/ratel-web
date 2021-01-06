@@ -1,0 +1,68 @@
+import Chart from 'chart.js';
+
+Chart.defaults.global.defaultFontFamily = "'Nunito', sans-serif"
+Chart.defaults.global.defaultFontSize = 11
+
+export const initExpencesIncomeChart = (node, incomeData, expencesData, dateStep) => {
+  return new Chart(node, {
+    type: 'bar',
+    data: {
+      datasets: [{
+        label: 'Expences',
+        data: expencesData,
+        borderColor: "#d5505d",
+        backgroundColor: "#fa9ea6",
+        borderWidth: 2
+      }, {
+        label: 'Income',
+        data: incomeData,
+        borderColor: "#58d775",
+        backgroundColor: "#cdf0d5",
+        borderWidth: 2
+      }]
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          offset: true,
+          type: 'time',
+          distribution: 'series',
+          time: {
+            tooltipFormat:'MM/DD/YYYY',
+            unit: dateStep
+          }
+        }]
+      }
+    }
+  })
+}
+
+export const initCardsChart = (node, dataset, labels, colors) => {
+  return  new Chart(node, {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: dataset,
+        backgroundColor: colors
+      }]
+    },
+    options: {
+      circumference: Math.PI,
+      rotation: -Math.PI
+    }
+  })
+}
+
+export const initTagsChart = (node, dataset, labels, colors) => {
+  return  new Chart(node, {
+    type: 'pie',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: dataset,
+        backgroundColor: colors
+      }]
+    }
+  })
+}
