@@ -77,10 +77,10 @@ export const prepareCardsData = (cards, totalSum) => {
     })
   }
 
-  cards = cards.map(el => Object.assign({}, el, { records_sum: Math.abs(Number(el['records_sum'])) }))
-  const absSum = cards.map(el => el['records_sum']).reduce((calc, val) => Number((calc + val).toFixed(2)), 0)
+  cards = cards.map(el => Object.assign({}, el, { records_sum: Number(el['records_sum']) }))
+  const absSum = cards.map(el => el['records_sum']).reduce((calc, val) => Number((calc + Math.abs(val)).toFixed(2)), 0)
 
-  cards.sort((a,b) => a['records_sum'] < b['records_sum'] ? 1 : -1)
+  cards.sort((a,b) => Math.abs(a['records_sum']) < Math.abs(b['records_sum']) ? 1 : -1)
   
   cards.forEach((el, i, arr) => {
     if(!el['color']) arr[i]['color'] = cardColorList[cardColorList.length - 1 - i] 
@@ -88,7 +88,7 @@ export const prepareCardsData = (cards, totalSum) => {
 
   return {
     labels: cards.map(el => el['name']),
-    dataLabels: cards.map(el => Number((el['records_sum'] * 100 / absSum).toFixed(2))),
+    dataLabels: cards.map(el => Number((Math.abs(el['records_sum']) * 100 / absSum).toFixed(2))),
     dataset: cards.map(el => el['records_sum']),
     colors: cards.map(el => el['color'])
   }
