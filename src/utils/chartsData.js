@@ -1,12 +1,23 @@
-export const prepareExpencesIncomeDatasets = (incomeData, expencesData) => {
-  const renameKey = (object, key, newKey) => {
-    const clonedObj = Object.assign({}, object);
-    const targetKey = clonedObj[key];
-    delete clonedObj[key];
-    clonedObj[newKey] = targetKey;
-    return clonedObj;
-  };
+export const prepareBalanceDatasets = (balances, startBalance) => {
+  balances = balances.map(el => {
+    let a;
+    a = renameKey(el, 'performed_date', 'x')
+    a = renameKey(a, 'sum_amount', 'y')
+    return a
+  })
 
+  for (let i = 0; i < balances.length; i++) {
+    if (i === 0) {
+      balances[i].y = (Number(balances[i].y) + Number(startBalance)).toFixed(2)
+    } else {
+      balances[i].y = (Number(balances[i].y) + Number(balances[i - 1].y)).toFixed(2)
+    }
+  }
+
+  return balances
+}
+
+export const prepareExpencesIncomeDatasets = (incomeData, expencesData) => {
   expencesData = expencesData.map(el => {
     let a;
     a = renameKey(el, 'performed_date', 'x')
@@ -126,3 +137,11 @@ const cardColorList = [
   "#006d2c",
   "#00441b"
 ]
+
+const renameKey = (object, key, newKey) => {
+  const clonedObj = Object.assign({}, object);
+  const targetKey = clonedObj[key];
+  delete clonedObj[key];
+  clonedObj[newKey] = targetKey;
+  return clonedObj;
+};

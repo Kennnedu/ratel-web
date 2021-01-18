@@ -11,7 +11,7 @@
           :checked="periodStep"
           @input="val => this.periodStep = val"
         >
-      </b-form-radio-group>
+        </b-form-radio-group>
       </b-form-group>
     </b-card-header>
     <b-card-body>

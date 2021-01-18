@@ -83,3 +83,30 @@ export const initTagsChart = (node, data) => {
     }
   })
 }
+
+export const initBalanceChart = (node, data, dateStep) => {
+  return  new Chart(node, {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'Balance',
+        data: data,
+        lineTension: 0,
+        backgroundColor: '#9ECAE1',
+        borderColor: '#3182BD',
+      }]
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          type: 'time',
+          distribution: 'series',
+          time: {
+            tooltipFormat:'MM/DD/YYYY',
+            unit: dateStep
+          }
+        }]
+      }
+    }
+  })
+}
