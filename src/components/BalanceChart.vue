@@ -58,13 +58,13 @@ export default {
   methods: {
     async fetchBalancesData() {
       let balancesData = [], datasets = [];
-      let sumParams = Object.assign({}, this.filterParams, { 'performed_at[lt]': this.filterParams['performed_at[gt]'] });
+      let sumParams = Object.assign({}, this.filterParams, { 'performed_at[lt]': this.filterParams['performed_at[gt]'], 'performed_at[gt]': null });
       let statisticParams = Object.assign({ 'period_step': this.periodStep }, this.filterRecordParams)
 
       await axios.get('/records/sum', { params: sumParams }).then( data => { this.startBalance = data.data.sum })
       await axios.get('/records/statistic/sum', { params: statisticParams }).then(({ data }) => balancesData = data.statistic)
 
-      datasets = prepareBalanceDatasets(balancesData, this.startBalance)
+      datasets = prepareBalanceDatasets(balancesData) // balancesData, this.startBalance
       this.balanceChart = initBalanceChart(document.getElementById('balance-chart'), datasets, this.periodStep)
     }
   }
