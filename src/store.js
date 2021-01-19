@@ -28,6 +28,18 @@ export default new Vuex.Store({
       }
     },
 
+    filterRecordParams: state => {
+      return {
+        'record[name]': state.filter.name,
+        'record[card]': state.filter.card,
+        'record[tags]': state.filter.tags,
+        'record[performed_at][gt]': moment(state.filter.from).utc().format('llll'),
+        'record[performed_at][lt]': moment(state.filter.to).utc().format('llll'),
+        'record[amount][lt]': state.filter.type === 'Expences' ? 0 : null,
+        'record[amount][gt]': state.filter.type === 'Replenish' ? 0 : null
+      }
+    },
+
     cardsCount: state => state.cards.length,
     tagsCount: state => state.tags.length
   },

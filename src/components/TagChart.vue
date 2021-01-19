@@ -21,13 +21,25 @@ export default {
 
   computed: {
     ...mapState(['totalSum']),
-    ...mapGetters(['tagsCount']),
+    ...mapGetters(['tagsCount', 'filterRecordParams']),
+  },
+
+  watch: {
+    filterRecordParams: {
+      handler: function(){
+        if(this.tagsChart) this.tagsChart.destroy();
+        this.fetchTagData()
+      },
+      deep: true
+    },
   },
 
   methods: {
     fetchTagData() {
-      axios.get(`/tags?fields=records_sum&limit=${this.tagsCount}`).then(({data}) => {
-        initTagsChart(document.getElementById('tags-chart'), prepareTagsData(data.tags, this.totalSum))
+      axios.get('/tags', {
+        params: Object.assign({ 'fields': 'records_sum', 'limit': this.tagsCount }, this.filterRecordParams) 
+      }).then(({data}) => {
+        this.tagsChart = initTagsChart(document.getElementById('tags-chart'), prepareTagsData(data.tags, this.totalSum))
       })
     },
   }

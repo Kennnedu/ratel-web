@@ -21,6 +21,7 @@
 </template>
 <script>
 import axios from 'axios';
+import { mapGetters } from 'vuex'
 import { prepareExpencesIncomeDatasets } from '../utils/chartsData'
 import { initExpencesIncomeChart } from '../utils/charts'
 
@@ -31,27 +32,44 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters(['filterRecordParams']),
+  },
+
   mounted() {
-    this.fetchExpencesData();
+    this.fetchExpencesIncomeData();
   },
 
   watch: {
     periodStep() {
-      if(this.expencesChart) this.expencesChart.destroy();
-      return this.fetchExpencesData();
-    }
+      if(this.expencesIncomeChart) this.expencesIncomeChart.destroy();
+      return this.fetchExpencesIncomeData();
+    },
+
+    filterRecordParams: {
+      handler: function(){
+        if(this.expencesIncomeChart) this.expencesIncomeChart.destroy();
+        this.fetchExpencesIncomeData()
+      },
+      deep: true
+    },
   },
 
   methods: {
-    async fetchExpencesData() {
+    async fetchExpencesIncomeData() {
       let expencesData = [], incomeData = [], datasets = [];
 
-      await axios.get(`/records/statistic/sum?type=expences&period_step=${this.periodStep}`).then(({ data }) => expencesData = data.statistic)
-      await axios.get(`/records/statistic/sum?type=replenish&period_step=${this.periodStep}`).then(({ data }) => incomeData = data.statistic)
+      await axios.get('/records/statistic/sum', { 
+        params: Object.assign({'type': 'expences', 'period_step': this.periodStep}, this.filterRecordParams) 
+      }).then(({ data }) => expencesData = data.statistic)
+
+      await axios.get('/records/statistic/sum', {
+        params: Object.assign({'type': 'replenish', 'period_step': this.periodStep}, this.filterRecordParams)
+      }).then(({ data }) => incomeData = data.statistic)
 
       datasets = prepareExpencesIncomeDatasets(incomeData, expencesData)
 
-      this.expencesChart = initExpencesIncomeChart(document.getElementById('expences-chart'), datasets[0], datasets[1], this.periodStep)
+      this.expencesIncomeChart = initExpencesIncomeChart(document.getElementById('expences-chart'), datasets[0], datasets[1], this.periodStep)
     }
   }
 }

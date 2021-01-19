@@ -34,9 +34,17 @@ export default {
 
   watch: {
     periodStep() {
-      if(this.balancesChart) this.balancesChart.destroy();
+      if(this.balanceChart) this.balanceChart.destroy();
       return this.fetchBalancesData();
-    }
+    },
+
+    filterRecordParams: {
+      handler: function(){
+        if(this.balanceChart) this.balanceChart.destroy();
+        this.fetchBalancesData()
+      },
+      deep: true
+    },
   },
 
   mounted() {
@@ -44,19 +52,20 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['filterParams']),
+    ...mapGetters(['filterParams', 'filterRecordParams']),
   },
 
   methods: {
     async fetchBalancesData() {
       let balancesData = [], datasets = [];
-      let filter = Object.assign({}, this.filterParams, { 'performed_at[lt]': this.filterParams['performed_at[gt]'] });
+      let sumParams = Object.assign({}, this.filterParams, { 'performed_at[lt]': this.filterParams['performed_at[gt]'] });
+      let statisticParams = Object.assign({ 'period_step': this.periodStep }, this.filterRecordParams)
 
-      await axios.get('/records/sum', { params: filter }).then( data => { this.startBalance = data.data.sum })
-      await axios.get(`/records/statistic/sum?period_step=${this.periodStep}`).then(({ data }) => balancesData = data.statistic)
+      await axios.get('/records/sum', { params: sumParams }).then( data => { this.startBalance = data.data.sum })
+      await axios.get('/records/statistic/sum', { params: statisticParams }).then(({ data }) => balancesData = data.statistic)
 
       datasets = prepareBalanceDatasets(balancesData, this.startBalance)
-      this.balancesChart = initBalanceChart(document.getElementById('balance-chart'), datasets, this.periodStep)
+      this.balanceChart = initBalanceChart(document.getElementById('balance-chart'), datasets, this.periodStep)
     }
   }
 }
