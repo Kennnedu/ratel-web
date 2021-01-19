@@ -16,7 +16,7 @@ export default new VueRouter({
   routes: [
     { name: 'login', path: '/login', component: Login },
     { name: 'records', path: '/', component: Records, alias: '/records' },
-    { name: 'sources', path: '/sources', component: Sources },
+    { name: 'accounts', path: '/accounts', component: Sources },
     { name: 'tags', path: '/tags', component: Tags },
     { name: 'record_names', path: '/record_names', component: RecordNames },
     { name: 'settings', path: '/settings', component: Settings },
