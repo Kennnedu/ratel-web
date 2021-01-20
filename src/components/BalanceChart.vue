@@ -20,6 +20,7 @@
   </b-card>
 </template>
 <script>
+import moment from 'moment'
 import axios from 'axios'
 import { mapGetters } from 'vuex'
 import { prepareBalanceDatasets } from '../utils/chartsData'
@@ -58,15 +59,23 @@ export default {
   methods: {
     async fetchBalancesData() {
       let balancesData = [], datasets = [];
-      let sumParams = Object.assign({}, this.filterParams, { 'performed_at[lt]': this.filterParams['performed_at[gt]'], 'performed_at[gt]': null });
       let statisticParams = Object.assign({ 'period_step': this.periodStep }, this.filterRecordParams)
 
-      await axios.get('/records/sum', { params: sumParams }).then( data => { this.startBalance = data.data.sum })
       await axios.get('/records/statistic/sum', { params: statisticParams }).then(({ data }) => balancesData = data.statistic)
 
-      datasets = prepareBalanceDatasets(balancesData) // balancesData, this.startBalance
+      if(Date.parse(this.filterParams['performed_at[gt]'])) {
+        let sinceDate = moment(Date.parse(this.filterParams['performed_at[gt]'])).subtract(1, 'day').utc().format('llll');
+
+        await axios.get('/records/sum', {
+          params: Object.assign({}, this.filterParams, { 'performed_at[lt]': sinceDate, 'performed_at[gt]': null })
+        }).then( data => { this.startBalance = data.data.sum })
+      } else {
+        this.startBalance = 0
+      }
+
+      datasets = prepareBalanceDatasets(balancesData, this.startBalance)
       this.balanceChart = initBalanceChart(document.getElementById('balance-chart'), datasets, this.periodStep)
     }
   }
-}
+} 
 </script>

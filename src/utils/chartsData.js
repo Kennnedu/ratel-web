@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-export const prepareBalanceDatasets = (balances) => {
+export const prepareBalanceDatasets = (balances, startBalance) => {
   balances = balances.map(el => {
     let a;
     a = renameKey(el, 'performed_date', 'x')
@@ -12,7 +12,7 @@ export const prepareBalanceDatasets = (balances) => {
 
   for (let i = 0; i < balances.length; i++) {
     if (i === 0) {
-      // balances[i].y = (Number(balances[i].y) + Number(startBalance)).toFixed(2)
+      balances[i].y = (Number(balances[i].y) + Number(startBalance)).toFixed(2)
     } else {
       balances[i].y = (Number(balances[i].y) + Number(balances[i - 1].y)).toFixed(2)
     }

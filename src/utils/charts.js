@@ -97,6 +97,9 @@ export const initBalanceChart = (node, data, dateStep) => {
       }]
     },
     options: {
+      legend: {
+        display: false
+      },
       scales: {
         xAxes: [{
           type: 'time',
