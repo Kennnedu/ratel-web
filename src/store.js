@@ -8,7 +8,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    isFetchingTotalSum: true,
+    isFetchingTotalBalance: true,
+    totalBalance: 0,
     totalSum: 0,
     filter: getDefaultFilter(),
     cards: [],
@@ -57,6 +58,10 @@ export default new Vuex.Store({
       state.totalSum = payload.totalSum
     },
 
+    updateTotalBalance(state, payload) {
+      state.totalBalance = payload.totalBalance
+    },
+ 
     updateFilter(state, payload) {
       state.filter = Object.assign({}, state.filter, payload.changes)
     },
@@ -65,22 +70,34 @@ export default new Vuex.Store({
       state.filter.name = [...state.filter.name.split('&'), ...['!' + payload.name]].join('&')
     },
 
-    changeisFetchingTotalSum(state, payload) {
-      state.isFetchingTotalSum = payload.isFetching;
+    changeIsFetchingTotalBalance(state, payload) {
+      state.isFetchingTotalBalance = payload.isFetching;
     }
   },
 
   actions: {
     fetchTotalSum(context, params) {
       return new Promise((resolve, reject) => {
-        context.commit('changeisFetchingTotalSum', { isFetching: true });
         axios.get('/records/sum', { params: Object.assign({}, context.getters.filterParams, params) })
         .then(data => {
           context.commit('updateTotalSum', { totalSum: data.data.sum })
           resolve(data.data) 
         })
         .catch(error => reject(error.response))
-        .then(() => context.commit('changeisFetchingTotalSum', { isFetching: false }))
+      })
+    },
+
+    fetchTotalBalance(context) {
+      context.commit('changeIsFetchingTotalBalance', { isFetching: true })
+
+      return new Promise((resolve, reject) => {
+        axios.get('/records/sum')
+        .then(data => {
+          context.commit('updateTotalBalance', { totalBalance: data.data.sum })
+          resolve(data.data) 
+        })
+        .catch(error => reject(error.response))
+        .then(() =>  context.commit('changeIsFetchingTotalBalance', { isFetching: false }))
       })
     },
 

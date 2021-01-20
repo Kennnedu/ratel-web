@@ -1,25 +1,30 @@
 <template>
   <b-navbar toggleable="lg" type="dark" variant="dark" :sticky="true">
-    <b-overlay :show="isFetchingTotalSum" spinner-variant="secondary" spinner-type="grow" variant="dark" opacity="1" spinner-small rounded="sm" v-if="isMobile()">
-      <b-navbar-brand :class="`mx-5 ${balanceColorClass}`" :aria-hidden="isFetchingTotalSum ? 'true' : null" align="center">
-        {{totalSum}}
+    <b-overlay :show="isFetchingTotalBalance" spinner-variant="secondary" spinner-type="grow" variant="dark" opacity="1" spinner-small rounded="sm" v-if="isMobile()">
+      <b-navbar-brand :class="`mx-5 ${balanceColorClass}`" :aria-hidden="isFetchingTotalBalance ? 'true' : null" align="center">
+        {{totalBalance}}
       </b-navbar-brand>
     </b-overlay>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="mx-auto" align='left'>
-        <b-nav-item href="#" to="records" :active="$route.name === 'records'">Records</b-nav-item>
-        <b-nav-item href="#" to="tags" :active="$route.name === 'tags'">
-          Tags <b-badge>{{tagsCount}}</b-badge>
+        <b-nav-item href="#" to="records" :active="$route.name === 'records'">
+          Records
+            <b-badge 
+              v-bind:variant="totalSum < 0 && 'danger' || totalSum > 0 && 'success' || totalSum == 0 && 'secondary'"
+              v-b-tooltip.hover title="Filtered Records Sum">{{totalSum}}</b-badge>
         </b-nav-item>
-        <b-nav-item href="#" to="sources" :active="$route.name === 'sources'">
-          Sources <b-badge>{{cardsCount}}</b-badge>
+        <b-nav-item href="#" to="tags" :active="$route.name === 'tags'">
+          Tags <b-badge variant="light">{{tagsCount}}</b-badge>
+        </b-nav-item>
+        <b-nav-item href="#" to="accounts" :active="$route.name === 'accounts'">
+          Accounts <b-badge variant="light">{{cardsCount}}</b-badge>
         </b-nav-item>
         <b-nav-item href="#" to="record_names" :active="$route.name === 'record_names'">Record Names</b-nav-item>
       </b-navbar-nav>
-      <b-overlay :show="isFetchingTotalSum" spinner-variant="secondary" spinner-type="grow" variant="dark" opacity="1" spinner-small rounded="sm" v-if="!isMobile()">
-        <b-navbar-brand :class="`mx-5 ${balanceColorClass}`" :aria-hidden="isFetchingTotalSum ? 'true' : null" align="center">
-          {{totalSum}}
+      <b-overlay :show="isFetchingTotalBalance" spinner-variant="secondary" spinner-type="grow" variant="dark" opacity="1" spinner-small rounded="sm" v-if="!isMobile()">
+        <b-navbar-brand :class="`mx-5 ${balanceColorClass}`" :aria-hidden="isFetchingTotalBalance ? 'true' : null" align="center" v-b-tooltip.hover title="Total Balance">
+          {{totalBalance}}
         </b-navbar-brand>
       </b-overlay>
       <b-navbar-nav class="mx-auto" align='right'>
@@ -32,30 +37,27 @@
   </b-navbar>
 </template>
 <script>
-  import debounce from 'lodash.debounce'
   import { isMobile } from './../utils/mobileDetect.js'
   import { mapState, mapGetters, mapActions } from 'vuex'
   import Cookies from 'js-cookie'
 
   export default {
     computed: {
-      ...mapState(['filter', 'totalSum', 'isFetchingTotalSum']),
+      ...mapState(['filter', 'totalBalance', 'isFetchingTotalBalance', 'totalSum']),
       ...mapGetters(['cardsCount', 'tagsCount']),
 
       balanceColorClass() {
-        if(this.totalSum > 0) return 'text-success';
-        else if(this.totalSum < 0) return 'text-danger';
+        if(this.totalBalance > 0) return 'text-success';
+        else if(this.totalBalance < 0) return 'text-danger';
         else return ''; 
       }
     },
 
     mounted() {
-			let params = {}
-			if(this.$route.name === 'expences') params = {'amount[lt]': 0}
-      this.fetchTotalSum(params);
+      this.fetchTotalBalance();
+      this.fetchTotalSum();
       this.fetchCards();
       this.fetchTags();
-      this.debouncedFetchSum = debounce(this.fetchTotalSum, 500);
     },
 
     watch: {
@@ -65,15 +67,10 @@
         },
         deep: true
       },
-
-      $route(to, from) {
-				if(from.name !== 'expences' && to.name === 'expences') this.fetchTotalSum({'amount[lt]': 0});
-				if(['login', 'expences'].includes(from.name) && !['expences'].includes(to.name)) this.fetchTotalSum();
-      }
     },
 
     methods: {
-      ...mapActions(['fetchTotalSum', 'fetchCards', 'fetchTags']),
+      ...mapActions(['fetchTotalBalance', 'fetchTotalSum', 'fetchCards', 'fetchTags']),
 
       isMobile() {
         return isMobile();
