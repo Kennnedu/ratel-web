@@ -13,7 +13,8 @@ export default new Vuex.Store({
     totalSum: 0,
     filter: getDefaultFilter(),
     cards: [],
-    tags: []
+    tags: [],
+    user: {},
   },
 
   getters: {
@@ -46,6 +47,10 @@ export default new Vuex.Store({
   },
 
   mutations: {
+    setUser(state, payload) {
+      state.user = payload.user
+    },
+
     updateCards(state, payload) {
       state.cards = payload.cards;
     },
@@ -119,6 +124,16 @@ export default new Vuex.Store({
         })
         .catch(error => reject(error.response))
       })
-    }
+    },
+
+    authorizeUser(context, params) {
+      return new Promise((resolve, reject) => {
+        axios.post('/sessions', params).then(({ data }) => {
+          context.commit('setUser', data);
+          resolve();
+        })
+        .catch(error => reject(error.response))
+      })
+    },
   }
 })

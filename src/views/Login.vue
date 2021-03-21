@@ -31,8 +31,7 @@
   </b-container>
 </template>
 <script>
-  import axios from 'axios'
-  import Cookies from 'js-cookie'
+  import { mapActions } from 'vuex'
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { faUser, faLock } from '@fortawesome/free-solid-svg-icons'
   
@@ -46,24 +45,20 @@
         hasError: false,
       }
     },
+
     methods: {
-      cookies() {
-        return Cookies
-      },
+      ...mapActions(['authorizeUser']),
 
       submitForm(e){
         e.preventDefault();
         this.hasError = false
 
-        let _this = this;
-        axios.post("/sessions", {
-          username: _this.username,
-          password: _this.password,
-          secure_login: _this.secureLogin
-        }).then(function(resp){
-          _this.cookies().set('session_token', resp.data.session_token)
-          _this.$router.push('/');
-        }).catch(() => _this.hasError = true)
+        this.authorizeUser({
+          username: this.username,
+          password: this.password,
+          secure_login: this.secureLogin
+        }).then(() => this.$router.push('/'))
+          .catch(() => this.hasError = true)
       }
     }
   }

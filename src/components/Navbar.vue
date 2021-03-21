@@ -38,8 +38,7 @@
 </template>
 <script>
   import { isMobile } from './../utils/mobileDetect.js'
-  import { mapState, mapGetters, mapActions } from 'vuex'
-  import Cookies from 'js-cookie'
+  import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 
   export default {
     computed: {
@@ -71,13 +70,14 @@
 
     methods: {
       ...mapActions(['fetchTotalBalance', 'fetchTotalSum', 'fetchCards', 'fetchTags']),
+      ...mapMutations(['setUser']),
 
       isMobile() {
         return isMobile();
       },
 
       logout() {
-        Cookies.remove('session_token');
+        this.setUser({ user: {}});
         this.$router.push('/login');
       }
     },

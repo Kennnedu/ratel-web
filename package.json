@@ -17,7 +17,6 @@
     "chart.js": "^2.9.4",
     "chartjs-plugin-datalabels": "^0.7.0",
     "core-js": "^3.4.4",
-    "js-cookie": "^2.2.1",
     "lodash.debounce": "^4.0.8",
     "mobile-detect": "^1.4.4",
     "moment": "^2.24.0",

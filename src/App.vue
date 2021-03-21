@@ -8,17 +8,21 @@
 <script>
   import Navbar from './components/Navbar.vue'
   import axios from 'axios'
-  import Cookies from 'js-cookie'
+  import { mapState } from 'vuex'
 
   export default {
     components: { Navbar },
+
+    computed: {
+      ...mapState(['user'])
+    },
 
     created() {
       let _this = this;
       const host = process.env.NODE_ENV === 'development' ? 'http://localhost:4567' : 'https://ratel-app.herokuapp.com';
       axios.interceptors.request.use((config) => {
         config.url = `${host}/api/v1${config.url}`;
-        config.headers.common.Authorization = `Bearer ${this.cookies().get('session_token')}`
+        config.headers.common.Authorization = `Bearer ${this.user.auth_token}`
         return config
       }, error => Promise.reject(error));
 
@@ -30,12 +34,6 @@
         return Promise.reject(error);
       });
     },
-
-    methods: {
-      cookies() {
-        return Cookies
-      }
-    }
   }
 </script>
 
