@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { SidebarPlugin, ToastPlugin, BootstrapVue, ModalPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import './registerServiceWorker'
 import './assets/main.css'
 
 // VUE setup
@@ -25,3 +24,11 @@ window.onload = function(){
   });
 }
 
+// OneSignal setup
+window.OneSignal = window.OneSignal || [];
+window.OneSignal.push(() => {
+  window.OneSignal.init({
+    appId: process.env.ONESIGNAL_APP_ID,
+    allowLocalhostAsSecureOrigin: process.env.NODE_ENV !== 'production',
+  });
+});

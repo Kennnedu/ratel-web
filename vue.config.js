@@ -5,6 +5,9 @@ module.exports = {
     msTileColor: '#FFFFFF',
     manifestOptions: {
       background_color: '#FFFFFF'
+    },
+    workboxOptions: {
+      exclude: [/OneSignal.*\.js$/],
     }
   }
 }
