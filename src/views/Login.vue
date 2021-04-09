@@ -57,7 +57,12 @@
           username: this.username,
           password: this.password,
           secure_login: this.secureLogin
-        }).then(() => this.$router.push('/'))
+        }).then(() => {
+          window.OneSignal.push(function() {
+            window.OneSignal.setExternalUserId(this.username)
+          })
+          this.$router.push('/');
+        })
           .catch(() => this.hasError = true)
       }
     }

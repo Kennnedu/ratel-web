@@ -9,14 +9,13 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './registerServiceWorker'
 import './assets/main.css'
 
+// VUE setup
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(BootstrapVue);
 Vue.use(ModalPlugin);
 Vue.use(ToastPlugin);
 Vue.use(SidebarPlugin);
-
 Vue.config.productionTip = false
-
 window.onload = function(){
   new Vue({
     el: '#app',
@@ -25,3 +24,4 @@ window.onload = function(){
     render: createElement => createElement(App)
   });
 }
+
