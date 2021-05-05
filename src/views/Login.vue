@@ -61,9 +61,7 @@
           password: _this.password,
           secure_login: _this.secureLogin
         }).then(function(resp){
-          window.OneSignal.push(function() {
-            window.OneSignal.setExternalUserId(_this.username);
-          });
+          window.OneSignal.push(['setExternalUserId', _this.username]);
           _this.cookies().set('session_token', resp.data.session_token)
           _this.$router.push('/');
         }).catch(() => _this.hasError = true)
