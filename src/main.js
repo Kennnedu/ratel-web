@@ -26,3 +26,10 @@ window.onload = function(){
   });
 };
 
+window.OneSignal = window.OneSignal || [];
+window.OneSignal.push(function() {
+  window.OneSignal.init({
+    appId: process.env.ONESIGNAL_APP_ID,
+  });
+});
+
