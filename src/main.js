@@ -17,9 +17,11 @@ Vue.use(SidebarPlugin);
 
 Vue.config.productionTip = false
 
-window.OneSignal.push(["init", {
-  appId: "378d5922-58f1-4bfd-9772-c08e705f7113" 
-}]);
+window.OneSignal.push(() => {
+  window.OneSignal.init({
+    appId: process.env.ONESIGNAL_APP_ID,
+  });
+});
 
 window.onload = function(){
   new Vue({
