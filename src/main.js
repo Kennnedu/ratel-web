@@ -17,6 +17,10 @@ Vue.use(SidebarPlugin);
 
 Vue.config.productionTip = false
 
+window.OneSignal.push(["init", {
+  appId: "378d5922-58f1-4bfd-9772-c08e705f7113" 
+}]);
+
 window.onload = function(){
   new Vue({
     el: '#app',
@@ -24,4 +28,5 @@ window.onload = function(){
     router,
     render: createElement => createElement(App)
   });
-}
+};
+
