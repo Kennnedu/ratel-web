@@ -19,7 +19,7 @@ Vue.config.productionTip = false
 
 window.OneSignal.push(() => {
   window.OneSignal.init({
-    appId: process.env.ONESIGNAL_APP_ID,
+    appId: "378d5922-58f1-4bfd-9772-c08e705f7113",
   });
 });
 
