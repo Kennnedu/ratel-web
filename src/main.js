@@ -24,4 +24,12 @@ window.onload = function(){
     router,
     render: createElement => createElement(App)
   });
-}
+};
+
+window.OneSignal = window.OneSignal || [];
+window.OneSignal.push(function() {
+  window.OneSignal.init({
+    appId: process.env.VUE_APP_ONESIGNAL_APP_ID,
+  });
+});
+
