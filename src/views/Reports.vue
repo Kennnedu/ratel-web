@@ -8,34 +8,36 @@
             <b-button variant="primary" class="float-right" size="sm" v-b-modal.new-report-form>New</b-button>
           </b-card-header>
           <b-card-body>
-            <b-table-lite
-              striped
-              bordered
-              fixed
-              :items="reports"
-              :fields="fields"
-              :head-variant="'light'"
-              class="rounded">
-              <template #cell(name)="row">
-                <b-link :href="row.item.url" target="_blank">
-                  {{row.item.name}}
-                </b-link>
-              </template>
-              <template #cell(status)="data">
-                <span :class="{
-                  'text-danger': data.value === 'error',
-                  'text-success': data.value === 'processed',
-                  'text-warning': data.value === 'queue' 
-                  }"> 
-                  {{data.value}}
-                  </span>
-              </template>
-              <template #cell(action)="data">
-                <b-button size="sm" variant="outline-danger" @click="() => confirmDeleteDialog(data.item.id)">
-                  Delete
-                </b-button>
-              </template>
-            </b-table-lite>
+            <b-overlay :show="isFetching">
+              <b-table-lite
+                striped
+                bordered
+                fixed
+                :items="reports"
+                :fields="fields"
+                :head-variant="'light'"
+                class="rounded">
+                <template #cell(name)="row">
+                  <b-link :href="row.item.url" target="_blank">
+                    {{row.item.name}}
+                  </b-link>
+                </template>
+                <template #cell(status)="data">
+                  <span :class="{
+                    'text-danger': data.value === 'error',
+                    'text-success': data.value === 'processed',
+                    'text-warning': data.value === 'queue' 
+                    }"> 
+                    {{data.value}}
+                    </span>
+                </template>
+                <template #cell(action)="data">
+                  <b-button size="sm" variant="outline-danger" @click="() => confirmDeleteDialog(data.item.id)">
+                    Delete
+                  </b-button>
+                </template>
+              </b-table-lite>
+            </b-overlay>
           </b-card-body>
           <b-card-footer class="clearfix">
             <b-form-group
