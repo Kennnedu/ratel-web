@@ -7,6 +7,9 @@ import Tags from './views/Tags.vue'
 import RecordNames from './views/RecordNames.vue'
 import Settings from './views/Settings.vue'
 import Reports from './views/Reports.vue'
+import Rules from './views/Rules.vue'
+import NewRule from './views/NewRule.vue'
+import EditRule from './views/EditRule.vue'
 import Dashboard from './views/Dashboard.vue'
 
 Vue.use(VueRouter)
@@ -21,6 +24,9 @@ export default new VueRouter({
     { name: 'record_names', path: '/record_names', component: RecordNames },
     { name: 'settings', path: '/settings', component: Settings },
     { name: 'reports', path: '/reports', component: Reports },
+    { name: 'rules', path: '/rules', component: Rules },
+    { name: 'new_rule', path: '/new_rule', component: NewRule },
+    { name: 'edit_rule', path: '/edit_rule', component: EditRule },
     { name: 'dashboard', path: '/dashboard', component: Dashboard },
   ]
 }) 

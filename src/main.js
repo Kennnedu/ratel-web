@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import store from './store.js'
 import router from './router.js'
+import Clipboard from 'v-clipboard'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { SidebarPlugin, ToastPlugin, BootstrapVue, ModalPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -14,6 +15,7 @@ Vue.use(BootstrapVue);
 Vue.use(ModalPlugin);
 Vue.use(ToastPlugin);
 Vue.use(SidebarPlugin);
+Vue.use(Clipboard);
 
 Vue.config.productionTip = false
 
