@@ -13,7 +13,8 @@ export default new Vuex.Store({
     totalSum: 0,
     filter: getDefaultFilter(),
     cards: [],
-    tags: []
+    tags: [],
+    editableRule: null,
   },
 
   getters: {
@@ -72,6 +73,10 @@ export default new Vuex.Store({
 
     changeIsFetchingTotalBalance(state, payload) {
       state.isFetchingTotalBalance = payload.isFetching;
+    },
+
+    updateEditableRule(state, payload) {
+      state.editableRule = Object.assign({}, state.editableRule, payload.changes);
     }
   },
 

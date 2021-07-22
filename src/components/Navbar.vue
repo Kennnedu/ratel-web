@@ -30,6 +30,7 @@
       <b-navbar-nav class="mx-auto" align='right'>
         <b-nav-item href="#" to="dashboard" :active="$route.name === 'dashboard'">Dashboard</b-nav-item>
         <b-nav-item href="#" to="reports" :active="$route.name === 'reports'">Bank Reports</b-nav-item>
+        <b-nav-item href="#" to="rules" :active="$route.name === 'rules'">Rules</b-nav-item>
         <b-nav-item href="#" to="settings" :active="$route.name === 'settings'">Settings</b-nav-item>
         <b-nav-item href="#" @click="logout">Logout</b-nav-item>
       </b-navbar-nav>
