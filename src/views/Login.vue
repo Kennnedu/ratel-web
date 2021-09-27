@@ -2,7 +2,10 @@
   <b-container>
     <b-row class="login-wrapper">
       <b-col md="4" offset-md="4" cols="10" offset="1" class="my-auto">
-        <b-card title="Login" class="shadow p-3 mb-5 rounded">
+        <b-card title="" class="shadow p-3 mb-5 rounded">
+          <div class="d-flex justify-content-center mb-5">
+            <img :src="logo" style="height:150px;width:150px;"/>
+          </div>
           <b-form @submit="submitForm">
             <b-input-group id="username-group" class="mb-3">
               <b-input-group-prepend>
@@ -35,6 +38,7 @@
   import Cookies from 'js-cookie'
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { faUser, faLock } from '@fortawesome/free-solid-svg-icons'
+  import logo from '../assets/logo.png'
   
   library.add(faUser, faLock)
   
@@ -44,6 +48,7 @@
         username: "",
         password: "",
         hasError: false,
+        logo 
       }
     },
     methods: {
