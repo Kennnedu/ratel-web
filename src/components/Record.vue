@@ -26,7 +26,17 @@
             v-bind:key="recordsTag.tag_id">{{recordsTag.tag.name}}</b-badge>
         </section>
         <section class="source">{{ record.card.name }}</section>
-        <section class="performed-at">{{ moment(record.performed_at).format('LT') }}</section>
+        <section class="d-flex justify-content-between">
+          <section class="performed-at">{{ moment(record.performed_at).format('LT') }}</section>
+          <section class="currency d-flex">
+            <div v-b-tooltip.hover :title="dollar" class="mt-1" v-if="dollar != null">
+              <font-awesome-icon icon="dollar-sign" />
+            </div>
+            <div v-b-tooltip.hover :title="euro" class="ml-2 mt-1" v-if="euro != null">
+              <font-awesome-icon icon="euro-sign" />
+            </div>
+          </section>
+        </section>
       </b-card-text>
     </b-card-body>
   </b-card>
@@ -35,9 +45,9 @@
 import moment from 'moment'
 import { mapMutations } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle, faDollarSign, faEuroSign } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faCheckCircle)
+library.add(faCheckCircle, faDollarSign, faEuroSign)
 
 export default {
   props: ['record', 'isSelected', 'filterable'],
@@ -45,6 +55,24 @@ export default {
   data: function(){
     return {
       moment: moment
+    }
+  },
+
+  computed: {
+    dollar() {
+      if(!this.record.usd_id) return null;
+      const dollarCurrency = parseFloat(this.record.usd.byn)
+      const recordAmount = parseFloat(this.record.amount)
+      return (recordAmount / dollarCurrency).toFixed(2)
+    },
+
+    euro() {
+      if(!this.record.usd_id) return null;
+      const euroCurrency = parseFloat(this.record.usd.eur)
+      const dollarCurrency = parseFloat(this.record.usd.byn)
+      const recordAmount = parseFloat(this.record.amount)
+
+      return (recordAmount / (dollarCurrency / euroCurrency)).toFixed(2)
     }
   },
 
