@@ -98,7 +98,9 @@
                       )()"
                       :filterable="selectedOption === 'None'"
                       :record="record"
-                      @click="clickOnRecordCallback(record)"/>
+                      @select="selectRecord(record)"
+                      @edit="editRecord(record)"
+                      />
                   </b-col>
               </template>
             </b-row>
@@ -124,7 +126,7 @@
     </b-modal>
     <b-modal id="edit-record" centered title="Edit Record" hide-footer>
       <RecordForm 
-        :record="records.find(r => r.id === selectedRecordIds[0])"
+        :record="editableRecord"
         @save="$bvModal.hide('edit-record'); fetchRecords({ limit: recordsCount }); fetchTotalSum(); selectedRecordIds = []" />
     </b-modal>
   </section>
@@ -149,7 +151,7 @@
       return {
         isFetchingRecords: true,
         displayBackButton: false,
-        currentRecord: {},
+        editableRecord: {},
         moment: moment,
         records: [],
         totalRecords: 0,
@@ -269,19 +271,9 @@
         )
       },
 
-      clickOnRecordCallback(record) {
-        this.recordClicks++;
-
-        if(this.recordClicks === 1) {
-          this.selectRecord(record);
-          this.timer = setTimeout(() => this.recordClicks = 0, 300);
-        } else{
-          clearTimeout(this.timer);
-          this.recordClicks = 0;
-          if(this.selectedCount > 1) this.$bvModal.show('edit-batch-records');
-          else if(this.selectedCount === 0) this.$bvModal.show('new-record');
-          else this.$bvModal.show('edit-record');
-        }
+      editRecord(record) {
+        this.editableRecord = record;
+        this.$bvModal.show('edit-record');
       },
 
       selectRecord(record) {

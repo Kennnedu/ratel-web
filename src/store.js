@@ -68,7 +68,11 @@ export default new Vuex.Store({
     },
 
     addFilteringName(state, payload) {
-      state.filter.name = [...state.filter.name.split('&'), ...['!' + payload.name]].join('&')
+      if(state.filter.name.length) {
+        state.filter.name = state.filter.name + '&' + payload.name;
+      } else {
+        state.filter.name = payload.name
+      }
     },
 
     changeIsFetchingTotalBalance(state, payload) {

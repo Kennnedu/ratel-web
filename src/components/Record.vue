@@ -3,58 +3,75 @@
     class="record-card shadow-sm"
     no-body
     :border-variant='isSelected ? "warning" : ""'
-    :class="{ positive: record.amount > 0 }">
-    <b-card-body @click="$emit('click')">
-      <font-awesome-icon icon="check-circle" size="lg" class="selected-icon" v-if="isSelected" />
-      <b-card-sub-title class="mb-2" @click="(e) => {
-         if(filterable) {
-           e.preventDefault()
-           e.stopPropagation()
-           addFilteringName({name: record.name})
-         } else return true
-       }">
-        {{record.name}}
-      </b-card-sub-title>
-      <b-card-title>{{record.amount}}</b-card-title>
-      <b-card-text>
-        <section class="tags">
-          <b-badge
-            pill
-            variant="secondary"
-            class="mr-1"
-            v-for="recordsTag in record.records_tags"
-            v-bind:key="recordsTag.tag_id">{{recordsTag.tag.name}}</b-badge>
+    :class="{ positive: record.amount > 0 }"
+    @mouseover="isActive = true"
+    @mouseleave="isActive = false">
+    <b-row no-gutters>
+      <b-col cols="10">
+        <b-card-body>
+          <b-card-sub-title class="mb-2">
+            {{record.name}}
+          </b-card-sub-title>
+          <b-card-title>{{record.amount}}</b-card-title>
+          <b-card-text>
+            <section class="tags">
+              <b-badge
+                pill
+                variant="secondary"
+                class="mr-1"
+                v-for="recordsTag in record.records_tags"
+                v-bind:key="recordsTag.tag_id">{{recordsTag.tag.name}}</b-badge>
+            </section>
+            <section class="source">{{ record.card.name }}</section>
+            <section class="d-flex justify-content-between">
+              <section class="performed-at">{{ moment(record.performed_at).format('LT') }}</section>
+            </section>
+          </b-card-text>
+        </b-card-body>
+      </b-col>
+      <b-col cols="1" class="ml-2">
+        <section class="d-flex flex-column align-items-center text-muted">
+          <div v-b-tooltip.hover.ds1000 title="Select the record for further manipulation" 
+            :class="`mt-1 ml-1 px-1 rounded toolbar-action ${isSelected && 'selected-icon'}`"
+            @click="$emit('select')"
+            v-show="isActive || isSelected"
+            >
+            <font-awesome-icon icon="check"/>
+          </div>
+          <div v-b-tooltip.hover.ds1000 title="Edit the Record" class="mt-1 ml-1 px-1 rounded toolbar-action" v-show="isActive" @click="$emit('edit')">
+            <font-awesome-icon icon="pen"/>
+          </div>
+          <div v-b-tooltip.hover.ds1000 title="Exclude Name from search" class="mt-1 ml-1 px-1 rounded toolbar-action" v-show="isActive && !isSelected" @click="addFilteringName({name: `!${record.name}`})">
+            <font-awesome-icon icon="minus"/>
+          </div>
+          <div ref="currency" v-if="dollar != null" class="mt-1 ml-1 px-1 rounded toolbar-action" v-show="isActive">
+            <font-awesome-icon icon="dollar-sign" />
+          </div>
+          <b-tooltip :target="this.$refs.currency" triggers="click">
+            <div>&dollar;: {{dollar}}</div>
+            <div>&euro;: {{euro}}</div>
+            <div>z&#410;: {{zloty}}</div>
+          </b-tooltip>
         </section>
-        <section class="source">{{ record.card.name }}</section>
-        <section class="d-flex justify-content-between">
-          <section class="performed-at">{{ moment(record.performed_at).format('LT') }}</section>
-          <section class="currency d-flex">
-            <div v-b-tooltip.hover :title="dollar" class="mt-1" v-if="dollar != null">
-              <font-awesome-icon icon="dollar-sign" />
-            </div>
-            <div v-b-tooltip.hover :title="euro" class="ml-2 mt-1" v-if="euro != null">
-              <font-awesome-icon icon="euro-sign" />
-            </div>
-          </section>
-        </section>
-      </b-card-text>
-    </b-card-body>
+      </b-col>
+    </b-row>
   </b-card>
 </template>
 <script>
 import moment from 'moment'
 import { mapMutations } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCheckCircle, faDollarSign, faEuroSign } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faPen, faDollarSign, faMinus } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faCheckCircle, faDollarSign, faEuroSign)
+library.add(faCheck, faDollarSign, faPen, faMinus)
 
 export default {
   props: ['record', 'isSelected', 'filterable'],
 
   data: function(){
     return {
-      moment: moment
+      moment: moment,
+      isActive: false,
     }
   },
 
@@ -73,6 +90,16 @@ export default {
       const recordAmount = parseFloat(this.record.amount)
 
       return (recordAmount / (dollarCurrency / euroCurrency)).toFixed(2)
+    },
+
+
+    zloty() {
+      if(!this.record.usd_id) return null;
+      const dollarCurrency = parseFloat(this.record.usd.byn)
+      const zlotyCurrency = parseFloat(this.record.usd.pln)
+      const recordAmount = parseFloat(this.record.amount)
+
+      return (recordAmount / (dollarCurrency / zlotyCurrency)).toFixed(2)
     }
   },
 
@@ -101,9 +128,15 @@ export default {
   }
 
   .selected-icon {
-    position: absolute;
-    top: 5px;
-    right: 5px;
     color: #ffc107;
+  }
+
+ .toolbar-action {
+    cursor: pointer;
+  }
+
+  .toolbar-action:hover {
+    background-color: #6d85ca75;
+    font-weight: bold;
   }
 </style>
