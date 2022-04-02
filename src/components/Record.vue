@@ -32,19 +32,19 @@
       <b-col cols="1" class="ml-2">
         <section class="d-flex flex-column align-items-center text-muted">
           <div v-b-tooltip.hover.ds1000 title="Select the record for further manipulation" 
-            :class="`mt-1 ml-1 px-1 rounded toolbar-action ${isSelected && 'selected-icon'}`"
+            :class="`toolbar-action btn btn-sm ${isSelected ? 'text-warning' : 'text-muted'}`"
             @click="$emit('select')"
             v-if="isActive || isSelected"
             >
             <font-awesome-icon icon="check"/>
           </div>
-          <div v-b-tooltip.hover.ds1000 title="Edit the Record" class="mt-1 ml-1 px-1 rounded toolbar-action" v-if="isActive" @click="$emit('edit')">
+          <div v-b-tooltip.hover.ds1000 title="Edit the Record" class="toolbar-action btn btn-sm text-muted" v-if="isActive" @click="$emit('edit')">
             <font-awesome-icon icon="pen"/>
           </div>
-          <div v-b-tooltip.hover.ds1000 title="Exclude Name from search" class="mt-1 ml-1 px-1 rounded toolbar-action" v-if="isActive && !isSelected" @click="addFilteringName({name: `!${record.name}`})">
+          <div v-b-tooltip.hover.ds1000 title="Exclude Name from search" class="toolbar-action btn btn-sm text-muted" v-if="isActive && !isSelected" @click="addFilteringName({name: `!${record.name}`})">
             <font-awesome-icon icon="minus"/>
           </div>
-          <div ref="currency" v-if="dollar != null && isActive" class="mt-1 ml-1 px-1 rounded toolbar-action">
+          <div ref="currency" v-if="dollar != null && isActive" class="toolbar-action btn btn-sm text-muted">
             <font-awesome-icon icon="dollar-sign" />
             <b-popover :target="() => $refs.currency" placement="left" triggers="hover">
               <div>{{dollar}} <span class="font-weight-bold">&dollar;</span></div>
@@ -124,10 +124,6 @@ export default {
 
   .record-card.border-warning {
     border: 2px solid;
-  }
-
-  .selected-icon {
-    color: #ffc107;
   }
 
  .toolbar-action {

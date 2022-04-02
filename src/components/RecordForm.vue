@@ -117,6 +117,8 @@
         delete savingRecord.records_tags
         delete savingRecord.card
         delete savingRecord.card_name_old
+        delete savingRecord.usd
+        delete savingRecord.usd_id
         return savingRecord
       }
     },
