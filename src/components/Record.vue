@@ -34,24 +34,24 @@
           <div v-b-tooltip.hover.ds1000 title="Select the record for further manipulation" 
             :class="`mt-1 ml-1 px-1 rounded toolbar-action ${isSelected && 'selected-icon'}`"
             @click="$emit('select')"
-            v-show="isActive || isSelected"
+            v-if="isActive || isSelected"
             >
             <font-awesome-icon icon="check"/>
           </div>
-          <div v-b-tooltip.hover.ds1000 title="Edit the Record" class="mt-1 ml-1 px-1 rounded toolbar-action" v-show="isActive" @click="$emit('edit')">
+          <div v-b-tooltip.hover.ds1000 title="Edit the Record" class="mt-1 ml-1 px-1 rounded toolbar-action" v-if="isActive" @click="$emit('edit')">
             <font-awesome-icon icon="pen"/>
           </div>
-          <div v-b-tooltip.hover.ds1000 title="Exclude Name from search" class="mt-1 ml-1 px-1 rounded toolbar-action" v-show="isActive && !isSelected" @click="addFilteringName({name: `!${record.name}`})">
+          <div v-b-tooltip.hover.ds1000 title="Exclude Name from search" class="mt-1 ml-1 px-1 rounded toolbar-action" v-if="isActive && !isSelected" @click="addFilteringName({name: `!${record.name}`})">
             <font-awesome-icon icon="minus"/>
           </div>
-          <div ref="currency" v-if="dollar != null" class="mt-1 ml-1 px-1 rounded toolbar-action" v-show="isActive">
+          <div ref="currency" v-if="dollar != null && isActive" class="mt-1 ml-1 px-1 rounded toolbar-action">
             <font-awesome-icon icon="dollar-sign" />
+            <b-popover :target="() => $refs.currency" placement="left" triggers="hover">
+              <div>{{dollar}} <span class="font-weight-bold">&dollar;</span></div>
+              <div>{{euro}} <span class="font-weight-bold">&euro;</span></div>
+              <div>{{zloty}} <span class="font-weight-bold">z&#410;</span></div>
+            </b-popover>
           </div>
-          <b-tooltip :target="this.$refs.currency" triggers="click">
-            <div>&dollar;: {{dollar}}</div>
-            <div>&euro;: {{euro}}</div>
-            <div>z&#410;: {{zloty}}</div>
-          </b-tooltip>
         </section>
       </b-col>
     </b-row>
@@ -106,7 +106,6 @@ export default {
   methods: {
     ...mapMutations(['addFilteringName']),
   }
-
 }
 </script>
 <style>
