@@ -12,7 +12,20 @@
           <b-card-sub-title class="mb-2">
             {{record.name}}
           </b-card-sub-title>
-          <b-card-title>{{record.amount}}</b-card-title>
+          <b-card-title>
+            <span ref="amount">
+              {{record.amount}}
+              <span class="currency-type"> BYN</span>
+            </span>
+          </b-card-title>
+          <b-popover :target="() => $refs.amount" placement="left" triggers="hover">
+            <template v-if="dollar">
+              <div>{{dollar}} <span class="font-weight-bold">&dollar;</span></div>
+              <div>{{euro}} <span class="font-weight-bold">&euro;</span></div>
+              <div>{{zloty}} <span class="font-weight-bold">z&#410;</span></div>
+            </template>
+            <span v-else>There is no data.</span>
+          </b-popover>
           <b-card-text>
             <section class="tags">
               <b-badge
@@ -29,8 +42,8 @@
           </b-card-text>
         </b-card-body>
       </b-col>
-      <b-col cols="1" class="ml-2">
-        <section class="d-flex flex-column align-items-center text-muted">
+      <b-col cols="1" class="ml-1">
+        <section class="d-flex flex-column align-items-center mt-1">
           <div v-b-tooltip.hover.ds1000 title="Select the record for further manipulation" 
             :class="`toolbar-action btn btn-sm ${isSelected ? 'text-warning' : 'text-muted'}`"
             @click="$emit('select')"
@@ -44,14 +57,6 @@
           <div v-b-tooltip.hover.ds1000 title="Exclude Name from search" class="toolbar-action btn btn-sm text-muted" v-if="isActive && !isSelected" @click="addFilteringName({name: `!${record.name}`})">
             <font-awesome-icon icon="minus"/>
           </div>
-          <div ref="currency" v-if="dollar != null && isActive" class="toolbar-action btn btn-sm text-muted">
-            <font-awesome-icon icon="dollar-sign" />
-            <b-popover :target="() => $refs.currency" placement="left" triggers="hover">
-              <div>{{dollar}} <span class="font-weight-bold">&dollar;</span></div>
-              <div>{{euro}} <span class="font-weight-bold">&euro;</span></div>
-              <div>{{zloty}} <span class="font-weight-bold">z&#410;</span></div>
-            </b-popover>
-          </div>
         </section>
       </b-col>
     </b-row>
@@ -61,9 +66,9 @@
 import moment from 'moment'
 import { mapMutations } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCheck, faPen, faDollarSign, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faPen, faMinus } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faCheck, faDollarSign, faPen, faMinus)
+library.add(faCheck, faPen, faMinus)
 
 export default {
   props: ['record', 'isSelected', 'filterable'],
@@ -110,8 +115,6 @@ export default {
 </script>
 <style>
   .record-card .card-subtitle:hover {
-    cursor: pointer;
-    text-decoration: underline;
     white-space: initial;
   }
 
@@ -133,5 +136,10 @@ export default {
   .toolbar-action:hover {
     background-color: #6d85ca75;
     font-weight: bold;
+  }
+
+  .currency-type {
+    font-size: 15px;
+    font-weight: 400;
   }
 </style>
