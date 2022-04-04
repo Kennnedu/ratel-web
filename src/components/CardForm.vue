@@ -1,6 +1,6 @@
 <template>
   <b-form @submit="submitForm">
-    <b-form-group id="source-name-group" label="Source Name" label-for="source-name">
+    <b-form-group id="source-name-group" label="Name" label-for="source-name">
       <b-form-input type="text" autofocus id="source-name" v-model="currentCard.name" :required="true">
       </b-form-input>
     </b-form-group>

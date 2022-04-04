@@ -17,9 +17,7 @@
         <b-nav-item href="#" to="tags" :active="$route.name === 'tags'">
           Tags <b-badge variant="light">{{tagsCount}}</b-badge>
         </b-nav-item>
-        <b-nav-item href="#" to="accounts" :active="$route.name === 'accounts'">
-          Accounts <b-badge variant="light">{{cardsCount}}</b-badge>
-        </b-nav-item>
+        <NavAccounts />
         <b-nav-item href="#" to="record_names" :active="$route.name === 'record_names'">Record Names</b-nav-item>
       </b-navbar-nav>
       <b-overlay :show="isFetchingTotalBalance" spinner-variant="secondary" spinner-type="grow" variant="dark" opacity="1" spinner-small rounded="sm" v-if="!isMobile()">
@@ -41,10 +39,13 @@
   import { isMobile } from './../utils/mobileDetect.js'
   import { mapState, mapGetters, mapActions } from 'vuex'
   import Cookies from 'js-cookie'
+  import NavAccounts from './NavAccounts.vue'
 
   export default {
+    components: {NavAccounts},
+
     computed: {
-      ...mapState(['filter', 'totalBalance', 'isFetchingTotalBalance', 'totalSum']),
+      ...mapState(['filter', 'totalBalance', 'isFetchingTotalBalance', 'totalSum', 'cards']),
       ...mapGetters(['cardsCount', 'tagsCount']),
 
       balanceColorClass() {
