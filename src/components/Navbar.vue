@@ -17,10 +17,10 @@
         <NavTags />
         <NavAccounts />
 
-        <b-nav-item-dropdown href="#" no-caret text="Grouping By">
-          <b-dropdown-item to="accounts" :active="$route.name === 'accounts'">Account</b-dropdown-item>
-          <b-dropdown-item to="record_names" :active="$route.name === 'record_names'">Name</b-dropdown-item>
-          <b-dropdown-item to="tags" :active="$route.name === 'tags'">Tag</b-dropdown-item>
+        <b-nav-item-dropdown href="#" no-caret text="Sum By">
+          <b-dropdown-item to="accounts" :active="$route.name === 'accounts'">Accounts</b-dropdown-item>
+          <b-dropdown-item to="record_names" :active="$route.name === 'record_names'">Names</b-dropdown-item>
+          <b-dropdown-item to="tags" :active="$route.name === 'tags'">Tags</b-dropdown-item>
         </b-nav-item-dropdown>
 
       </b-navbar-nav>
