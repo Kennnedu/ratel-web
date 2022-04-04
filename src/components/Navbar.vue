@@ -16,7 +16,13 @@
         </b-nav-item>
         <NavTags />
         <NavAccounts />
-        <b-nav-item href="#" to="record_names" :active="$route.name === 'record_names'">Record Names</b-nav-item>
+
+        <b-nav-item-dropdown href="#" no-caret text="Grouping By">
+          <b-dropdown-item to="accounts" :active="$route.name === 'accounts'">Account</b-dropdown-item>
+          <b-dropdown-item to="record_names" :active="$route.name === 'record_names'">Name</b-dropdown-item>
+          <b-dropdown-item to="tags" :active="$route.name === 'tags'">Tag</b-dropdown-item>
+        </b-nav-item-dropdown>
+
       </b-navbar-nav>
       <b-overlay :show="isFetchingTotalBalance" spinner-variant="secondary" spinner-type="grow" variant="dark" opacity="1" spinner-small rounded="sm" v-if="!isMobile()">
         <b-navbar-brand :class="`mx-5 ${balanceColorClass}`" :aria-hidden="isFetchingTotalBalance ? 'true' : null" align="center" v-b-tooltip.hover title="Total Balance">
