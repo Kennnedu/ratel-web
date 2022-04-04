@@ -14,9 +14,7 @@
               v-bind:variant="totalSum < 0 && 'danger' || totalSum > 0 && 'success' || totalSum == 0 && 'secondary'"
               v-b-tooltip.hover title="Filtered Records Sum">{{totalSum}}</b-badge>
         </b-nav-item>
-        <b-nav-item href="#" to="tags" :active="$route.name === 'tags'">
-          Tags <b-badge variant="light">{{tagsCount}}</b-badge>
-        </b-nav-item>
+        <NavTags />
         <NavAccounts />
         <b-nav-item href="#" to="record_names" :active="$route.name === 'record_names'">Record Names</b-nav-item>
       </b-navbar-nav>
@@ -37,16 +35,16 @@
 </template>
 <script>
   import { isMobile } from './../utils/mobileDetect.js'
-  import { mapState, mapGetters, mapActions } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
   import Cookies from 'js-cookie'
   import NavAccounts from './NavAccounts.vue'
+  import NavTags from './NavTags.vue'
 
   export default {
-    components: {NavAccounts},
+    components: {NavAccounts, NavTags},
 
     computed: {
-      ...mapState(['filter', 'totalBalance', 'isFetchingTotalBalance', 'totalSum', 'cards']),
-      ...mapGetters(['cardsCount', 'tagsCount']),
+      ...mapState(['filter', 'totalBalance', 'isFetchingTotalBalance', 'totalSum']),
 
       balanceColorClass() {
         if(this.totalBalance > 0) return 'text-success';

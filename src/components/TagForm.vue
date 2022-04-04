@@ -1,6 +1,6 @@
 <template>
   <b-form @submit="submitForm">
-    <b-form-group id="tag-name-group" label="Tag Name" label-for="tag-name">
+    <b-form-group id="tag-name-group" label="Name" label-for="tag-name">
       <b-form-input type="text" autofocus id="tag-name" required v-model="currentTag.name"></b-form-input>
     </b-form-group>
     <b-row>
