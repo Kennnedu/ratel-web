@@ -85,7 +85,7 @@ export default {
       if(!this.record.usd_id) return null;
       const dollarCurrency = parseFloat(this.record.usd.byn)
       const recordAmount = parseFloat(this.record.amount)
-      return (recordAmount / dollarCurrency).toFixed(2)
+      return Math.abs((recordAmount / dollarCurrency).toFixed(2))
     },
 
     euro() {
@@ -94,7 +94,7 @@ export default {
       const dollarCurrency = parseFloat(this.record.usd.byn)
       const recordAmount = parseFloat(this.record.amount)
 
-      return (recordAmount / (dollarCurrency / euroCurrency)).toFixed(2)
+      return Math.abs((recordAmount / (dollarCurrency / euroCurrency)).toFixed(2))
     },
 
 
@@ -104,7 +104,7 @@ export default {
       const zlotyCurrency = parseFloat(this.record.usd.pln)
       const recordAmount = parseFloat(this.record.amount)
 
-      return (recordAmount / (dollarCurrency / zlotyCurrency)).toFixed(2)
+      return Math.abs((recordAmount / (dollarCurrency / zlotyCurrency)).toFixed(2))
     }
   },
 
