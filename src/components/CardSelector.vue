@@ -1,18 +1,10 @@
 <template>
-  <b-form-select
-    id="record-card"
-    v-model="currentCardId"
-    :required="required"
-    @change="$emit('selectCard', cards.filter(card => currentCardId === card.id)[0])">
-    <b-form-select-option :value="null">Select source</b-form-select-option>
-    <b-form-select-option
-      v-for="card in cards"
-      :key="card.id"
-      :value="card.id"
-      :selected="currentCardId === card.id">
-      {{card.name}}
-    </b-form-select-option>
-  </b-form-select>
+  <div>
+    <input type="hidden" :value="currentCardId" :required="required"/>
+    <b-button size="sm" v-for="account in cards" :key="account.name" class="ml-1 mb-1"
+     :variant="currentCardId === account.id ? 'secondary' : 'outline-secondary'"
+       @click="selectAccount(account)">{{account.name}}</b-button>
+  </div>
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -28,6 +20,18 @@ export default {
 
   computed: {
     ...mapState(['cards'])
+  },
+
+  methods: {
+    selectAccount(account) {
+      if(this.currentCardId === account.id && !this.$props.required) {
+        this.currentCardId = null;
+        this.$emit('selectCard', { id: null })
+      } else {
+        this.currentCardId = account.id
+        this.$emit('selectCard', account)
+      }
+    }
   }
 }
 </script>

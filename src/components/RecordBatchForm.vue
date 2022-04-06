@@ -1,20 +1,21 @@
 <template>
   <b-form>
-    <b-form-group label="Source:">
-      <b-input-group>
-        <b-input-group-prepend>
-          <b-input-group-text ><font-awesome-icon icon="credit-card"/></b-input-group-text>
-        </b-input-group-prepend>
-        <CardSelector
-          :card="batchForm.card"
-          @selectCard="newCard => batchForm.card = newCard"/>
-      </b-input-group>
+    <b-form-group>
+      <RecordNameInput
+        :recordName="batchForm.name"
+        @change="newName => batchForm.name = newName" />
     </b-form-group>
 
-    <b-form-group label="Add tags:">
+    <b-form-group label="Account">
+      <CardSelector
+        :card="batchForm.card"
+        @selectCard="newCard => batchForm.card = newCard"/>
+    </b-form-group>
+
+    <b-form-group label="Add Tags">
       <b-input-group>
         <b-input-group-prepend>
-          <b-input-group-text ><font-awesome-icon icon="tags"/></b-input-group-text>
+          <b-input-group-text class="font-weight-bold">&plus;</b-input-group-text>
         </b-input-group-prepend>
         <TagsInput
           :recordsTags="batchForm.addRecordsTags"
@@ -22,21 +23,15 @@
       </b-input-group>
     </b-form-group>
 
-    <b-form-group label="Remove tags:">
+    <b-form-group label="Remove Tags">
       <b-input-group>
         <b-input-group-prepend>
-          <b-input-group-text ><font-awesome-icon icon="tags"/></b-input-group-text>
+          <b-input-group-text class="font-weight-bold">&minus;</b-input-group-text>
         </b-input-group-prepend>
         <TagsInput
           :recordsTags="batchForm.removeRecordsTags"
           @change="newRecordsTags => batchForm.removeRecordsTags = newRecordsTags" />
       </b-input-group>
-    </b-form-group>
-
-    <b-form-group>
-      <RecordNameInput
-        :recordName="batchForm.name"
-        @change="newName => batchForm.name = newName" />
     </b-form-group>
 
     <b-row>
