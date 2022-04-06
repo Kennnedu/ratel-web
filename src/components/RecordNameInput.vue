@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-textarea
+      :size="size || 'md'"
       type="text"
       class="form-control"
       id="record-name"
@@ -23,7 +24,7 @@
 import axios from 'axios'
 
 export default {
-  props: ['recordName', 'isRequired', 'dataListId', 'autofocus'],
+  props: ['recordName', 'isRequired', 'dataListId', 'autofocus', 'size'],
 
   data: function(){
     return {

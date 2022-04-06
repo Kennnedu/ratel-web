@@ -14,7 +14,7 @@
           </b-card-sub-title>
           <b-card-title>
             <span ref="amount">
-              {{record.amount}}
+              {{Math.abs(record.amount)}}
               <span class="currency-type"> BYN</span>
             </span>
           </b-card-title>

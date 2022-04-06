@@ -1,30 +1,42 @@
 <template>
   <b-form @submit="submitForm">
-    <b-form-group class="mb-3" id="record-amount-group" label="Amount">
-      <b-form-input type="number" id="record-amount" step="0.01" :autofocus="true" v-model.number="currentRecord.amount" :required="true">
+    <b-form-group label="Type" label-size="sm">
+      <b-form-radio-group
+        class="pt-2"
+        :options="['Expences', 'Income']"
+        buttons
+        button-variant="outline-secondary"
+        size="sm"
+        v-model="currentRecord.type"
+      ></b-form-radio-group>
+    </b-form-group>
+
+    <b-form-group class="mb-3" id="record-amount-group" label="Amount" label-size="sm">
+      <b-form-input size="sm" type="number" id="record-amount" step="0.01" min="0.00" :formatter="onlyPositiveFormatter"  v-model.number="currentRecord.amount" :required="true">
       </b-form-input>
     </b-form-group>
 
-    <b-form-group id="record-name-group">
+    <b-form-group id="record-name-group" label="Name" label-size="sm">
       <RecordNameInput
+        :size="'sm'"  
         :recordName="currentRecord.name"
         :dataListId="'record-name-suggestions'"
         @change="newName => currentRecord.name = newName" />
     </b-form-group>
     
-    <b-form-group class="mb-3" id="record-card-group" label="Account">
+    <b-form-group class="mb-3" id="record-card-group" label="Account" label-size="sm">
       <CardSelector
         :card="currentRecord.card"
         @selectCard="newCard => currentRecord.card = newCard"/>
     </b-form-group>
       
-    <b-form-group class="mb-3" id="record-tags-group" label="Tags">
+    <b-form-group class="mb-3" id="record-tags-group" label="Tags" label-size="sm">
       <TagsInput
         :recordsTags="currentRecord.records_tags"
         @change="newRecordsTags => currentRecord.records_tags = newRecordsTags" />
     </b-form-group>
 
-    <b-form-group class="mb-3" id="record-performed-at-group" label="Performed at:">
+    <b-form-group class="mb-3" id="record-performed-at-group" label="Performed At" label-size="sm">
       <b-input-group>
         <b-input-group-prepend>
           <b-input-group-text ><font-awesome-icon icon="calendar"/></b-input-group-text>
@@ -60,6 +72,7 @@
 
   const emptyNewRecord = () => {
     return {
+      type: 'Expences',
       name: '',
       card: {},
       amount: null,
@@ -71,7 +84,9 @@
 
   const initCurrentRecord = (record) => {
     if (record) {
-      return Object.assign({}, record, { performed_at: moment(record.performed_at).format('YYYY-MM-DDTHH:mm')});
+      const type = record.amount > 0 ? 'Income' : 'Expences';
+      const amount = Math.abs(record.amount);
+      return Object.assign({}, record, { performed_at: moment(record.performed_at).format('YYYY-MM-DDTHH:mm'), type: type, amount: amount});
     } else {
       return Object.assign({}, emptyNewRecord());
     }
@@ -99,6 +114,12 @@
           delete recTag.tag
           return recTag
         })
+
+        if (this.currentRecord.type === 'Expences') {
+          savingRecord.amount = this.currentRecord.amount * -1
+        }
+
+        delete savingRecord.type
         delete savingRecord.records_tags
         delete savingRecord.card
         delete savingRecord.card_name_old
@@ -142,6 +163,14 @@
 
         axios.delete(`/records/${_this.record.id}`)
           .then(() => _this.$emit('save'))
+      },
+
+      onlyPositiveFormatter(value) {
+        if(value < 0) {
+          return value * -1
+        } else {
+          return value
+        }
       }
     }
   }
