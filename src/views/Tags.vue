@@ -78,7 +78,7 @@
         </b-col>
       </b-row>
     </b-container>
-    <b-sidebar id="sidebar-1" title="Filter" right shadow>
+    <b-sidebar id="sidebar-1" title="Filter" right shadow backdrop>
       <b-container>
         <RecordFilter/>
       </b-container>

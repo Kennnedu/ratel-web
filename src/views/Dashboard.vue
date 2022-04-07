@@ -30,7 +30,7 @@
         <account-chart />
       </b-col>
     </b-row>
-    <b-sidebar id="sidebar-1" title="Filter" right shadow>
+    <b-sidebar id="sidebar-1" title="Filter" right shadow backdrop>
       <b-container>
         <record-filter />
       </b-container>
