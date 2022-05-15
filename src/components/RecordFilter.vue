@@ -18,6 +18,7 @@
           <b-input-group-text ><font-awesome-icon icon="receipt"/></b-input-group-text>
         </b-input-group-prepend>
         <b-form-input
+          size="sm"
           type="text"
           id="filter-name"
           :value="filter.name"
@@ -25,7 +26,7 @@
       </b-input-group>
     </b-form-group>
 
-    <b-form-group id="filter-source-group" label="Cards" label-size="sm">
+    <b-form-group id="filter-source-group" label="Accounts" label-size="sm">
       <b-input-group>
         <b-input-group-prepend>
           <b-input-group-text ><font-awesome-icon icon="credit-card"/></b-input-group-text>
@@ -38,18 +39,7 @@
       </b-input-group>
     </b-form-group>
 
-    <b-form-group id="filter-tags-group" label="Tags" label-size="sm">
-      <b-input-group>
-        <b-input-group-prepend>
-          <b-input-group-text ><font-awesome-icon icon="tags"/></b-input-group-text>
-        </b-input-group-prepend>
-        <b-form-input
-          type="text"
-          id="filter-tags"
-          :value="filter.tags"
-          @input="val => updateFilter({changes: { tags: val }})"></b-form-input>
-      </b-input-group>
-    </b-form-group>
+    <FilterTags />
 
     <b-form-group id="filter-performed-group" label="Period" label-size="sm">
       <b-input-group>
@@ -63,7 +53,7 @@
         ></b-form-select>
       </b-input-group>
     </b-form-group> 
-    <b-form-group id="filter-range" label="Range" v-if="selectedPerformedHandler === 'custom'">
+    <b-form-group id="filter-range" label="Range" v-if="selectedPerformedHandler === 'custom'" label-size="sm">
       <flat-pickr :value="[...[], ...[filter.from, filter.to]]"
                   class="form-control"
                   :config="{mode: 'range', onChange: updateDateRange}"></flat-pickr>
@@ -78,6 +68,7 @@ import { getDefaultFilter, getDefaultPerformedHandler, getPerformedHandlerOption
 import flatPickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
 import moment from 'moment'
+import FilterTags from './FilterTags.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faReceipt, faCreditCard, faTags, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
 
@@ -85,7 +76,7 @@ library.add(faReceipt, faCreditCard, faTags, faCalendarAlt)
 
 
 export default {
-  components: { flatPickr },
+  components: { flatPickr, FilterTags },
 
   data: function() {
     return {

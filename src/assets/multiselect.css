@@ -1,0 +1,31 @@
+.multiselect {
+  font-size: 0.875rem;
+}
+
+.multiselect__input, .multiselect__placeholder {
+  color: var(--secondary);
+  font-size: 0.875rem;
+  margin: unset;
+  padding: unset;
+}
+
+.multiselect__placeholder {
+}
+
+.multiselect__option--highlight,
+.multiselect__option--highlight:after {
+  background: var(--primary)
+}
+
+.multiselect__option--selected.multiselect__option--highlight,
+.multiselect__option--selected.multiselect__option--highlight:after {
+  background: var(--danger);
+}
+
+.multiselect__tag,
+.multiselect__tag-icon:after,
+.multiselect__tag-icon:hover,
+.multiselect__tag-icon:focus {
+  background: var(--secondary);
+  color: var(--light);
+}
