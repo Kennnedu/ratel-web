@@ -12,32 +12,9 @@
       ></b-form-radio-group>
     </b-form-group>
 
-    <b-form-group id="filter-name-group" label="Description" label-size="sm">
-      <b-input-group>
-        <b-input-group-prepend>
-          <b-input-group-text ><font-awesome-icon icon="receipt"/></b-input-group-text>
-        </b-input-group-prepend>
-        <b-form-input
-          size="sm"
-          type="text"
-          id="filter-name"
-          :value="filter.name"
-          @input="val => updateFilter({changes: { name: val }})"></b-form-input>
-      </b-input-group>
-    </b-form-group>
+    <FilterNames />
 
-    <b-form-group id="filter-source-group" label="Accounts" label-size="sm">
-      <b-input-group>
-        <b-input-group-prepend>
-          <b-input-group-text ><font-awesome-icon icon="credit-card"/></b-input-group-text>
-        </b-input-group-prepend>
-        <b-form-input
-          type="text"
-          id="filter-card"
-          :value="filter.card"
-          @input="val => updateFilter({changes: { card: val }})"></b-form-input>
-      </b-input-group>
-    </b-form-group>
+    <FilterAccounts />
 
     <FilterTags />
 
@@ -68,15 +45,16 @@ import { getDefaultFilter, getDefaultPerformedHandler, getPerformedHandlerOption
 import flatPickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
 import moment from 'moment'
+import FilterAccounts from './FilterAccounts.vue'
+import FilterNames from './FilterNames.vue'
 import FilterTags from './FilterTags.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faReceipt, faCreditCard, faTags, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faReceipt, faCreditCard, faTags, faCalendarAlt)
-
+library.add(faCalendarAlt)
 
 export default {
-  components: { flatPickr, FilterTags },
+  components: { flatPickr, FilterTags, FilterAccounts, FilterNames },
 
   data: function() {
     return {

@@ -1,16 +1,16 @@
 <template>
-  <b-form-group label="Tags" label-size="sm">
+  <b-form-group label="Accounts" label-size="sm">
     <div class="d-flex">
       <div class="d-flex justify-content-center align-items-center p-1">
         <font-awesome-icon icon="plus"/>
       </div>
       <multiselect
-        :value="onlyTags"
-        :options="tags.map(t => t.name)"
+        :value="onlyAccounts"
+        :options="cards.map(t => t.name)"
         :multiple="true"
         :hideSelected="true"
         placeholder="are included"
-        @input="updateOnlyTags"/>
+        @input="updateOnlyAccounts"/>
     </div>
 
   <div class="d-flex">
@@ -19,12 +19,12 @@
     </div>
     <multiselect
       class="mt-2"
-      :value="exceptTags"
-      :options="tags.map(t => t.name)"
+      :value="exceptAccounts"
+      :options="cards.map(t => t.name)"
       :multiple="true"
       :hideSelected="true"
       placeholder="are excluded"
-      @input="updateExceptTags"/>
+      @input="updateExceptAccounts"/>
   </div>
   </b-form-group>
 </template>
@@ -39,50 +39,50 @@ library.add(faPlus, faMinus);
 export default {
   data: function(){
     return {
-      onlyTags: [],
-      exceptTags: [],
+      onlyAccounts: [],
+      exceptAccounts: [],
     }
   },
 
   components: { Multiselect },
 
   created() {
-    this.assingTagsStr(this.filter.tags);
+    this.assingAccountsStr(this.filter.card);
   },
 
   computed: {
-    ...mapState(['filter', 'tags']),
+    ...mapState(['filter', 'cards']),
 
-    tagsStr() {
-      return [...this.onlyTags, ...this.exceptTags.map(t => `!${t}`)].join('&')
+    accountsStr() {
+      return [...this.onlyAccounts, ...this.exceptAccounts.map(t => `!${t}`)].join('&')
     }
   },
 
   methods: {
     ...mapMutations(['updateFilter']),
 
-    updateOnlyTags(newOnlyTags) {
-      this.onlyTags = newOnlyTags;
-      this.updateFilter({ changes: { tags: this.tagsStr } });
+    updateOnlyAccounts(newOnlyAccounts) {
+      this.onlyAccounts = newOnlyAccounts;
+      this.updateFilter({ changes: { card: this.accountsStr } });
     },
 
-    updateExceptTags(newExceptTags) {
-      this.exceptTags = newExceptTags;
-      this.updateFilter({ changes: { tags: this.tagsStr } });
+    updateExceptAccounts(newExceptAccounts) {
+      this.exceptAccounts = newExceptAccounts;
+      this.updateFilter({ changes: { card: this.accountsStr } });
     },
 
-    assingTagsStr(tagsStr) {
-      const tags = tagsStr.split('&');
-      this.onlyTags = tags.filter(t => t[0] !== '!' && t.length > 0);
-      this.exceptTags = tags.filter(t => t[0] === '!' && t.length > 1).map(t => t.slice(1));
+    assingAccountsStr(accountsStr) {
+      const accounts = accountsStr.split('&');
+      this.onlyAccounts = accounts.filter(a => a[0] !== '!' && a.length > 0);
+      this.exceptAccounts = accounts.filter(a => a[0] === '!' && a.length > 1).map(a => a.slice(1));
     }
   },
 
   watch: {
     filter: {
       handler: function(newFilter){
-        if(newFilter.tags !== this.tagsStr) {
-          this.assingTagsStr(newFilter.tags);
+        if(newFilter.card !== this.accountsStr) {
+          this.assingAccountsStr(newFilter.card);
         }
       },
       deep: true
