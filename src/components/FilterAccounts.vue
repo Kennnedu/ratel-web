@@ -9,6 +9,7 @@
         :options="cards.map(t => t.name)"
         :multiple="true"
         :hideSelected="true"
+        :searchable="false"
         placeholder="are included"
         @input="updateOnlyAccounts"/>
     </div>
@@ -23,6 +24,7 @@
       :options="cards.map(t => t.name)"
       :multiple="true"
       :hideSelected="true"
+      :searchable="false"
       placeholder="are excluded"
       @input="updateExceptAccounts"/>
   </div>

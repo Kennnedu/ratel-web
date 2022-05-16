@@ -10,6 +10,7 @@
         :multiple="true"
         :hideSelected="true"
         placeholder="are included"
+        :searchable="false"
         @input="updateOnlyTags"/>
     </div>
 
@@ -23,6 +24,7 @@
       :options="tags.map(t => t.name)"
       :multiple="true"
       :hideSelected="true"
+      :searchable="false"
       placeholder="are excluded"
       @input="updateExceptTags"/>
   </div>
