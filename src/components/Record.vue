@@ -1,9 +1,9 @@
 <template>
   <b-card
-    class="record-card shadow-sm"
+    class="work-space__card record-card shadow-sm"
     no-body
     :border-variant='isSelected ? "warning" : ""'
-    :class="{ positive: record.amount > 0 }"
+    :class="{ 'work-space__card_positive': record.amount > 0 }"
     @mouseover="isActive = true"
     @mouseleave="isActive = false">
     <b-row no-gutters>

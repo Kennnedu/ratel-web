@@ -41,9 +41,9 @@
       <b-row class="work-space">
         <b-col md="12">
           <b-overlay :show="isFetching">
-            <b-row class="cards-deck active" :aria-hidden="isFetching ? 'true' : null">
+            <b-row class="work-space__deck" :aria-hidden="isFetching ? 'true' : null">
               <b-col v-for="tag in tags" :key="tag.id" md="3" class="py-3">
-                <b-card no-body :class="{ positive: tag.records_sum > 0 }" class="shadow-sm">
+                <b-card no-body :class="{ positive: tag.records_sum > 0 }" class="work-space__card shadow-sm">
                   <b-card-body @click="currentTag = tag; $bvModal.show('edit-tag')">
                     <b-card-sub-title class="mb-2">{{tag.name}}</b-card-sub-title>
                     <template v-if="filter.type === 'Expences'">
@@ -187,8 +187,4 @@
   }
 </script>
 <style>
-  .work-space {
-    border-radius: 3px;
-    border: 3px solid lightgray;
-  }
 </style>

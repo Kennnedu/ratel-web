@@ -78,10 +78,10 @@
           </b-button-toolbar>
         </b-col>
       </b-row>
-      <b-row :class="`work-space ${selectedOption !== 'None' && 'edit'}`" >
+      <b-row :class="`work-space ${selectedOption !== 'None' ? 'work-space_editable': ''}`" >
         <b-col md="12">
           <b-overlay :show="isFetchingRecords">
-            <b-row class="cards-deck active" @scroll="recordsScroll" :aria-hidden="isFetchingRecords ? 'true' : null">
+            <b-row class="work-space__deck active" @scroll="recordsScroll" :aria-hidden="isFetchingRecords ? 'true' : null">
               <template v-for="(record, index) in records">
                   <b-col
                     :key="`${record.id}${moment(record.performed_at).format('X')}`"
@@ -291,31 +291,8 @@
   }
 </script>
 <style>
-  .cards-deck {
-    background-color: #f4f3ef;
-    overflow-y: auto;
-    height: calc(100vh - 130px);
-  }
-
   .side-tab {
     height: calc(100vh - 185px);
     overflow-y: auto;
-  }
-
-  .cards-deck .card.positive {
-    background-color: #ddfbdd;
-  }
-
-  .cards-deck.active .card:hover, .cards-deck.active .card:focus, .cards-deck.active .card:active {
-    background-color: #e0e8ff75;
-  }
-
-  .work-space {
-    border-radius: 3px;
-    border: 3px solid lightgray;
-  }
-
-  .work-space.edit {
-    border: 3px dashed lightgray;
   }
 </style>

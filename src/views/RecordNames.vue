@@ -35,9 +35,9 @@
       <b-row class="work-space">
         <b-col md="12">
           <b-overlay :show="isFetching">
-            <b-row class="cards-deck" @scroll="recordsScroll" :aria-hidden="isFetching ? 'true' : null">
+            <b-row class="work-space__deck" @scroll="recordsScroll" :aria-hidden="isFetching ? 'true' : null">
               <b-col v-for="expenceItem in expences" :key="expenceItem.name" md="3" class="py-3">
-                <b-card no-body :class="{ positive: expenceItem.records_sum > 0 }">
+                <b-card no-body :class="`work-space__card shadow-sm ${ expenceItem.records_sum > 0 ? 'work-space__card_positive' : '' }`">
                   <b-card-body>
                     <b-card-sub-title class="mb-2">{{expenceItem.name}}</b-card-sub-title>
                     <b-card-title>{{expenceItem.records_sum}}</b-card-title>
@@ -153,8 +153,4 @@
   }
 </script>
 <style>
-  .work-space {
-    border-radius: 3px;
-    border: 3px solid lightgray;
-  }
 </style>

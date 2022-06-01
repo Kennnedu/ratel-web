@@ -42,9 +42,9 @@
       <b-row class="work-space">
         <b-col md="12">
           <b-overlay :show="isFetching">
-            <b-row class="cards-deck active" :aria-hidden="isFetching ? 'true' : null">
+            <b-row class="work-space__deck active" :aria-hidden="isFetching ? 'true' : null">
               <b-col v-for="source in sources" :key="source.id" md="3" class="py-3">
-                <b-card no-body :class="{ positive: source.records_sum > 0 }" class="shadow-sm">
+                <b-card no-body :class="`work-space__card ${ source.records_sum > 0 ? 'work-space__card_positive' : '' }`">
                   <b-card-body @click="currentSource = source; $bvModal.show('edit-source')">
                     <b-card-sub-title class="mb-2">{{source.name}}</b-card-sub-title>
                     <template v-if="filter.type === 'Expences'">
@@ -185,8 +185,4 @@
   }
 </script>
 <style>
-  .work-space {
-    border-radius: 3px;
-    border: 3px solid lightgray;
-  }
 </style>

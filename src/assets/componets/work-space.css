@@ -1,0 +1,24 @@
+.work-space {
+  border: 3px solid #f4f3ef;
+  border-radius: 0.5rem;
+}
+
+.work-space__deck {
+  overflow-y: auto;
+  height: calc(100vh - 130px);
+  background: #f4f3ef;
+}
+
+.work-space__card {
+  border: 0;
+  box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 8%);
+}
+
+.work-space__card_positive {
+  background-color: #ddfbdd;
+}
+
+.work-space_editable {
+  border: 3px dashed #f4f3ef;
+}
+
